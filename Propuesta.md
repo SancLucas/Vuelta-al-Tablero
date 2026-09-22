@@ -6,7 +6,7 @@
 
 ---
 
-## 1. Resumen Ejecutivo
+## 1. Resumen
 
 **Vuelta al Tablero** es un sistema integral enfocado en la economía circular, diseñado para la gestión y alquiler de juegos de mesa. La plataforma centraliza la oferta de un catálogo administrado por el sistema y, en simultáneo, habilita un mercado colaborativo donde los usuarios pueden poner en alquiler sus propias colecciones. Este modelo fomenta la rotación de títulos, facilita el acceso a una mayor variedad de juegos y genera una comunidad activa de jugadores.
 
