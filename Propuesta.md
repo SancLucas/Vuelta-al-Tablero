@@ -8,7 +8,8 @@
 
 ## 1. Resumen
 
-**Vuelta al Tablero** es un sistema integral enfocado en la economía circular, diseñado para la gestión y alquiler de juegos de mesa. La plataforma centraliza la oferta de un catálogo administrado por el sistema y, en simultáneo, habilita un mercado colaborativo donde los usuarios pueden poner en alquiler sus propias colecciones. Este modelo fomenta la rotación de títulos, facilita el acceso a una mayor variedad de juegos y genera una comunidad activa de jugadores.
+**Vuelta al Tablero** es una idea enfocada en la economía circular, diseñada para la gestión y alquiler de juegos de mesa.
+La plataforma centraliza la oferta de un catálogo administrado por el sistema y, en simultáneo, habilita un mercado colaborativo en donde los usuarios pueden poner en alquiler su propia colección (o simplemente "anotarla"). Este modelo buscaría fomentar la rotación de títulos, facilitando el acceso y conocimiento de juegos de mesa, además de fomentar la discusión entre los usuarios.
 
 ## 2. Modelo de Negocio
 
@@ -25,11 +26,11 @@ Para facilitar la búsqueda y selección, cada título disponible en el sistema 
 
 * **Descripción y Objetivo:** Sinopsis de la temática y la meta principal para ganar la partida.
 * **Especificaciones:** Cantidad de jugadores admitidos y tipo/categoría de juego (estrategia, *party game*, cartas, cooperativo, etc.).
-* **Reglamento:** Detalle de las reglas principales para facilitar el aprendizaje antes de concretar el alquiler.
+* **Reglamento:** Detalle de las reglas principales para facilitar el aprendizaje.
 
 ### 3.2. Mercado Colaborativo y Control de Ejemplares
 
-* **Publicación de Usuarios (P2P):** Los usuarios registrados están habilitados para listar sus propios juegos físicos dentro de la plataforma para ofrecerlos a terceros.
+* **Publicación de Usuarios (P2P):** Los usuarios registrados están habilitados para listar sus propios juegos físicos dentro de la plataforma, pudiendo ofrecerlos, o no, a terceros.
 * **Trazabilidad por Ejemplar:** El sistema distingue entre el "Juego" (el concepto general) y el "Ejemplar" (la copia física). Un mismo juego puede tener múltiples ejemplares vinculados a distintos propietarios (administrador o usuarios), cada uno con su propia disponibilidad.
 
 ### 3.3. Sistema de Calificaciones Bidireccional
