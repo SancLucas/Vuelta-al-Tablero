@@ -1,4 +1,4 @@
-package com.provoletta.vuelta_al_tablero;
+package com.borboletta.vueltaaltablero;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

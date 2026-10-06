@@ -1,4 +1,4 @@
-package com.provoletta.vuelta_al_tablero;
+package com.borboletta.vueltaaltablero;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
