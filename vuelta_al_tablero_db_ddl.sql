@@ -21,7 +21,7 @@ USE `Vuelta_al_tablero_db` ;
 -- Table `Vuelta_al_tablero_db`.`usuario`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `Vuelta_al_tablero_db`.`usuario` (
-  `nro` INT NOT NULL AUTO_INCREMENT,
+  `nro` BIGINT NOT NULL,
   `nombre` VARCHAR(45) NOT NULL,
   `apellido` VARCHAR(45) NOT NULL,
   `dni` VARCHAR(45) NOT NULL,
@@ -41,7 +41,7 @@ ENGINE = InnoDB;
 -- Table `Vuelta_al_tablero_db`.`ficha_tecnica`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `Vuelta_al_tablero_db`.`ficha_tecnica` (
-  `id` INT NOT NULL AUTO_INCREMENT,
+  `id` BIGINT NOT NULL AUTO_INCREMENT,
   `max_jugadores` INT NULL,
   `min_jugadores` INT NULL,
   `min_edad` INT NULL,
@@ -55,11 +55,11 @@ ENGINE = InnoDB;
 -- Table `Vuelta_al_tablero_db`.`juego`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `Vuelta_al_tablero_db`.`juego` (
-  `id` INT NOT NULL,
+  `id` BIGINT NOT NULL,
   `titulo` VARCHAR(45) NOT NULL,
   `editorial` VARCHAR(25) NOT NULL,
   `categoria` VARCHAR(25) NOT NULL,
-  `id_ficha_tecnica` INT NOT NULL,
+  `id_ficha_tecnica` BIGINT NOT NULL,
   PRIMARY KEY (`id`),
   INDEX `fk_juego_ficha_tecnica1_idx` (`id_ficha_tecnica` ASC),
   CONSTRAINT `fk_juego_ficha_tecnica`
@@ -74,11 +74,11 @@ ENGINE = InnoDB;
 -- Table `Vuelta_al_tablero_db`.`ejemplar`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `Vuelta_al_tablero_db`.`ejemplar` (
-  `id` INT NOT NULL AUTO_INCREMENT,
+  `id` BIGINT NOT NULL AUTO_INCREMENT,
   `estado` VARCHAR(25) NOT NULL DEFAULT 'Nuevo',
   `disponible_alquiler` TINYINT NOT NULL DEFAULT 0,
-  `id_juego` INT NOT NULL,
-  `nro_usuario` INT NOT NULL,
+  `id_juego` BIGINT NOT NULL,
+  `nro_usuario` BIGINT NOT NULL,
   PRIMARY KEY (`id`, `id_juego`, `nro_usuario`),
   INDEX `fk_ejemplar_juego1_idx` (`id_juego` ASC),
   INDEX `fk_ejemplar_usuario1_idx` (`nro_usuario` ASC),
@@ -99,8 +99,8 @@ ENGINE = InnoDB;
 -- Table `Vuelta_al_tablero_db`.`alquila`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `Vuelta_al_tablero_db`.`alquila` (
-  `nro_usuario` INT NOT NULL,
-  `id_ejemplar` INT NOT NULL,
+  `nro_usuario` BIGINT NOT NULL,
+  `id_ejemplar` BIGINT NOT NULL,
   `precio` DOUBLE NOT NULL,
   `fecha_entrega` DATE NULL,
   `fecha_devolucion` DATE NULL,
@@ -124,8 +124,8 @@ ENGINE = InnoDB;
 -- Table `Vuelta_al_tablero_db`.`critica_ejemplar`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `Vuelta_al_tablero_db`.`critica_ejemplar` (
-  `id_ejemplar` INT NOT NULL,
-  `nro_usuario` INT NOT NULL,
+  `id_ejemplar` BIGINT NOT NULL,
+  `nro_usuario` BIGINT NOT NULL,
   `comentario` VARCHAR(200) NULL,
   `puntuacion` INT NOT NULL,
   PRIMARY KEY (`id_ejemplar`, `nro_usuario`),
@@ -148,8 +148,8 @@ ENGINE = InnoDB;
 -- Table `Vuelta_al_tablero_db`.`critica_juego`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `Vuelta_al_tablero_db`.`critica_juego` (
-  `nro_usuario` INT NOT NULL,
-  `id_juego` INT NOT NULL,
+  `nro_usuario` BIGINT NOT NULL,
+  `id_juego` BIGINT NOT NULL,
   `comentario` VARCHAR(200) NULL,
   `puntuacion` INT NOT NULL,
   PRIMARY KEY (`nro_usuario`, `id_juego`),
