@@ -8,23 +8,19 @@
     <link rel="icon" type="image/x-icon" th:href="@{/images/favicon.png}"> 
 </head> 
 <body> 
-    <header> 
-        <a th:href="@{/}"> 
-            <img th:src="@{/images/logo.png}" alt="Logo de Vuelta al Tablero"> 
-        </a> 
-        <nav> 
-            <ul> 
-                <li><a href="#">Juegos</a></li> 
-                <li><a href="#">Ejemplares</a></li> 
-                <li><a href="#">Usuarios</a></li> 
-                <li><a href="#">Contacto</a></li> 
-            </ul> 
-        </nav> 
-    </header> 
+<header th:replace="fragments/header :: header-nav"></header> 
  
     <div class="container"> 
-        <p>Alquiler de juegos de mesa</p> 
+        <p>Juegos de mesa en circulación</p> 
+  
+        <div class="usuarios-grid"> 
+            <div th:each="usuario: ${usuarios}" class="usuario-card"> 
+                <h3 th:text="${usuario.nombre}+' '+${usuario.apellido}">Nombre de usuario</h3>
+                <p th:text="${usuario.correo}">Mail del usuario</p>
+                <p th:text="${usuario.dni}">DNI del usuario</p>
+            </div> 
+        </div> 
     </div> 
- 
+ <footer th:replace="fragments/footer :: footer-nav"></footer> 
 </body> 
 </html> 
