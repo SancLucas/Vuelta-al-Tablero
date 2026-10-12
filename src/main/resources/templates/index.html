@@ -1,26 +1,28 @@
-<!DOCTYPE html> 
-<html lang="es"> 
-<head> 
-    <meta charset="UTF-8"> 
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
-    <title>Vuelta al Tablero</title> 
-    <link rel="stylesheet" th:href="@{/css/style.css}"> 
-    <link rel="icon" type="image/x-icon" th:href="@{/images/favicon.png}"> 
-</head> 
-<body> 
-<header th:replace="fragments/header :: header-nav"></header> 
- 
-    <div class="container"> 
-        <p>Juegos de mesa en circulación</p> 
-  
-        <div class="usuarios-grid"> 
-            <div th:each="usuario: ${usuarios}" class="usuario-card"> 
-                <h3 th:text="${usuario.nombre}+' '+${usuario.apellido}">Nombre de usuario</h3>
-                <p th:text="${usuario.correo}">Mail del usuario</p>
-                <p th:text="${usuario.dni}">DNI del usuario</p>
-            </div> 
-        </div> 
-    </div> 
- <footer th:replace="fragments/footer :: footer-nav"></footer> 
-</body> 
-</html> 
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vuelta al Tablero</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link rel="icon" type="image/x-icon" th:href="@{/images/favicon.png}">
+</head>
+
+<body>
+<header th:replace="fragments/header :: header-nav"> </header>
+
+    <div class="container">
+        <p>Parte de los juegos de mesa en circulación:</p>
+
+        <div class="usuarios-grid">
+            <div th:each="usuario: ${usuarios}" class="usuario-card">
+                <h3 th:text="${usuario.nombre} + ' ' + ${usuario.apellido}"> Nombre de usuario </h3>
+                <p th:text="${usuario.correo}"> Mail del usuario </p>
+                <p th:text="${usuario.dni}"> DNI del usuario </p>
+            </div>
+        </div>
+        
+    </div>
+<footer th:replace="fragments/footer :: footer-nav"> </footer>
+</body>
+</html>

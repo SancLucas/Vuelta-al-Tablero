@@ -8,16 +8,16 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
-@Controller 
-public class UsuarioController { 
- 
-    @Autowired 
-    private UsuarioService usuarioService; 
- 
-    @GetMapping("/usuarios") 
-    public String listUsuarios(Model model) { 
-        List<Usuario> listaDeUsuarios = usuarioService.obtenerTodosLosUsuarios();         
-        model.addAttribute("usuarios", listaDeUsuarios);         
-        return "usuarios/list";  
-    } 
+@Controller
+public class UsuarioController{
+
+    @Autowired
+    private UsuarioService usuarioService;
+
+    @GetMapping("/usuarios")
+    public String listUsuarios(Model model){
+        List<Usuario> listaDeUsuarios = usuarioService.obtenerTodosLosUsuarios();     
+        model.addAttribute("usuarios", listaDeUsuarios);
+        return "usuarios/list";
+    }
 }
