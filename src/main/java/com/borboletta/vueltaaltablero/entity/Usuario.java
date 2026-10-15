@@ -32,7 +32,7 @@ public class Usuario{
         private String telefono;
         private LocalDate fechaRegistro;
         private boolean rolAdmin;
-        
+
 ///////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////
 
@@ -48,25 +48,24 @@ public class Usuario{
         this.rolAdmin = rolAdmin;
     }
 
-    public static Usuario registrar(String nombre, String apellido, String dni, String correo,
-                                    String telefono, String contrasenia){
-        return new Usuario(nombre, apellido, dni, correo, telefono, contrasenia, false);
+    public static Usuario registrar(String nombre, String apellido, String dni,
+                                    String correo, String telefono, String contra){
+        return new Usuario(nombre, apellido, dni, correo, telefono, contra, false);
     }
 
-    public static Usuario registrarAdministrador(String nombre, String apellido, String dni, String correo,
-                                                 String telefono, String contrasenia){
-        return new Usuario(nombre, apellido, dni, correo, telefono, contrasenia, true);
+    public static Usuario registrarAdministrador(String nombre, String apellido, String dni,
+                                                String correo, String telefono, String contra){
+        return new Usuario(nombre, apellido, dni, correo, telefono, contra, true);
     }
-    
+
     /**
-     * Principio Tell, Don't Ask: El objeto Usuario valida su propia contraseña
-     * en lugar de que el servicio extraiga el contrasenia con un getter.
+     * Tell, Don't Ask: el propio Usuario decide qué entrega a la capa de seguridad.
+     * Es la única vía por la que sale la contraseña (ya codificada); no hay getter.
+     * La comparación de contraseñas la hace Spring Security, no la entidad.
      */
-    public boolean verificarContrasenia(String contraseniaIngresado){
-        boolean esValida = false;
-        if(this.contrasenia != null && this.contrasenia.equals(contraseniaIngresado)){
-            esValida = true;
-        }
-        return esValida;
+    public Credenciales credenciales(){
+        return new Credenciales(correo, contrasenia, rolAdmin);
     }
+
+    public record Credenciales(String correo, String contraseniaCodificada, boolean administrador){ }
 }

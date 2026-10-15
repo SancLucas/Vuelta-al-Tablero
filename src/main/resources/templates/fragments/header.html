@@ -12,19 +12,22 @@
         <li><a th:href="@{/ejemplares}">Ejemplares</a></li>
         
         <!-- Opciones si NO hay sesión activa -->
-        <li th:if="${session.usuarioIngresado == null}">
+        <li th:unless="${sesionIniciada}">
             <a th:href="@{/usuario/ingreso}">Iniciar Sesión</a>
         </li>
-        <li th:if="${session.usuarioIngresado == null}">
+        <li th:unless="${sesionIniciada}">
             <a th:href="@{/registro}">Registrarse</a>
         </li>
 
         <!-- Opciones si SÍ hay sesión activa -->
-        <li th:if="${session.usuarioIngresado != null}">
+        <li th:if="${sesionIniciada}">
             <a th:href="@{/usuario/perfil}">Mi Perfil</a>
         </li>
-        <li th:if="${session.usuarioIngresado != null}">
-            <a th:href="@{/salir}">Cerrar Sesión</a>
+        <li th:if="${sesionIniciada}">
+            <!-- Spring Security exige POST (con token CSRF) para cerrar sesión -->
+            <form th:action="@{/salir}" method="post" class="form-salir">
+                <button type="submit" class="enlace-nav">Cerrar Sesión</button>
+            </form>
         </li>
     </ul>
 </nav>

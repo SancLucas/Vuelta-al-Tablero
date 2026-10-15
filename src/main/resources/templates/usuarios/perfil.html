@@ -1,40 +1,55 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+
 <head>
     <meta charset="UTF-8">
-    <title>Iniciar Sesión - Vuelta al Tablero</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mi perfil | Vuelta al Tablero</title>
     <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link rel="icon" type="image/x-icon" th:href="@{/images/favicon.png}">
 </head>
+
 <body>
-    <!-- Cabecera compartida -->
-    <div th:replace="~{fragments/header :: header-nav}"></div>
+<header th:replace="fragments/header :: header-nav"> </header>
 
-    <main class="container">
-        <h2>Iniciar Sesión en Vuelta al Tablero</h2>
+<main class="container container-form">
+    <h1>Mi perfil</h1>
 
-        <!-- Mensaje de error -->
-        <div th:if="${error}" class="alert alert-danger" th:text="${error}" style="color: #d9534f; margin-bottom: 15px;"></div>
+    <dl class="datos-perfil">
+        <div class="dato">
+            <dt>Nombre</dt>
+            <dd th:text="${perfil.nombre}">Nombre</dd>
+        </div>
+        <div class="dato">
+            <dt>Apellido</dt>
+            <dd th:text="${perfil.apellido}">Apellido</dd>
+        </div>
+        <div class="dato">
+            <dt>DNI</dt>
+            <dd th:text="${perfil.dni}">DNI</dd>
+        </div>
+        <div class="dato">
+            <dt>Correo electrónico</dt>
+            <dd th:text="${perfil.correo}">correo@ejemplo.com</dd>
+        </div>
+        <div class="dato">
+            <dt>Teléfono</dt>
+            <dd th:text="${perfil.telefono}">Teléfono</dd>
+        </div>
+        <div class="dato">
+            <dt>Miembro desde</dt>
+            <dd th:text="${#temporals.format(perfil.fechaRegistro, 'dd/MM/yyyy')}">01/01/2026</dd>
+        </div>
+        <div class="dato">
+            <dt>Tipo de cuenta</dt>
+            <dd th:text="${perfil.rol}">Usuario</dd>
+        </div>
+    </dl>
 
-        <form th:action="@{/usuario/ingreso}" th:object="${ingresoForm}" method="post">
-            <div class="form-group" style="margin-bottom: 15px;">
-                <label for="correo">Correo Electrónico:</label>
-                <input type="email" id="correo" th:field="*{correo}" required style="display: block; width: 100%; padding: 8px;" />
-            </div>
+    <!-- Próximo paso: acá van las acciones "Modificar datos" y "Eliminar cuenta". -->
+</main>
 
-            <div class="form-group" style="margin-bottom: 15px;">
-                <label for="contrasenia">Contraseña:</label>
-                <input type="password" id="contrasenia" th:field="*{contrasenia}" required style="display: block; width: 100%; padding: 8px;" />
-            </div>
-
-            <button type="submit" class="btn-primary">Entrar</button>
-        </form>
-
-        <p style="margin-top: 20px;">
-            ¿No tenés una cuenta? <a th:href="@{/registro}">Registrate</a>
-        </p>
-    </main>
-
-    <!-- Pie de página compartido -->
-    <div th:replace="~{fragments/footer :: footer-nav}"></div>
+<footer th:replace="fragments/footer :: footer-nav"> </footer>
 </body>
+
 </html>

@@ -138,3 +138,49 @@ body {
     margin-bottom: 1rem;
 }
 .alerta-ok { background-color: #e6f4ea; color: #1e6b34; }
+
+/* ---------- Perfil de usuario ---------- */
+.datos-perfil { margin: 1.5rem 0 0; }
+
+.dato {
+    padding: 0.8rem 0;
+    border-bottom: 1px solid #eee;
+}
+
+.dato:last-child { border-bottom: none; }
+
+.dato dt {
+    font-size: 0.85rem;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: #777;
+    margin-bottom: 0.2rem;
+}
+
+.dato dd {
+    margin: 0;
+    font-size: 1.1rem;
+    color: #333;
+    overflow-wrap: anywhere;
+}
+
+/* ---------- Mensaje de error y botón de cierre de sesión ---------- */
+.alerta-error { background-color: #fdecea; color: #b3261e; }
+
+.form-salir { display: inline; margin: 0; }
+
+.enlace-nav {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #fff;
+    font-family: inherit;
+    font-weight: bold;
+    font-size: 1.1rem;
+    padding: 5px 10px;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+}
+
+.enlace-nav:hover { background-color: #555456; }

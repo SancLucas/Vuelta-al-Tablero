@@ -54,7 +54,7 @@
 
         <div class="campo">
             <label for="contrasenia">Contraseña</label>
-            <input type="password" th:field="*{contrasenia}" minlength="8" maxlength="100" required
+            <input type="password" th:field="*{contrasenia}" minlength="8" maxlength="72" required
                    th:classappend="${#fields.hasErrors('contrasenia')} ? 'invalido'">
             <small class="error" th:errors="*{contrasenia}"> Error </small>
         </div>

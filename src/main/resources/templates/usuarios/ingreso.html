@@ -1,40 +1,43 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+
 <head>
     <meta charset="UTF-8">
-    <title>Iniciar Sesión - Vuelta al Tablero</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ingresar | Vuelta al Tablero</title>
     <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link rel="icon" type="image/x-icon" th:href="@{/images/favicon.png}">
 </head>
+
 <body>
-    <!-- Cabecera compartida -->
-    <div th:replace="~{fragments/header :: header-nav}"></div>
+<header th:replace="fragments/header :: header-nav"> </header>
 
-    <main class="container">
-        <h2>Iniciar Sesión en Vuelta al Tablero</h2>
+<main class="container container-form">
+    <h1>Ingresar</h1>
 
-        <!-- Mensaje de error -->
-        <div th:if="${error}" class="alert alert-danger" th:text="${error}" style="color: #d9534f; margin-bottom: 15px;"></div>
+    <p class="alerta alerta-ok" th:if="${mensajeExito}" th:text="${mensajeExito}">Mensaje</p>
+    <p class="alerta alerta-error" th:if="${param.error}">Correo o contraseña incorrectos.</p>
 
-        <form th:action="@{/usuario/ingreso}" th:object="${ingresoForm}" method="post">
-            <div class="form-group" style="margin-bottom: 15px;">
-                <label for="correo">Correo Electrónico:</label>
-                <input type="email" id="correo" th:field="*{correo}" required style="display: block; width: 100%; padding: 8px;" />
-            </div>
+    <!-- Los nombres "correo" y "contrasenia" deben coincidir con SecurityConfig -->
+    <form th:action="@{/usuario/ingreso}" method="post">
 
-            <div class="form-group" style="margin-bottom: 15px;">
-                <label for="contrasenia">Contraseña:</label>
-                <input type="password" id="contrasenia" th:field="*{contrasenia}" required style="display: block; width: 100%; padding: 8px;" />
-            </div>
+        <div class="campo">
+            <label for="correo">Correo electrónico</label>
+            <input type="email" id="correo" name="correo" maxlength="100" required>
+        </div>
 
-            <button type="ingresar" class="btn-primary">Entrar</button>
-        </form>
+        <div class="campo">
+            <label for="contrasenia">Contraseña</label>
+            <input type="password" id="contrasenia" name="contrasenia" maxlength="72" required>
+        </div>
 
-        <p style="margin-top: 20px;">
-            ¿No tenés una cuenta? <a th:href="@{/registro}">Registrate</a>
-        </p>
-    </main>
+        <button type="submit" class="btn"> Entrar </button>
+    </form>
 
-    <!-- Pie de página compartido -->
-    <div th:replace="~{fragments/footer :: footer-nav}"></div>
+    <p>¿No tenés una cuenta? <a th:href="@{/registro}">Registrate</a></p>
+</main>
+
+<footer th:replace="fragments/footer :: footer-nav"> </footer>
 </body>
+
 </html>
