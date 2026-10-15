@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registro | Vuelta al Tablero</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link rel="icon" type="image/x-icon" th:href="@{/images/favicon.png}">
+</head>
+<body>
+<header th:replace="fragments/header :: header-nav"></header>
+
+<main class="container container-form">
+    <h1>Crear cuenta</h1>
+
+    <form th:action="@{/registro}" th:object="${registroForm}" method="post">
+
+        <div class="campo">
+            <label for="nombre">Nombre</label>
+            <input type="text" th:field="*{nombre}" maxlength="45" required
+                   th:classappend="${#fields.hasErrors('nombre')} ? 'invalido'">
+            <small class="error" th:errors="*{nombre}">Error</small>
+        </div>
+
+        <div class="campo">
+            <label for="apellido">Apellido</label>
+            <input type="text" th:field="*{apellido}" maxlength="45" required
+                   th:classappend="${#fields.hasErrors('apellido')} ? 'invalido'">
+            <small class="error" th:errors="*{apellido}">Error</small>
+        </div>
+
+        <div class="campo">
+            <label for="dni">DNI</label>
+            <input type="text" th:field="*{dni}" inputmode="numeric" maxlength="8" required
+                   th:classappend="${#fields.hasErrors('dni')} ? 'invalido'">
+            <small class="error" th:errors="*{dni}">Error</small>
+        </div>
+
+        <div class="campo">
+            <label for="correo">Correo electrónico</label>
+            <input type="email" th:field="*{correo}" maxlength="100" required
+                   th:classappend="${#fields.hasErrors('correo')} ? 'invalido'">
+            <small class="error" th:errors="*{correo}">Error</small>
+        </div>
+
+        <div class="campo">
+            <label for="telefono">Teléfono</label>
+            <input type="tel" th:field="*{telefono}" maxlength="15" required
+                   th:classappend="${#fields.hasErrors('telefono')} ? 'invalido'">
+            <small class="error" th:errors="*{telefono}">Error</small>
+        </div>
+
+        <div class="campo">
+            <label for="contrasenia">Contraseña</label>
+            <input type="password" th:field="*{contrasenia}" minlength="8" maxlength="100" required
+                   th:classappend="${#fields.hasErrors('contrasenia')} ? 'invalido'">
+            <small class="error" th:errors="*{contrasenia}">Error</small>
+        </div>
+
+        <div class="campo">
+            <label for="confirmacionContrasenia">Repetir contraseña</label>
+            <input type="password" th:field="*{confirmacionContrasenia}" required
+                   th:classappend="${#fields.hasErrors('confirmacionContrasenia') or #fields.hasErrors('contraseniasCoinciden')} ? 'invalido'">
+            <small class="error" th:errors="*{confirmacionContrasenia}">Error</small>
+            <small class="error" th:errors="*{contraseniasCoinciden}">Error</small>
+        </div>
+
+        <button type="submit" class="btn">Registrarme</button>
+    </form>
+</main>
+
+<footer th:replace="fragments/footer :: footer-nav"></footer>
+</body>
+</html>
