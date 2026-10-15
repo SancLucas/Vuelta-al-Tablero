@@ -11,7 +11,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class RegistroUsuarioForm {
+public class RegistroUsuarioForm{
 
     @NotBlank(message = "Ingresá tu nombre.")
     @Size(max = 45, message = "Máximo 45 caracteres.")
@@ -42,11 +42,11 @@ public class RegistroUsuarioForm {
     private String confirmacionContrasenia;
 
     @AssertTrue(message = "Las contraseñas no coinciden.")
-    public boolean isContraseniasCoinciden() {
+    public boolean isContraseniasCoinciden(){
         return Objects.equals(contrasenia, confirmacionContrasenia);
     }
 
-    public DatosDeRegistro aDatosDeRegistro() {
+    public DatosDeRegistro aDatosDeRegistro(){
          return new DatosDeRegistro(nombre, apellido, dni, correo, telefono, contrasenia);
     }
 }

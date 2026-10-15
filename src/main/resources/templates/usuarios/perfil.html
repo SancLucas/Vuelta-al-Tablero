@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Iniciar Sesión - Vuelta al Tablero</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+    <!-- Cabecera compartida -->
+    <div th:replace="~{fragments/header :: header-nav}"></div>
+
+    <main class="container">
+        <h2>Iniciar Sesión en Vuelta al Tablero</h2>
+
+        <!-- Mensaje de error -->
+        <div th:if="${error}" class="alert alert-danger" th:text="${error}" style="color: #d9534f; margin-bottom: 15px;"></div>
+
+        <form th:action="@{/usuario/ingreso}" th:object="${ingresoForm}" method="post">
+            <div class="form-group" style="margin-bottom: 15px;">
+                <label for="correo">Correo Electrónico:</label>
+                <input type="email" id="correo" th:field="*{correo}" required style="display: block; width: 100%; padding: 8px;" />
+            </div>
+
+            <div class="form-group" style="margin-bottom: 15px;">
+                <label for="contrasenia">Contraseña:</label>
+                <input type="password" id="contrasenia" th:field="*{contrasenia}" required style="display: block; width: 100%; padding: 8px;" />
+            </div>
+
+            <button type="submit" class="btn-primary">Entrar</button>
+        </form>
+
+        <p style="margin-top: 20px;">
+            ¿No tenés una cuenta? <a th:href="@{/registro}">Registrate</a>
+        </p>
+    </main>
+
+    <!-- Pie de página compartido -->
+    <div th:replace="~{fragments/footer :: footer-nav}"></div>
+</body>
+</html>
