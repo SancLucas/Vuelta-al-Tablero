@@ -20,9 +20,9 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 @Controller
 @RequiredArgsConstructor
 public class UsuarioController{
-
+    
     private static final String VISTA_LISTADO = "usuarios/list";
-    private static final String VISTA_REGISTRO = "usuarios/registro";
+    private static final String VISTA_FORMULARIO = "usuarios/formulario";
     private static final String VISTA_INGRESO = "usuarios/ingreso";
     private static final String REDIRECCION_INGRESO = "redirect:/usuario/ingreso";
 
@@ -37,16 +37,16 @@ public class UsuarioController{
 
     @GetMapping("/registro")
     public String mostrarFormulario(Model model){
-        model.addAttribute("registroForm", new RegistroUsuarioForm());
-        return VISTA_REGISTRO;
+        model.addAttribute("form", new RegistroUsuarioForm());
+        return VISTA_FORMULARIO;
     }
 
     @PostMapping("/registro")
-    public String procesarRegistro(@Valid @ModelAttribute("registroForm")
+    public String procesarRegistro(@Valid @ModelAttribute("form")
                                    RegistroUsuarioForm form,
                                    BindingResult resultado,
                                    RedirectAttributes redirectAttributes){
-        String vista = VISTA_REGISTRO;
+        String vista = VISTA_FORMULARIO;
         if (!resultado.hasErrors()) {
             vista = registrar(form, resultado, redirectAttributes);
         }
@@ -55,7 +55,7 @@ public class UsuarioController{
 
     private String registrar(RegistroUsuarioForm form, BindingResult resultado,
                              RedirectAttributes redirectAttributes){
-        String vista = VISTA_REGISTRO;
+        String vista = VISTA_FORMULARIO;
         try{
             usuarioService.registrar(form.aDatosDeRegistro());
             redirectAttributes.addFlashAttribute("mensajeExito", "¡Usuario registrado correctamente! Ya podés ingresar.");

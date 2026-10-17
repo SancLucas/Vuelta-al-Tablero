@@ -11,15 +11,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class RegistroUsuarioForm{
-
-    @NotBlank(message = "Ingresá tu nombre.")
-    @Size(max = 45, message = "Máximo 45 caracteres.")
-    private String nombre;
-
-    @NotBlank(message = "Ingresá tu apellido.")
-    @Size(max = 45, message = "Máximo 45 caracteres.")
-    private String apellido;
+public class RegistroUsuarioForm extends DatosPersonalesForm{
 
     @NotBlank(message = "Ingresá tu DNI.")
     @Pattern(regexp = "\\d{7,8}", message = "El DNI debe tener 7 u 8 números, sin puntos.")
@@ -29,10 +21,6 @@ public class RegistroUsuarioForm{
     @Email(message = "El correo no es válido.")
     @Size(max = 100, message = "Máximo 100 caracteres.")
     private String correo;
-
-    @NotBlank(message = "Ingresá tu teléfono.")
-    @Pattern(regexp = "[0-9+\\- ]{6,15}", message = "Teléfono inválido (6 a 15 caracteres).")
-    private String telefono;
 
     @NotBlank(message = "Ingresá una contraseña.")
     @Size(min = 8, max = 72, message = "La contraseña debe tener entre 8 y 72 caracteres.")
@@ -47,6 +35,7 @@ public class RegistroUsuarioForm{
     }
 
     public DatosDeRegistro aDatosDeRegistro(){
-         return new DatosDeRegistro(nombre, apellido, dni, correo, telefono, contrasenia);
+        return new DatosDeRegistro(getNombre(), getApellido(), dni, correo,
+                                   getTelefono(), contrasenia);
     }
 }

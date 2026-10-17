@@ -21,7 +21,9 @@
                 <p th:text="${usuario.dni}"> DNI del usuario </p>
             </div>
         </div>
-        
+        <p class="alerta alerta-ok" th:if="${param.cuentaEliminada}">
+            Tu cuenta fue dada de baja. Si querés volver, registrate con los mismos datos y la reactivamos.
+        </p>
     </div>
 <footer th:replace="fragments/footer :: footer-nav"> </footer>
 </body>

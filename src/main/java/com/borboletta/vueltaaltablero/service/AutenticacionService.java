@@ -22,9 +22,10 @@ public class AutenticacionService implements UserDetailsService{
     @Override
     @Transactional(readOnly = true)
     public UserDetails loadUserByUsername(String correo) throws UsernameNotFoundException{
-        Usuario.Credenciales credenciales = usuarioRepository.findByCorreoIgnoreCase(correo)
-                .map(Usuario::credenciales)
-                .orElseThrow(() -> new UsernameNotFoundException("No existe un usuario con ese correo."));
+        Usuario.Credenciales credenciales = usuarioRepository
+            .findByCorreoIgnoreCaseAndFechaBajaIsNull(correo)  
+            .map(Usuario::credenciales)
+            .orElseThrow(() -> new UsernameNotFoundException("No existe un usuario con ese correo."));
         return aUserDetails(credenciales);
     }
 

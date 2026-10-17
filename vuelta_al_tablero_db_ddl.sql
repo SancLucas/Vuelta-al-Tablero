@@ -29,6 +29,7 @@ CREATE TABLE IF NOT EXISTS `Vuelta_al_tablero_db`.`usuario`(
   `contrasenia` VARCHAR(100) NOT NULL,
   `telefono` VARCHAR(15) NOT NULL,
   `fecha_registro` DATE NOT NULL DEFAULT (CURRENT_DATE()),
+  `fecha_baja` DATE NULL,
   `rol_admin` TINYINT NOT NULL DEFAULT 0,
 
   PRIMARY KEY (`nro`),
