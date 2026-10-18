@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>No encontrado | Vuelta al Tablero</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link rel="icon" type="image/x-icon" th:href="@{/images/favicon.png}">
+</head>
+
+<body>
+<header th:replace="fragments/header :: header-nav"> </header>
+
+<main class="container container-form">
+    <h1>No encontramos lo que buscabas</h1>
+    <p th:text="${mensaje} ?: 'La página que pediste no existe.'">La página que pediste no existe.</p>
+
+    <div class="acciones-perfil">
+        <a th:href="@{/juegos}" class="btn">Ir al catálogo</a>
+        <a th:href="@{/}" class="btn btn-secundario">Volver al inicio</a>
+    </div>
+</main>
+
+<footer th:replace="fragments/footer :: footer-nav"> </footer>
+</body>
+
+</html>

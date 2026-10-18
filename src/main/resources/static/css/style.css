@@ -217,3 +217,127 @@ form a.btn { margin-top: 0.8rem; }
 
 .btn-peligro { background-color: #b3261e; }
 .btn-peligro:hover { background-color: #8c1d18; }
+
+/* ---------- Catálogo y ejemplares ---------- */
+.container h1 { margin-bottom: 0.5rem; }
+
+.encabezado-lista {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.encabezado-lista h1 { margin: 0; }
+
+.tarjetas {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 1rem;
+}
+
+.tarjeta {
+    border: 1px solid #e6e1db;
+    border-radius: 12px;
+    padding: 1.2rem;
+    background-color: #fdfcfb;
+}
+
+.tarjeta h2 {
+    font-family: 'Georgia', serif;
+    font-size: 1.35rem;
+    margin: 0 0 0.6rem;
+}
+
+.tarjeta h2 a { color: #3f3e40; text-decoration: none; }
+.tarjeta h2 a:hover { text-decoration: underline; }
+.tarjeta h2 a:focus-visible { outline: 3px solid #3f3e40; outline-offset: 2px; }
+
+.tarjeta-detalle { margin: 0.2rem 0; color: #555; }
+
+.tarjeta-acciones {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+    margin-top: 1rem;
+}
+
+.tarjeta-acciones form { margin: 0; }
+
+.vacio {
+    padding: 1.5rem;
+    border: 1px dashed #cfc8bf;
+    border-radius: 12px;
+    color: #555;
+}
+
+/* Botones de tamaño compacto (los .btn comunes ocupan todo el ancho) */
+.btn.btn-compacto {
+    width: auto;
+    padding: 8px 16px;
+    font-size: 0.95rem;
+}
+
+a.btn.btn-compacto { display: inline-block; }
+
+/* Formularios con más tipos de campo */
+.campo select,
+.campo textarea {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-family: inherit;
+    box-sizing: border-box;
+    background-color: #fff;
+}
+
+.campo textarea { resize: vertical; }
+
+.campo select:focus,
+.campo textarea:focus {
+    outline: none;
+    border-color: #3f3e40;
+    box-shadow: 0 0 0 3px rgba(63, 62, 64, 0.15);
+}
+
+.campo select.invalido,
+.campo textarea.invalido { border-color: #b3261e; }
+
+.campo-check label {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    font-weight: normal;
+    cursor: pointer;
+}
+
+.campo-check input { width: auto; }
+
+.grupo {
+    border: 1px solid #e6e1db;
+    border-radius: 12px;
+    padding: 1rem 1.2rem 0.4rem;
+    margin: 0 0 1.2rem;
+}
+
+.grupo legend {
+    font-family: 'Georgia', serif;
+    font-weight: bold;
+    padding: 0 0.5rem;
+}
+
+.campo-fila {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.campo-fila .campo { flex: 1 1 160px; }
+

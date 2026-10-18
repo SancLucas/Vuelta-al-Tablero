@@ -2,6 +2,7 @@ package com.borboletta.vueltaaltablero.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.core.session.SessionRegistry;
@@ -39,9 +40,13 @@ public class SecurityConfig{
     public SecurityFilterChain filtroDeSeguridad(HttpSecurity http) throws Exception{
         http
             .authorizeHttpRequests(rutas -> rutas
-                .requestMatchers("/", "/registro", RUTA_INGRESO, "/juegos", "/ejemplares",
+                .requestMatchers("/", "/registro", RUTA_INGRESO,
                                  "/css/**", "/images/**", "/error").permitAll()
-                .requestMatchers("/usuarios").hasRole(Roles.ADMINISTRADOR)
+                // Catálogo y ejemplares disponibles: públicos, pero SOLO para mirar (GET).
+                .requestMatchers(HttpMethod.GET, "/juegos", "/juegos/*", "/ejemplares").permitAll()
+                // Administración: todo lo que cuelga de /admin/** es solo para administradores.
+                .requestMatchers("/usuarios", "/admin/**").hasRole(Roles.ADMINISTRADOR)
+                // Lo demás (por ejemplo /mis-ejemplares/**) pide sesión iniciada.
                 .anyRequest().authenticated())
             .formLogin(formulario -> formulario
                 .loginPage(RUTA_INGRESO)

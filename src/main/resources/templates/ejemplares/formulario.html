@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ejemplar | Vuelta al Tablero</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link rel="icon" type="image/x-icon" th:href="@{/images/favicon.png}">
+</head>
+
+<body>
+<header th:replace="fragments/header :: header-nav"> </header>
+
+<main class="container container-form">
+    <h1 th:text="${modoEdicion} ? 'Editar ejemplar' : 'Publicar ejemplar'">Publicar ejemplar</h1>
+
+    <!-- Para publicar hace falta que el catálogo tenga al menos un juego -->
+    <div th:if="${!modoEdicion and #lists.isEmpty(juegos)}">
+        <p class="alerta alerta-error">
+            El catálogo todavía no tiene juegos. Un administrador tiene que agregarlos
+            antes de que puedas publicar tus ejemplares.
+        </p>
+        <a th:href="@{/mis-ejemplares}" class="btn btn-secundario">Volver a mis ejemplares</a>
+    </div>
+
+    <form th:if="${modoEdicion or !#lists.isEmpty(juegos)}"
+          th:action="${modoEdicion} ? @{/mis-ejemplares/{id}/editar(id=${ejemplar.id})} : @{/mis-ejemplares}"
+          th:object="${form}" method="post">
+
+        <!-- PUBLICAR: se elige el juego -->
+        <div class="campo" th:unless="${modoEdicion}">
+            <label for="idJuego">Juego</label>
+            <select th:field="*{idJuego}" required
+                    th:classappend="${#fields.hasErrors('idJuego')} ? 'invalido'">
+                <option value="">Elegí un juego</option>
+                <option th:each="juego : ${juegos}" th:value="${juego.id}" th:text="${juego.titulo}">Juego</option>
+            </select>
+            <small class="error" th:errors="*{idJuego}"> Error </small>
+        </div>
+
+        <!-- EDITAR: el juego se muestra, pero un ejemplar no cambia de juego -->
+        <div class="campo" th:if="${modoEdicion}">
+            <label for="juego-fijo">Juego</label>
+            <input type="text" id="juego-fijo" th:value="${ejemplar.tituloJuego}" disabled>
+            <small class="ayuda">Un ejemplar no puede cambiar de juego.</small>
+        </div>
+
+        <div class="campo">
+            <label for="estado">Estado del ejemplar</label>
+            <select th:field="*{estado}" required
+                    th:classappend="${#fields.hasErrors('estado')} ? 'invalido'">
+                <option value="">Elegí el estado</option>
+                <option th:each="estadoDelEjemplar : ${estados}" th:value="${estadoDelEjemplar}"
+                        th:text="${estadoDelEjemplar.etiqueta}">Nuevo</option>
+            </select>
+            <small class="error" th:errors="*{estado}"> Error </small>
+        </div>
+
+        <div class="campo campo-check">
+            <label for="disponibleAlquiler">
+                <input type="checkbox" th:field="*{disponibleAlquiler}">
+                Disponible para alquilar
+            </label>
+        </div>
+
+        <button type="submit" class="btn"
+                th:text="${modoEdicion} ? 'Guardar cambios' : 'Publicar ejemplar'">Publicar ejemplar</button>
+        <a th:href="@{/mis-ejemplares}" class="btn btn-secundario">Cancelar</a>
+    </form>
+</main>
+
+<footer th:replace="fragments/footer :: footer-nav"> </footer>
+</body>
+
+</html>

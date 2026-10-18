@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mis ejemplares | Vuelta al Tablero</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link rel="icon" type="image/x-icon" th:href="@{/images/favicon.png}">
+</head>
+
+<body>
+<header th:replace="fragments/header :: header-nav"> </header>
+
+<main class="container">
+    <p class="alerta alerta-ok" th:if="${mensajeExito}" th:text="${mensajeExito}">Mensaje</p>
+
+    <div class="encabezado-lista">
+        <h1>Mis ejemplares</h1>
+        <a th:href="@{/mis-ejemplares/nuevo}" class="btn btn-compacto">Publicar ejemplar</a>
+    </div>
+
+    <p class="vacio" th:if="${#lists.isEmpty(ejemplares)}">
+        Todavía no publicaste ningún ejemplar. Elegí un juego del catálogo y sumá tu copia.
+    </p>
+
+    <ul class="tarjetas">
+        <li class="tarjeta" th:each="ejemplar : ${ejemplares}">
+            <h2><a th:href="@{/juegos/{id}(id=${ejemplar.idJuego})}" th:text="${ejemplar.tituloJuego}">Juego</a></h2>
+            <p class="tarjeta-detalle" th:text="'Estado: ' + ${ejemplar.estado.etiqueta}">Estado: Nuevo</p>
+            <p class="tarjeta-detalle"
+               th:text="${ejemplar.disponibleAlquiler} ? 'Disponible para alquilar' : 'No disponible por ahora'">Disponible</p>
+
+            <div class="tarjeta-acciones">
+                <a th:href="@{/mis-ejemplares/{id}/editar(id=${ejemplar.id})}" class="btn btn-compacto">Editar</a>
+                <form th:action="@{/mis-ejemplares/{id}/baja(id=${ejemplar.id})}" method="post"
+                      onsubmit="return confirm('¿Querés quitar este ejemplar de tu colección?');">
+                    <button type="submit" class="btn btn-compacto btn-peligro">Quitar</button>
+                </form>
+            </div>
+        </li>
+    </ul>
+</main>
+
+<footer th:replace="fragments/footer :: footer-nav"> </footer>
+</body>
+
+</html>

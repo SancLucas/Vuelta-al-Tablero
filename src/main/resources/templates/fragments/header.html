@@ -21,6 +21,9 @@
 
         <!-- Opciones si SÍ hay sesión activa -->
         <li th:if="${sesionIniciada}">
+            <a th:href="@{/mis-ejemplares}">Mis Ejemplares</a>
+        </li>
+        <li th:if="${sesionIniciada}">
             <a th:href="@{/usuario/perfil}">Mi Perfil</a>
         </li>
         <li th:if="${sesionIniciada}">

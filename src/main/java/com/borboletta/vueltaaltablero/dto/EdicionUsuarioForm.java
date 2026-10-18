@@ -10,7 +10,7 @@ public class EdicionUsuarioForm extends DatosPersonalesForm{
         return form;
     }
 
-    public DatosDeEdicion aDatosDeEdicion(){
-        return new DatosDeEdicion(getNombre(), getApellido(), getTelefono());
+    public DatosDeEdicionUsuario aDatosDeEdicion(){
+        return new DatosDeEdicionUsuario(getNombre(), getApellido(), getTelefono());
     }
 }

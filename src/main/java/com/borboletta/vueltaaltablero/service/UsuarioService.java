@@ -1,8 +1,8 @@
 package com.borboletta.vueltaaltablero.service;
 
-import com.borboletta.vueltaaltablero.dto.DatosDeEdicion;
+import com.borboletta.vueltaaltablero.dto.DatosDeEdicionUsuario;
 import com.borboletta.vueltaaltablero.dto.DatosDePerfil;
-import com.borboletta.vueltaaltablero.dto.DatosDeRegistro;
+import com.borboletta.vueltaaltablero.dto.DatosDeRegistroUsuario;
 import com.borboletta.vueltaaltablero.entity.Usuario;
 import com.borboletta.vueltaaltablero.exception.UsuarioNoEncontradoException;
 import com.borboletta.vueltaaltablero.exception.UsuarioYaRegistradoException;
@@ -27,7 +27,7 @@ public class UsuarioService{
     /* Si el correo y el DNI son de una cuenta dada de baja, se la reactiva;
     si no, se crea una cuenta nueva. */
     @Transactional
-    public void registrar(DatosDeRegistro datos){
+    public void registrar(DatosDeRegistroUsuario datos){
         usuarioRepository
                 .findByCorreoIgnoreCaseAndDniAndFechaBajaIsNotNull(datos.correo(), datos.dni())
                 .ifPresentOrElse(
@@ -41,7 +41,7 @@ public class UsuarioService{
     }
 
     @Transactional
-    public void actualizar(String correo, DatosDeEdicion datos){
+    public void actualizar(String correo, DatosDeEdicionUsuario datos){
         Usuario usuario = buscarPorCorreo(correo);
         usuario.actualizarDatosPersonales(datos.nombre(), datos.apellido(), datos.telefono());
     }
@@ -51,12 +51,12 @@ public class UsuarioService{
         buscarPorCorreo(correo).darDeBaja();
     }
 
-    private void reactivar(Usuario cuentaDeBaja, DatosDeRegistro datos){
+    private void reactivar(Usuario cuentaDeBaja, DatosDeRegistroUsuario datos){
         cuentaDeBaja.reactivar(datos.nombre(), datos.apellido(), datos.telefono(),
                 passwordEncoder.encode(datos.contrasenia()));
     }
 
-    private void crearCuentaNueva(DatosDeRegistro datos){
+    private void crearCuentaNueva(DatosDeRegistroUsuario datos){
         validarQueNoExista(datos);
         Usuario nuevo = Usuario.registrar(
                 datos.nombre(), datos.apellido(), datos.dni(),
@@ -64,7 +64,7 @@ public class UsuarioService{
         usuarioRepository.save(nuevo);
     }
 
-    private void validarQueNoExista(DatosDeRegistro datos){
+    private void validarQueNoExista(DatosDeRegistroUsuario datos){
         if (usuarioRepository.existsByCorreoIgnoreCase(datos.correo())){
             throw new UsuarioYaRegistradoException("correo", "Ya existe una cuenta con ese correo.");
         }

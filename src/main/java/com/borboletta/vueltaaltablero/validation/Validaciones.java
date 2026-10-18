@@ -10,4 +10,10 @@ public final class Validaciones{
         }
         return valor.trim();
     }
+    
+    public static void exigirQue(boolean cumple, String mensaje){
+    if(!cumple){
+        throw new IllegalArgumentException(mensaje);
+        }
+    }
 }

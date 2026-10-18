@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Catálogo | Vuelta al Tablero</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link rel="icon" type="image/x-icon" th:href="@{/images/favicon.png}">
+</head>
+
+<body>
+<header th:replace="fragments/header :: header-nav"> </header>
+
+<main class="container">
+    <p class="alerta alerta-ok" th:if="${mensajeExito}" th:text="${mensajeExito}">Mensaje</p>
+
+    <div class="encabezado-lista">
+        <h1>Catálogo de juegos</h1>
+        <!-- Solo se ve si sos administrador; la protección real está en SecurityConfig -->
+        <a th:if="${esAdmin}" th:href="@{/admin/juegos/nuevo}" class="btn btn-compacto">Agregar juego</a>
+    </div>
+
+    <p class="vacio" th:if="${#lists.isEmpty(juegos)}">
+        Todavía no hay juegos en el catálogo.
+        <span th:if="${esAdmin}">Agregá el primero con el botón de arriba.</span>
+    </p>
+
+    <ul class="tarjetas">
+        <li class="tarjeta" th:each="juego : ${juegos}">
+            <h2><a th:href="@{/juegos/{id}(id=${juego.id})}" th:text="${juego.titulo}">Título</a></h2>
+            <p class="tarjeta-detalle" th:text="${juego.categoria}">Categoría</p>
+            <p class="tarjeta-detalle" th:text="${juego.editorial}">Editorial</p>
+            <p class="tarjeta-detalle"
+               th:text="${juego.jugadores()} + ', desde los ' + ${juego.minEdad} + ' años'">2 a 4 jugadores</p>
+
+            <div class="tarjeta-acciones" th:if="${esAdmin}">
+                <a th:href="@{/admin/juegos/{id}/editar(id=${juego.id})}" class="btn btn-compacto">Editar</a>
+                <form th:action="@{/admin/juegos/{id}/baja(id=${juego.id})}" method="post"
+                      onsubmit="return confirm('¿Querés quitar este juego del catálogo? Sus ejemplares dejarán de mostrarse.');">
+                    <button type="submit" class="btn btn-compacto btn-peligro">Quitar</button>
+                </form>
+            </div>
+        </li>
+    </ul>
+</main>
+
+<footer th:replace="fragments/footer :: footer-nav"> </footer>
+</body>
+
+</html>

@@ -34,8 +34,8 @@ public class RegistroUsuarioForm extends DatosPersonalesForm{
         return Objects.equals(contrasenia, confirmacionContrasenia);
     }
 
-    public DatosDeRegistro aDatosDeRegistro(){
-        return new DatosDeRegistro(getNombre(), getApellido(), dni, correo,
+    public DatosDeRegistroUsuario aDatosDeRegistro(){
+        return new DatosDeRegistroUsuario(getNombre(), getApellido(), dni, correo,
                                    getTelefono(), contrasenia);
     }
 }

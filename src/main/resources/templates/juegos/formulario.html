@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Juego | Vuelta al Tablero</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link rel="icon" type="image/x-icon" th:href="@{/images/favicon.png}">
+</head>
+
+<body>
+<header th:replace="fragments/header :: header-nav"> </header>
+
+<main class="container container-form">
+    <h1 th:text="${modoEdicion} ? 'Editar juego' : 'Agregar juego'">Agregar juego</h1>
+
+    <!-- El mismo formulario sirve para crear y para editar: cambia solo la URL y los textos -->
+    <form th:action="${modoEdicion} ? @{/admin/juegos/{id}/editar(id=${idJuego})} : @{/admin/juegos}"
+          th:object="${form}" method="post">
+
+        <div class="campo">
+            <label for="titulo">Título</label>
+            <input type="text" th:field="*{titulo}" maxlength="45" required
+                   th:classappend="${#fields.hasErrors('titulo')} ? 'invalido'">
+            <small class="error" th:errors="*{titulo}"> Error </small>
+        </div>
+
+        <div class="campo">
+            <label for="categoria">Categoría</label>
+            <input type="text" th:field="*{categoria}" maxlength="25" required
+                   th:classappend="${#fields.hasErrors('categoria')} ? 'invalido'">
+            <small class="ayuda">Por ejemplo: estrategia, cartas, cooperativo.</small>
+            <small class="error" th:errors="*{categoria}"> Error </small>
+        </div>
+
+        <div class="campo">
+            <label for="editorial">Editorial</label>
+            <input type="text" th:field="*{editorial}" maxlength="25" required
+                   th:classappend="${#fields.hasErrors('editorial')} ? 'invalido'">
+            <small class="error" th:errors="*{editorial}"> Error </small>
+        </div>
+
+        <fieldset class="grupo">
+            <legend>Ficha técnica</legend>
+
+            <div class="campo-fila">
+                <div class="campo">
+                    <label for="minJugadores">Jugadores (mínimo)</label>
+                    <input type="number" th:field="*{minJugadores}" min="1" required
+                           th:classappend="${#fields.hasErrors('minJugadores')} ? 'invalido'">
+                    <small class="error" th:errors="*{minJugadores}"> Error </small>
+                </div>
+                <div class="campo">
+                    <label for="maxJugadores">Jugadores (máximo)</label>
+                    <input type="number" th:field="*{maxJugadores}" min="1" required
+                           th:classappend="${#fields.hasErrors('maxJugadores') or #fields.hasErrors('rangoDeJugadoresValido')} ? 'invalido'">
+                    <small class="error" th:errors="*{maxJugadores}"> Error </small>
+                </div>
+            </div>
+            <small class="error" th:errors="*{rangoDeJugadoresValido}"> Error </small>
+
+            <div class="campo-fila">
+                <div class="campo">
+                    <label for="minEdad">Edad mínima</label>
+                    <input type="number" th:field="*{minEdad}" min="0" required
+                           th:classappend="${#fields.hasErrors('minEdad')} ? 'invalido'">
+                    <small class="error" th:errors="*{minEdad}"> Error </small>
+                </div>
+                <div class="campo">
+                    <label for="anioPublicacion">Año de publicación</label>
+                    <input type="number" th:field="*{anioPublicacion}" min="1900" required
+                           th:classappend="${#fields.hasErrors('anioPublicacion') or #fields.hasErrors('anioNoFuturo')} ? 'invalido'">
+                    <small class="error" th:errors="*{anioPublicacion}"> Error </small>
+                    <small class="error" th:errors="*{anioNoFuturo}"> Error </small>
+                </div>
+            </div>
+
+            <div class="campo">
+                <label for="descripcion">Descripción</label>
+                <textarea th:field="*{descripcion}" rows="4" maxlength="200" required
+                          th:classappend="${#fields.hasErrors('descripcion')} ? 'invalido'"></textarea>
+                <small class="error" th:errors="*{descripcion}"> Error </small>
+            </div>
+        </fieldset>
+
+        <button type="submit" class="btn"
+                th:text="${modoEdicion} ? 'Guardar cambios' : 'Agregar al catálogo'">Agregar al catálogo</button>
+        <a th:href="@{/juegos}" class="btn btn-secundario">Cancelar</a>
+    </form>
+</main>
+
+<footer th:replace="fragments/footer :: footer-nav"> </footer>
+</body>
+
+</html>

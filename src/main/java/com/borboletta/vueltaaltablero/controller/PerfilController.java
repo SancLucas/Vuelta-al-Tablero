@@ -3,11 +3,9 @@ package com.borboletta.vueltaaltablero.controller;
 import com.borboletta.vueltaaltablero.config.GestorDeSesiones;
 import com.borboletta.vueltaaltablero.dto.DatosDePerfil;
 import com.borboletta.vueltaaltablero.dto.EdicionUsuarioForm;
-import com.borboletta.vueltaaltablero.exception.UsuarioNoEncontradoException;
 import com.borboletta.vueltaaltablero.service.UsuarioService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import java.security.Principal;
 import lombok.RequiredArgsConstructor;
@@ -16,7 +14,6 @@ import org.springframework.security.web.authentication.logout.SecurityContextLog
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -29,7 +26,6 @@ public class PerfilController{
     private static final String VISTA_PERFIL = "usuarios/perfil";
     private static final String VISTA_FORMULARIO = "usuarios/formulario";
     private static final String REDIRECCION_PERFIL = "redirect:/usuario/perfil";
-    private static final String REDIRECCION_INGRESO = "redirect:/usuario/ingreso";
     private static final String REDIRECCION_INICIO = "redirect:/?cuentaEliminada";
 
     private final UsuarioService usuarioService;
@@ -76,12 +72,6 @@ public class PerfilController{
         new SecurityContextLogoutHandler().logout(request, response, autenticacion);   // esta sesión
         gestorDeSesiones.cerrarSesionesDe(correo);                                     // las demás
         return REDIRECCION_INICIO;
-    }
-    /* La cuenta ya no existe: la sesión quedó huérfana. Vale para todos los métodos de arriba. */
-    @ExceptionHandler(UsuarioNoEncontradoException.class)
-    public String cuentaInexistente(HttpSession session){
-        session.invalidate();
-        return REDIRECCION_INGRESO;
     }
 
     private String vistaDeEdicion(Model model, DatosDePerfil perfil){

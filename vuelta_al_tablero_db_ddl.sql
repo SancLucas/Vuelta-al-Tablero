@@ -44,9 +44,9 @@ CREATE TABLE IF NOT EXISTS `Vuelta_al_tablero_db`.`usuario`(
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `Vuelta_al_tablero_db`.`ficha_tecnica`(
   `id` BIGINT NOT NULL AUTO_INCREMENT,
-  `max_jugadores` INT NULL,
-  `min_jugadores` INT NULL,
-  `min_edad` INT NULL,
+  `max_jugadores` INT NOT NULL,
+  `min_jugadores` INT NOT NULL,
+  `min_edad` INT NOT NULL,
   `descripcion` VARCHAR(200) NOT NULL,
   `anio_publicacion` INT NOT NULL,
   PRIMARY KEY (`id`),
@@ -62,11 +62,12 @@ CREATE TABLE IF NOT EXISTS `Vuelta_al_tablero_db`.`ficha_tecnica`(
 -- Table `Vuelta_al_tablero_db`.`juego`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `Vuelta_al_tablero_db`.`juego`(
-  `id` BIGINT NOT NULL,
+  `id` BIGINT NOT NULL AUTO_INCREMENT,
   `titulo` VARCHAR(45) NOT NULL,
   `editorial` VARCHAR(25) NOT NULL,
   `categoria` VARCHAR(25) NOT NULL,
   `id_ficha_tecnica` BIGINT NOT NULL,
+  `fecha_baja` DATE NULL,
 
   PRIMARY KEY (`id`),
   INDEX `fk_juego_ficha_tecnica1_idx` (`id_ficha_tecnica` ASC),
@@ -86,6 +87,7 @@ CREATE TABLE IF NOT EXISTS `Vuelta_al_tablero_db`.`ejemplar`(
   `disponible_alquiler` TINYINT NOT NULL DEFAULT 0,
   `id_juego` BIGINT NOT NULL,
   `nro_usuario` BIGINT NOT NULL,
+  `fecha_baja` DATE NULL,
 
   PRIMARY KEY (`id`, `id_juego`, `nro_usuario`),
   INDEX `fk_ejemplar_juego1_idx` (`id_juego` ASC),

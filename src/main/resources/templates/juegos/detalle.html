@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${juego.titulo} + ' | Vuelta al Tablero'">Juego | Vuelta al Tablero</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link rel="icon" type="image/x-icon" th:href="@{/images/favicon.png}">
+</head>
+
+<body>
+<header th:replace="fragments/header :: header-nav"> </header>
+
+<main class="container container-form">
+    <h1 th:text="${juego.titulo}">Título</h1>
+
+    <dl class="datos-perfil">
+        <div class="dato">
+            <dt>Categoría</dt>
+            <dd th:text="${juego.categoria}">Categoría</dd>
+        </div>
+        <div class="dato">
+            <dt>Editorial</dt>
+            <dd th:text="${juego.editorial}">Editorial</dd>
+        </div>
+        <div class="dato">
+            <dt>Jugadores</dt>
+            <dd th:text="${juego.jugadores()}">2 a 4 jugadores</dd>
+        </div>
+        <div class="dato">
+            <dt>Edad mínima</dt>
+            <dd th:text="${juego.minEdad} + ' años'">10 años</dd>
+        </div>
+        <div class="dato">
+            <dt>Año de publicación</dt>
+            <dd th:text="${juego.anioPublicacion}">2000</dd>
+        </div>
+        <div class="dato">
+            <dt>Descripción</dt>
+            <dd th:text="${juego.descripcion}">Descripción</dd>
+        </div>
+    </dl>
+
+    <div class="acciones-perfil">
+        <a th:if="${esAdmin}" th:href="@{/admin/juegos/{id}/editar(id=${juego.id})}" class="btn">Editar juego</a>
+        <a th:href="@{/juegos}" class="btn btn-secundario">Volver al catálogo</a>
+    </div>
+</main>
+
+<footer th:replace="fragments/footer :: footer-nav"> </footer>
+</body>
+
+</html>
