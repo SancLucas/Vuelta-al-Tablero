@@ -184,3 +184,36 @@ body {
 }
 
 .enlace-nav:hover { background-color: #555456; }
+
+/* ---------- Edición y baja de cuenta ---------- */
+a.btn {
+    display: block;
+    box-sizing: border-box;
+    text-align: center;
+    text-decoration: none;
+}
+
+form a.btn { margin-top: 0.8rem; }
+
+.campo input:disabled {
+    background-color: #f1efed;
+    color: #777;
+    cursor: not-allowed;
+}
+
+.ayuda { display: block; color: #777; margin-top: 0.25rem; }
+
+.acciones-perfil {
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+    margin-top: 1.5rem;
+}
+
+.acciones-perfil form { margin: 0; }
+
+.btn-secundario { background-color: #777; }
+.btn-secundario:hover { background-color: #555456; }
+
+.btn-peligro { background-color: #b3261e; }
+.btn-peligro:hover { background-color: #8c1d18; }
