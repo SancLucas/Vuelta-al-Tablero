@@ -1,225 +1,256 @@
-body {
-    font-family: 'Segoe UI', 'Roboto', 'Helvetica Neue', Arial, sans-serif;
-    background-color: #f8f5f2;
-    color: #444;
-    margin: 0;
-    padding: 0;
+/* =====================================================================
+   Vuelta al Tablero: estilos del sitio
+   Paleta y tipografías tomadas del diseño hecho en Wix.
+   ---------------------------------------------------------------------
+   Para cambiar el aspecto de todo el sitio, tocá las variables de :root.
+   ===================================================================== */
+
+@import url('https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,200..800&family=Inter:wght@400;500;600;700&display=swap');
+
+:root {
+    /* ---- Paleta del diseño ---- */
+    --crema: #FBFFE7;          /* fondo de las páginas */
+    --verde: #257C70;          /* títulos y texto */
+    --verde-claro: #70AA9A;    /* bordes decorativos (NO usar para texto: contraste insuficiente sobre crema) */
+    --verde-suave: #BBD8C3;    /* líneas divisorias */
+    --verde-palido: #E6F2DB;   /* fondos de avisos, pie de página */
+    --oliva: #C9D29E;
+    --marron: #784F24;         /* botones y enlaces */
+    --marron-claro: #AE875D;
+    --arena: #DFC4A8;
+
+    /* ---- Derivados (no están en la paleta original) ---- */
+    --verde-oscuro: #1B5D53;   /* texto sobre fondos verdes pálidos: cumple contraste AA */
+    --marron-oscuro: #5E3D1A;  /* botones al pasar el mouse */
+    --borde-campo: #5E9C8B;    /* borde de los campos: #70AA9A un poco más oscuro, para llegar a 3:1 de contraste */
+    --telon: #4A6B65;          /* fondo detrás del panel de ingreso, tomado de la captura */
+    --error: #B3261E;
+    --error-oscuro: #8F1E18;
+    --error-fondo: #FDF0F0;
+    --error-borde: #F0C4C0;
+
+    /* ---- Tipografías ---- */
+    --fuente-titulos: 'Bricolage Grotesque', 'Segoe UI', system-ui, sans-serif;
+    --fuente-texto: 'Inter', 'Segoe UI', system-ui, sans-serif;
+
+    /* ---- Medidas ---- */
+    --radio-grande: 40px;
+    --radio-tarjeta: 28px;
+    --ancho-pagina: 1200px;
+    --margen-lateral: clamp(1rem, 3vw, 2.5rem);
+    --ancho-maximo: 1600px;    /* en pantallas enormes, el encabezado y la portada dejan de estirarse */
+    --margen-pagina: max(var(--margen-lateral), calc((100% - var(--ancho-maximo)) / 2));
+    --texto-hero: var(--verde-oscuro);
 }
 
-header {
-    background-color: #3f3e40;
-    color: #fff;
-    padding: 1.5rem 0;
-    text-align: center;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-}
+/* ---------- Base ---------- */
+*, *::before, *::after { box-sizing: border-box; }
 
-h1 {
-    font-family: 'Georgia', serif;
-    font-size: 2.5rem;
-    margin: 0;
-    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
-}
-
-nav ul {
-    list-style-type: none;
-    padding: 0;
-    text-align: center;
-    margin-top: 1rem;
-}
-
-nav li {
-    display: inline-block;
-    margin: 0 15px;
-}
-
-nav a {
-    color: #fff;
-    text-decoration: none;
-    font-weight: bold;
-    font-size: 1.1rem;
-    padding: 5px 10px;
-    border-radius: 5px;
-    transition: background-color 0.3s ease;
-}
-
-nav a:hover {
-    background-color: #555456;
-    color: #fff;
-}
-
-.container {
-    max-width: 960px;
-    margin: 2rem auto;
-    padding: 30px;
-    background-color: #fff;
-    border-radius: 15px;
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
-}
+html { -webkit-text-size-adjust: 100%; }
 
 body {
     margin: 0;
-    font-family: Arial, sans-serif;
-    /* Margen inferior para que el contenido no se oculte detrás del footer */
-    padding-bottom: 60px;
-}
-
-.contenido {
-    padding: 20px;
-    height: 2000px;
-    /* Altura alta solo para forzar el scroll de prueba */
-    background: #f0f0f0;
-}
-
-.footer-fijo {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    height: 50px;
-    background-color: #333;
-    color: white;
+    min-height: 100vh;
+    min-height: 100dvh;           /* en celulares, 100vh incluye la barra del navegador */
     display: flex;
-    justify-content: center;
-    align-items: center;
-    box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.2);
-}
-.container-form { max-width: 480px; }
-
-.campo { margin-bottom: 1.1rem; }
-
-.campo label {
-    display: block;
-    font-weight: bold;
-    margin-bottom: 0.3rem;
-}
-
-.campo input {
-    width: 100%;
-    padding: 10px 12px;
-    border: 1px solid #ccc;
-    border-radius: 8px;
+    flex-direction: column;       /* el pie queda siempre abajo */
+    background-color: var(--crema);
+    color: var(--verde);
+    font-family: var(--fuente-texto);
     font-size: 1rem;
-    box-sizing: border-box;
+    line-height: 1.6;
 }
 
-.campo input:focus {
-    outline: none;
-    border-color: #3f3e40;
-    box-shadow: 0 0 0 3px rgba(63, 62, 64, 0.15);
+body > main,
+body > .container { flex: 1 0 auto; }
+
+img { max-width: 100%; }
+
+a { color: var(--marron); }
+a:hover { color: var(--marron-oscuro); }
+
+h1, h2, h3 {
+    font-family: var(--fuente-titulos);
+    color: var(--verde);
+    line-height: 1.1;
+    margin: 0 0 0.6em;
 }
 
-.campo input.invalido { border-color: #b3261e; }
+h1 { font-weight: 800; font-size: clamp(2.25rem, 5vw, 3.5rem); }
+h2, h3 { font-weight: 700; font-size: 1.375rem; }   /* títulos: Bricolage 22 */
 
-.error {
-    display: block;
-    color: #b3261e;
-    margin-top: 0.25rem;
-}
-
-.btn {
-    width: 100%;
-    padding: 12px;
-    background-color: #3f3e40;
-    color: #fff;
-    border: none;
-    border-radius: 8px;
-    font-size: 1.05rem;
-    font-weight: bold;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-}
-
-.btn:hover { background-color: #555456; }
-
-.alerta {
-    padding: 10px 14px;
-    border-radius: 8px;
-    margin-bottom: 1rem;
-}
-.alerta-ok { background-color: #e6f4ea; color: #1e6b34; }
-
-/* ---------- Perfil de usuario ---------- */
-.datos-perfil { margin: 1.5rem 0 0; }
-
-.dato {
-    padding: 0.8rem 0;
-    border-bottom: 1px solid #eee;
-}
-
-.dato:last-child { border-bottom: none; }
-
-.dato dt {
-    font-size: 0.85rem;
-    font-weight: bold;
-    text-transform: uppercase;
-    letter-spacing: 0.04em;
-    color: #777;
-    margin-bottom: 0.2rem;
-}
-
-.dato dd {
-    margin: 0;
-    font-size: 1.1rem;
-    color: #333;
-    overflow-wrap: anywhere;
-}
-
-/* ---------- Mensaje de error y botón de cierre de sesión ---------- */
-.alerta-error { background-color: #fdecea; color: #b3261e; }
-
-.form-salir { display: inline; margin: 0; }
-
-.enlace-nav {
-    background: none;
-    border: none;
-    cursor: pointer;
-    color: #fff;
-    font-family: inherit;
-    font-weight: bold;
-    font-size: 1.1rem;
-    padding: 5px 10px;
-    border-radius: 5px;
-    transition: background-color 0.3s ease;
-}
-
-.enlace-nav:hover { background-color: #555456; }
-
-/* ---------- Edición y baja de cuenta ---------- */
-a.btn {
-    display: block;
-    box-sizing: border-box;
+.titulo-seccion {
     text-align: center;
+    font-weight: 700;
+    font-size: clamp(2rem, 5vw, 3.5rem);
+    margin-bottom: clamp(2rem, 5vw, 3.5rem);
+}
+
+:focus-visible {
+    outline: 3px solid var(--verde);
+    outline-offset: 3px;
+    border-radius: 4px;
+}
+
+/* ---------- Encabezado ---------- */
+.encabezado {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 1rem 2.5rem;
+    padding: 0.75rem var(--margen-pagina);
+    background-color: var(--crema);
+}
+
+.encabezado-logo { flex: none; display: block; line-height: 0; }
+.encabezado-logo img { display: block; height: 5.5rem; width: auto; }
+
+.encabezado-nav {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem 2rem;
+}
+
+.menu {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.25rem 1.75rem;
+}
+
+.menu a,
+.enlace-nav {
+    display: inline-block;
+    padding: 0.5rem 0;            /* área táctil de al menos 44 px de alto */
+    font-family: var(--fuente-texto);
+    font-size: 1.125rem;          /* encabezado: Inter 18 */
+    font-weight: 400;
+    color: var(--verde);
     text-decoration: none;
 }
 
-form a.btn { margin-top: 0.8rem; }
-
-.campo input:disabled {
-    background-color: #f1efed;
-    color: #777;
-    cursor: not-allowed;
+.menu a:hover,
+.enlace-nav:hover {
+    color: var(--verde);
+    text-decoration: underline;
+    text-decoration-color: var(--marron);
+    text-decoration-thickness: 2px;
+    text-underline-offset: 0.35em;
 }
 
-.ayuda { display: block; color: #777; margin-top: 0.25rem; }
-
-.acciones-perfil {
+.encabezado-acciones {
+    margin-left: auto;
     display: flex;
-    flex-direction: column;
-    gap: 0.8rem;
-    margin-top: 1.5rem;
+    align-items: center;
+    gap: 1.25rem;
 }
 
-.acciones-perfil form { margin: 0; }
+.form-salir { margin: 0; }
 
-.btn-secundario { background-color: #777; }
-.btn-secundario:hover { background-color: #555456; }
+/* Botón del menú para pantallas chicas (lo activa js/menu-movil.js; en escritorio no se ve) */
+.menu-boton {
+    display: none;
+    align-items: center;
+    gap: 0.5rem;
+    min-height: 2.75rem;
+    padding: 0.5rem 1.1rem;
+    border: 2px solid var(--marron);
+    border-radius: 999px;
+    background-color: var(--crema);
+    color: var(--marron);
+    font-family: var(--fuente-texto);
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+}
 
-.btn-peligro { background-color: #b3261e; }
-.btn-peligro:hover { background-color: #8c1d18; }
+.menu-boton:hover { background-color: var(--verde-palido); }
+.menu-boton .icono-cerrar { display: none; }
+.menu-boton[aria-expanded="true"] .icono-abrir { display: none; }
+.menu-boton[aria-expanded="true"] .icono-cerrar { display: inline; }
 
-/* ---------- Catálogo y ejemplares ---------- */
-.container h1 { margin-bottom: 0.5rem; }
+/* ---------- Botones ---------- */
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.85rem 2.25rem;
+    border: 2px solid var(--marron);
+    border-radius: 999px;
+    background-color: var(--marron);
+    color: var(--crema);
+    font-family: var(--fuente-texto);
+    font-size: 1rem;              /* botones: Inter 16 */
+    font-weight: 500;
+    line-height: 1.2;
+    text-decoration: none;
+    cursor: pointer;
+    transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+}
+
+.btn:hover {
+    background-color: var(--marron-oscuro);
+    border-color: var(--marron-oscuro);
+    color: var(--crema);
+}
+
+.btn-secundario {
+    background-color: var(--crema);
+    color: var(--marron);
+}
+
+.btn-secundario:hover {
+    background-color: var(--verde-palido);
+    border-color: var(--marron);
+    color: var(--marron-oscuro);
+}
+
+.btn-peligro {
+    background-color: var(--error);
+    border-color: var(--error);
+    color: #fff;
+}
+
+.btn-peligro:hover {
+    background-color: var(--error-oscuro);
+    border-color: var(--error-oscuro);
+    color: #fff;
+}
+
+.btn-compacto { padding: 0.5rem 1.25rem; font-size: 0.95rem; }
+
+/* Botón de formulario: ancho completo y esquinas rectas, como en el panel de ingreso */
+.btn-bloque {
+    display: flex;
+    width: 100%;
+    border-radius: 0;
+    padding: 0.95rem 1rem;
+}
+
+.btn-bloque + .btn-bloque { margin-top: 0.75rem; }
+
+/* ---------- Contenedores de página ---------- */
+.container {
+    width: 100%;
+    max-width: var(--ancho-pagina);
+    margin: 0 auto;
+    padding: 2rem var(--margen-lateral) 3rem;
+}
+
+.container h1 { margin-bottom: 1.5rem; }
+
+/* Páginas angostas (formularios, detalle, perfil): un panel con borde */
+.container-form {
+    max-width: 42rem;
+    margin: 2rem auto 3rem;
+    border: 1px solid var(--verde-claro);
+    border-radius: var(--radio-tarjeta);
+    padding: clamp(1.5rem, 4vw, 3rem);
+}
 
 .encabezado-lista {
     display: flex;
@@ -232,112 +263,408 @@ form a.btn { margin-top: 0.8rem; }
 
 .encabezado-lista h1 { margin: 0; }
 
-.tarjetas {
+/* ---------- Inicio: hero ---------- */
+.hero {
+    margin: 0 var(--margen-pagina);
+    min-height: clamp(26rem, 62vh, 40rem);
+    padding: clamp(2.5rem, 7vw, 5rem) clamp(1.5rem, 5vw, 4rem);
+    display: flex;
+    align-items: center;
+    border-radius: var(--radio-grande);
+    background: linear-gradient(115deg, #F1E5D4 0%, #E4D4BD 55%, #CFBDA5 100%);
+}
+
+.hero-contenido { max-width: 38rem; }
+
+.hero h1 {
+    font-size: clamp(2.75rem, 7vw, 4.5rem);   /* título: Bricolage extra negrita 72 */
+    font-weight: 800;
+    line-height: 1.02;
+    letter-spacing: -0.02em;
+    margin-bottom: 1.5rem;
+}
+
+.hero p {
+    max-width: 30rem;
+    margin: 0 0 2rem;
+    font-size: clamp(1.05rem, 2vw, 1.375rem);
+    color: var(--texto-hero);
+}
+
+.hero-acciones { display: flex; flex-wrap: wrap; gap: 1rem; }
+
+/* ---------- Inicio: cómo funciona ---------- */
+.como-funciona {
+    max-width: var(--ancho-pagina);
+    margin: 0 auto;
+    padding: clamp(3rem, 8vw, 6rem) var(--margen-lateral);
+}
+
+.pasos {
     list-style: none;
     margin: 0;
     padding: 0;
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-    gap: 1rem;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
 }
 
-.tarjeta {
-    border: 1px solid #e6e1db;
-    border-radius: 12px;
-    padding: 1.2rem;
-    background-color: #fdfcfb;
+.paso {
+    min-height: 14rem;
+    padding: 2.25rem 2.25rem 2.5rem;
+    border: 1px solid var(--verde-claro);
+    border-radius: var(--radio-grande);
 }
 
-.tarjeta h2 {
-    font-family: 'Georgia', serif;
-    font-size: 1.35rem;
-    margin: 0 0 0.6rem;
+.paso h3 {
+    margin-bottom: 1.25rem;
+    padding-bottom: 1.25rem;
+    border-bottom: 1.5px solid var(--marron);
 }
 
-.tarjeta h2 a { color: #3f3e40; text-decoration: none; }
-.tarjeta h2 a:hover { text-decoration: underline; }
-.tarjeta h2 a:focus-visible { outline: 3px solid #3f3e40; outline-offset: 2px; }
+.paso p { margin: 0; font-size: 1.125rem; }
 
-.tarjeta-detalle { margin: 0.2rem 0; color: #555; }
+/* ---------- Tarjetas: catálogo, ejemplares, usuarios ---------- */
+.tarjetas,
+.usuarios-grid {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(min(17rem, 100%), 1fr));
+    gap: 1.25rem;
+}
+
+.tarjeta,
+.usuario-card {
+    padding: 1.5rem;
+    border: 1px solid var(--verde-claro);
+    border-radius: var(--radio-tarjeta);
+}
+
+.tarjeta h2,
+.usuario-card h3 {
+    overflow-wrap: anywhere;      /* títulos y correos largos no rompen la tarjeta */
+    margin-bottom: 1rem;
+    padding-bottom: 0.9rem;
+    border-bottom: 1.5px solid var(--marron);
+}
+
+.tarjeta h2 a { color: var(--verde); text-decoration: none; }
+.tarjeta h2 a:hover { text-decoration: underline; text-underline-offset: 0.25em; }
+
+.tarjeta-detalle,
+.usuario-card p { margin: 0.25rem 0; overflow-wrap: anywhere; }
 
 .tarjeta-acciones {
     display: flex;
     flex-wrap: wrap;
     gap: 0.6rem;
-    margin-top: 1rem;
+    margin-top: 1.25rem;
 }
 
 .tarjeta-acciones form { margin: 0; }
 
 .vacio {
+    margin: 0 0 1.5rem;
     padding: 1.5rem;
-    border: 1px dashed #cfc8bf;
-    border-radius: 12px;
-    color: #555;
+    border: 1.5px dashed var(--verde-claro);
+    border-radius: var(--radio-tarjeta);
 }
 
-/* Botones de tamaño compacto (los .btn comunes ocupan todo el ancho) */
-.btn.btn-compacto {
-    width: auto;
-    padding: 8px 16px;
-    font-size: 0.95rem;
+/* ---------- Formularios ---------- */
+.campo { margin-bottom: 1.25rem; }
+
+.campo label {
+    display: block;
+    margin-bottom: 0.4rem;
 }
 
-a.btn.btn-compacto { display: inline-block; }
-
-/* Formularios con más tipos de campo */
+.campo input:not([type="checkbox"]),
 .campo select,
 .campo textarea {
+    display: block;
     width: 100%;
-    padding: 10px 12px;
-    border: 1px solid #ccc;
-    border-radius: 8px;
-    font-size: 1rem;
-    font-family: inherit;
-    box-sizing: border-box;
-    background-color: #fff;
+    padding: 0.8rem 1rem;
+    border: 1px solid var(--borde-campo);
+    border-radius: 0;             /* campos rectos, como en el panel de ingreso */
+    background-color: var(--crema);
+    color: var(--verde);
+    font: inherit;
 }
 
 .campo textarea { resize: vertical; }
 
+.campo input:not([type="checkbox"]):focus,
 .campo select:focus,
 .campo textarea:focus {
-    outline: none;
-    border-color: #3f3e40;
-    box-shadow: 0 0 0 3px rgba(63, 62, 64, 0.15);
+    outline: 2px solid var(--verde);
+    outline-offset: 1px;
+    border-color: var(--verde);
 }
 
-.campo select.invalido,
-.campo textarea.invalido { border-color: #b3261e; }
+.campo input:disabled {
+    background-color: var(--verde-palido);
+    color: var(--verde-oscuro);
+    cursor: not-allowed;
+}
+
+.campo .invalido { border-color: var(--error); }
+
+.ayuda {
+    display: block;
+    margin-top: 0.35rem;
+    font-size: 0.9rem;
+    color: var(--verde-oscuro);
+}
 
 .campo-check label {
     display: flex;
     align-items: center;
     gap: 0.6rem;
-    font-weight: normal;
     cursor: pointer;
 }
 
-.campo-check input { width: auto; }
+.campo-check input {
+    width: 1.15rem;
+    height: 1.15rem;
+    margin: 0;
+    accent-color: var(--marron);
+}
 
 .grupo {
-    border: 1px solid #e6e1db;
-    border-radius: 12px;
-    padding: 1rem 1.2rem 0.4rem;
-    margin: 0 0 1.2rem;
+    min-width: 0;
+    margin: 0 0 1.5rem;
+    padding: 1.1rem 1.4rem 0.5rem;
+    border: 1px solid var(--verde-claro);
+    border-radius: 16px;
 }
 
 .grupo legend {
-    font-family: 'Georgia', serif;
-    font-weight: bold;
     padding: 0 0.5rem;
+    font-family: var(--fuente-titulos);
+    font-size: 1.125rem;
+    font-weight: 700;
 }
 
-.campo-fila {
+.campo-fila { display: flex; flex-wrap: wrap; gap: 0 1rem; }
+.campo-fila .campo { flex: 1 1 10rem; }
+
+/* Campo de contraseña con el ojo para mostrarla u ocultarla (ver js/mostrar-contrasena.js) */
+.campo-contrasena { position: relative; }
+.campo .campo-contrasena input { padding-right: 3.25rem; }
+
+.ver-contrasena {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 3rem;
+    height: 100%;
     display: flex;
-    gap: 1rem;
-    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    border: 0;
+    background: none;
+    color: var(--verde);
+    cursor: pointer;
 }
 
-.campo-fila .campo { flex: 1 1 160px; }
+.ver-contrasena[aria-pressed="true"] { color: var(--marron); }
 
+/* ---------- Avisos y errores ---------- */
+.alerta {
+    margin: 0 0 1.25rem;
+    padding: 0.85rem 1.1rem;
+    border: 1px solid transparent;
+    border-radius: 4px;
+}
+
+.alerta-ok {
+    background-color: var(--verde-palido);
+    border-color: var(--verde-suave);
+    color: var(--verde-oscuro);
+}
+
+.aviso-inicio { margin: 0 var(--margen-pagina) 1.25rem; }
+
+/* Mismo aspecto para el error de un campo y para un aviso de error: caja rosada con ícono */
+.error,
+.alerta-error {
+    position: relative;
+    display: block;
+    margin-top: 0.5rem;
+    padding: 0.65rem 0.85rem 0.65rem 2.4rem;
+    border: 1px solid var(--error-borde);
+    border-radius: 4px;
+    background-color: var(--error-fondo);
+    color: var(--error);
+    font-size: 0.95rem;
+    line-height: 1.4;
+}
+
+.alerta-error { margin: 0 0 1.25rem; }
+
+.error::before,
+.alerta-error::before {
+    content: "!";
+    position: absolute;
+    top: 0.72rem;
+    left: 0.85rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.15rem;
+    height: 1.15rem;
+    border: 1.5px solid currentColor;
+    border-radius: 50%;
+    font-size: 0.75rem;
+    font-weight: 700;
+    line-height: 1;
+}
+
+/* ---------- Panel de ingreso y registro ---------- */
+.telon {
+    flex: 1 0 auto;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    padding: clamp(2rem, 6vw, 4rem) 1rem;
+    background-color: var(--telon);
+}
+
+.panel-auth {
+    position: relative;
+    width: 100%;
+    max-width: 36rem;
+    padding: clamp(2.25rem, 6vw, 3.5rem) clamp(1.25rem, 8vw, 4.5rem) clamp(2rem, 5vw, 3rem);
+    background-color: var(--crema);
+}
+
+.panel-auth h1 {
+    margin-bottom: 1rem;
+    text-align: center;
+    font-size: clamp(1.75rem, 5vw, 2.25rem);
+}
+
+.panel-sub { margin: 0 0 1.75rem; text-align: center; font-size: 1.0625rem; }
+
+.panel-cerrar {
+    position: absolute;
+    top: 0.5rem;
+    right: 0.75rem;
+    padding: 0.25rem 0.6rem;
+    color: var(--verde);
+    font-size: 2rem;
+    line-height: 1;
+    text-decoration: none;
+}
+
+.panel-cerrar:hover { color: var(--marron); }
+
+.nota { margin: 1.5rem 0 0; text-align: center; font-size: 0.95rem; }
+
+/* ---------- Perfil y detalle ---------- */
+.datos-perfil { margin: 0 0 2rem; }
+
+.dato {
+    display: grid;
+    grid-template-columns: minmax(9rem, 12rem) 1fr;
+    gap: 0.25rem 1.5rem;
+    padding: 0.85rem 0;
+    border-bottom: 1px solid var(--verde-suave);
+}
+
+.dato:first-child { border-top: 1px solid var(--verde-suave); }
+.dato dt { font-weight: 600; }
+.dato dd { margin: 0; overflow-wrap: anywhere; }
+
+.acciones-perfil { display: flex; flex-wrap: wrap; gap: 0.75rem; }
+.acciones-perfil form { margin: 0; }
+
+/* ---------- Pie ---------- */
+.pie {
+    margin-top: 3rem;
+    padding: 1.25rem 1rem;
+    border-top: 1px solid var(--verde-suave);
+    background-color: var(--verde-palido);
+    color: var(--verde-oscuro);
+    text-align: center;
+    font-size: 0.95rem;
+}
+
+.pie p { margin: 0; }
+
+/* ---------- Pantallas medianas y chicas ---------- */
+
+/* Tablets y celulares: el menú queda detrás de un botón. Si el JavaScript no carga, el menú
+   se muestra siempre (la clase "js" la agrega js/menu-movil.js). */
+@media (max-width: 64rem) {
+    .encabezado { justify-content: space-between; }
+
+    .encabezado-nav {
+        flex-basis: 100%;
+        flex-direction: column;
+        align-items: stretch;
+        gap: 0.5rem;
+    }
+
+    .js .menu-boton { display: inline-flex; }
+    .js .encabezado-nav { display: none; }
+    .js .encabezado-nav.abierto { display: flex; }
+
+    .menu { flex-direction: column; gap: 0; }
+
+    .menu a {
+        display: flex;
+        align-items: center;
+        min-height: 2.75rem;
+        border-bottom: 1px solid var(--verde-suave);
+    }
+
+    .encabezado-acciones {
+        margin-left: 0;
+        flex-direction: column;
+        align-items: stretch;
+        gap: 0.75rem;
+        padding-top: 0.5rem;
+    }
+
+    .encabezado-acciones .enlace-nav { text-align: center; }
+    .encabezado-acciones .btn { width: 100%; }
+}
+
+@media (max-width: 56rem) {
+    .pasos { grid-template-columns: 1fr; }
+    .paso { min-height: 0; }
+}
+
+@media (max-width: 48rem) {
+    .encabezado-logo img { height: 4rem; }
+    .hero { min-height: 0; border-radius: var(--radio-tarjeta); }
+    .container-form { margin-top: 1rem; }
+}
+
+@media (max-width: 30rem) {
+    .dato { grid-template-columns: 1fr; }
+    .hero-acciones .btn { flex: 1 1 100%; }
+    .encabezado-lista .btn { width: 100%; }
+}
+
+/* Pantallas táctiles: áreas de toque de al menos 44 px */
+@media (pointer: coarse) {
+    .btn-compacto { min-height: 2.75rem; }
+    .campo-check label { min-height: 2.75rem; }
+
+    .panel-cerrar {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-width: 2.75rem;
+        min-height: 2.75rem;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    * { transition: none !important; }
+}

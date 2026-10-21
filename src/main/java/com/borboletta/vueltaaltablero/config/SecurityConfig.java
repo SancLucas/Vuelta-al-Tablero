@@ -41,7 +41,7 @@ public class SecurityConfig{
         http
             .authorizeHttpRequests(rutas -> rutas
                 .requestMatchers("/", "/registro", RUTA_INGRESO,
-                                 "/css/**", "/images/**", "/error").permitAll()
+                                 "/css/**", "/js/**", "/images/**", "/error").permitAll()
                 // Catálogo y ejemplares disponibles: públicos, pero SOLO para mirar (GET).
                 .requestMatchers(HttpMethod.GET, "/juegos", "/juegos/*", "/ejemplares").permitAll()
                 // Administración: todo lo que cuelga de /admin/** es solo para administradores.

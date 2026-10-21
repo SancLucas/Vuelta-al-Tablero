@@ -4,95 +4,112 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Vuelta al Tablero</title>
+    <title th:text="${modoEdicion} ? 'Editar mis datos | Vuelta al Tablero' : 'Crear cuenta | Vuelta al Tablero'">Vuelta al Tablero</title>
     <link rel="stylesheet" th:href="@{/css/style.css}">
     <link rel="icon" type="image/x-icon" th:href="@{/images/favicon.png}">
+    <script th:src="@{/js/mostrar-contrasena.js}" defer></script>
 </head>
 
 <body>
 <header th:replace="fragments/header :: header-nav"> </header>
 
-<main class="container container-form">
-    <h1 th:text="${modoEdicion} ? 'Editar mis datos' : 'Crear cuenta'">Crear cuenta</h1>
+<main class="telon">
+    <section class="panel-auth" aria-labelledby="titulo-panel">
+        <a class="panel-cerrar" th:href="${modoEdicion} ? @{/usuario/perfil} : @{/}"
+           aria-label="Cerrar y salir del formulario">&times;</a>
 
-    <form th:action="${modoEdicion} ? @{/usuario/editar} : @{/registro}"
-          th:object="${form}" method="post">
+        <h1 id="titulo-panel" th:text="${modoEdicion} ? 'Editar mis datos' : 'Crear cuenta'">Crear cuenta</h1>
+        <p class="panel-sub" th:unless="${modoEdicion}">
+            ¿Ya tenés una cuenta? <a th:href="@{/usuario/ingreso}">Iniciar sesión</a>
+        </p>
 
-        <div class="campo">
-            <label for="nombre">Nombre</label>
-            <input type="text" th:field="*{nombre}" maxlength="45" required
-                   th:classappend="${#fields.hasErrors('nombre')} ? 'invalido'">
-            <small class="error" th:errors="*{nombre}"> Error </small>
-        </div>
+        <form th:action="${modoEdicion} ? @{/usuario/editar} : @{/registro}"
+              th:object="${form}" method="post">
 
-        <div class="campo">
-            <label for="apellido">Apellido</label>
-            <input type="text" th:field="*{apellido}" maxlength="45" required
-                   th:classappend="${#fields.hasErrors('apellido')} ? 'invalido'">
-            <small class="error" th:errors="*{apellido}"> Error </small>
-        </div>
-
-        <!-- EDICIÓN: DNI y correo se muestran, pero no se pueden modificar -->
-        <th:block th:if="${modoEdicion}">
             <div class="campo">
-                <label for="dni-fijo">DNI</label>
-                <input type="text" id="dni-fijo" th:value="${perfil.dni}" disabled>
-            </div>
-            <div class="campo">
-                <label for="correo-fijo">Correo electrónico</label>
-                <input type="email" id="correo-fijo" th:value="${perfil.correo}" disabled>
-                <small class="ayuda">El DNI y el correo no se pueden modificar.</small>
-            </div>
-        </th:block>
-
-        <!-- REGISTRO: DNI y correo editables -->
-        <th:block th:unless="${modoEdicion}">
-            <div class="campo">
-                <label for="dni">DNI</label>
-                <input type="text" th:field="*{dni}" inputmode="numeric" maxlength="8" required
-                       th:classappend="${#fields.hasErrors('dni')} ? 'invalido'">
-                <small class="error" th:errors="*{dni}"> Error </small>
+                <label for="nombre">Nombre</label>
+                <input type="text" th:field="*{nombre}" maxlength="45" required
+                       th:classappend="${#fields.hasErrors('nombre')} ? 'invalido'">
+                <small class="error" th:errors="*{nombre}"> Error </small>
             </div>
 
             <div class="campo">
-                <label for="correo">Correo electrónico</label>
-                <input type="email" th:field="*{correo}" maxlength="100" required
-                       th:classappend="${#fields.hasErrors('correo')} ? 'invalido'">
-                <small class="error" th:errors="*{correo}"> Error </small>
+                <label for="apellido">Apellido</label>
+                <input type="text" th:field="*{apellido}" maxlength="45" required
+                       th:classappend="${#fields.hasErrors('apellido')} ? 'invalido'">
+                <small class="error" th:errors="*{apellido}"> Error </small>
             </div>
-        </th:block>
 
-        <div class="campo">
-            <label for="telefono">Teléfono</label>
-            <input type="tel" th:field="*{telefono}" maxlength="15" required
-                   th:classappend="${#fields.hasErrors('telefono')} ? 'invalido'">
-            <small class="error" th:errors="*{telefono}"> Error </small>
-        </div>
+            <!-- EDICIÓN: DNI y correo se muestran, pero no se pueden modificar -->
+            <th:block th:if="${modoEdicion}">
+                <div class="campo">
+                    <label for="dni-fijo">DNI</label>
+                    <input type="text" id="dni-fijo" th:value="${perfil.dni}" disabled>
+                </div>
+                <div class="campo">
+                    <label for="correo-fijo">Correo electrónico</label>
+                    <input type="email" id="correo-fijo" th:value="${perfil.correo}" disabled>
+                    <small class="ayuda">El DNI y el correo no se pueden modificar.</small>
+                </div>
+            </th:block>
 
-        <!-- REGISTRO: contraseñas -->
-        <th:block th:unless="${modoEdicion}">
+            <!-- REGISTRO: DNI y correo editables -->
+            <th:block th:unless="${modoEdicion}">
+                <div class="campo">
+                    <label for="dni">DNI</label>
+                    <input type="text" th:field="*{dni}" inputmode="numeric" maxlength="8" required
+                           th:classappend="${#fields.hasErrors('dni')} ? 'invalido'">
+                    <small class="error" th:errors="*{dni}"> Error </small>
+                </div>
+
+                <div class="campo">
+                    <label for="correo">Correo electrónico</label>
+                    <input type="email" th:field="*{correo}" maxlength="100" required
+                           th:classappend="${#fields.hasErrors('correo')} ? 'invalido'">
+                    <small class="error" th:errors="*{correo}"> Error </small>
+                </div>
+            </th:block>
+
             <div class="campo">
-                <label for="contrasenia">Contraseña</label>
-                <input type="password" th:field="*{contrasenia}" minlength="8" maxlength="72" required
-                       th:classappend="${#fields.hasErrors('contrasenia')} ? 'invalido'">
-                <small class="error" th:errors="*{contrasenia}"> Error </small>
+                <label for="telefono">Teléfono</label>
+                <input type="tel" th:field="*{telefono}" maxlength="15" required
+                       th:classappend="${#fields.hasErrors('telefono')} ? 'invalido'">
+                <small class="error" th:errors="*{telefono}"> Error </small>
             </div>
 
-            <div class="campo">
-                <label for="confirmacionContrasenia">Repetir contraseña</label>
-                <input type="password" th:field="*{confirmacionContrasenia}" required
-                       th:classappend="${#fields.hasErrors('confirmacionContrasenia')
-                       or #fields.hasErrors('contraseniasCoinciden')} ? 'invalido'">
-                <small class="error" th:errors="*{confirmacionContrasenia}"> Error </small>
-                <small class="error" th:errors="*{contraseniasCoinciden}"> Error </small>
-            </div>
-        </th:block>
+            <!-- REGISTRO: contraseñas -->
+            <th:block th:unless="${modoEdicion}">
+                <div class="campo">
+                    <label for="contrasenia">Contraseña</label>
+                    <div class="campo-contrasena">
+                        <input type="password" th:field="*{contrasenia}" minlength="8" maxlength="72" required
+                               autocomplete="new-password"
+                               th:classappend="${#fields.hasErrors('contrasenia')} ? 'invalido'">
+                        <button th:replace="fragments/iconos :: ojo"></button>
+                    </div>
+                    <small class="error" th:errors="*{contrasenia}"> Error </small>
+                </div>
 
-        <button type="submit" class="btn"
-                th:text="${modoEdicion} ? 'Guardar cambios' : 'Registrarme'"> Registrarme </button>
+                <div class="campo">
+                    <label for="confirmacionContrasenia">Repetir contraseña</label>
+                    <div class="campo-contrasena">
+                        <input type="password" th:field="*{confirmacionContrasenia}" required
+                               autocomplete="new-password"
+                               th:classappend="${#fields.hasErrors('confirmacionContrasenia')
+                               or #fields.hasErrors('contraseniasCoinciden')} ? 'invalido'">
+                        <button th:replace="fragments/iconos :: ojo"></button>
+                    </div>
+                    <small class="error" th:errors="*{confirmacionContrasenia}"> Error </small>
+                    <small class="error" th:errors="*{contraseniasCoinciden}"> Error </small>
+                </div>
+            </th:block>
 
-        <a th:if="${modoEdicion}" th:href="@{/usuario/perfil}" class="btn btn-secundario">Cancelar</a>
-    </form>
+            <button type="submit" class="btn btn-bloque"
+                    th:text="${modoEdicion} ? 'Guardar cambios' : 'Registrarme'"> Registrarme </button>
+
+            <a th:if="${modoEdicion}" th:href="@{/usuario/perfil}" class="btn btn-secundario btn-bloque">Cancelar</a>
+        </form>
+    </section>
 </main>
 
 <footer th:replace="fragments/footer :: footer-nav"> </footer>

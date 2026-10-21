@@ -4,38 +4,48 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ingresar | Vuelta al Tablero</title>
+    <title>Iniciar sesión | Vuelta al Tablero</title>
     <link rel="stylesheet" th:href="@{/css/style.css}">
     <link rel="icon" type="image/x-icon" th:href="@{/images/favicon.png}">
+    <script th:src="@{/js/mostrar-contrasena.js}" defer></script>
 </head>
 
 <body>
 <header th:replace="fragments/header :: header-nav"> </header>
 
-<main class="container container-form">
-    <h1>Ingresar</h1>
+<main class="telon">
+    <section class="panel-auth" aria-labelledby="titulo-panel">
+        <a class="panel-cerrar" th:href="@{/}" aria-label="Cerrar y volver al inicio">&times;</a>
 
-    <p class="alerta alerta-ok" th:if="${mensajeExito}" th:text="${mensajeExito}">Mensaje</p>
-    <p class="alerta alerta-error" th:if="${param.error}">Correo o contraseña incorrectos.</p>
+        <h1 id="titulo-panel">Iniciar sesión</h1>
+        <p class="panel-sub">¿No tenés una cuenta? <a th:href="@{/registro}">Registrate</a></p>
 
-    <!-- Los nombres "correo" y "contrasenia" deben coincidir con SecurityConfig -->
-    <form th:action="@{/usuario/ingreso}" method="post">
+        <p class="alerta alerta-ok" th:if="${mensajeExito}" th:text="${mensajeExito}">Mensaje</p>
+        <p class="alerta alerta-error" th:if="${param.error}">Correo o contraseña incorrectos.</p>
 
-        <div class="campo">
-            <label for="correo">Correo electrónico</label>
-            <input type="email" id="correo" name="correo" maxlength="100" required>
-        </div>
+        <!-- Los nombres "correo" y "contrasenia" deben coincidir con SecurityConfig -->
+        <form th:action="@{/usuario/ingreso}" method="post">
 
-        <div class="campo">
-            <label for="contrasenia">Contraseña</label>
-            <input type="password" id="contrasenia" name="contrasenia" maxlength="72" required>
-        </div>
+            <div class="campo">
+                <label for="correo">Correo electrónico</label>
+                <input type="email" id="correo" name="correo" maxlength="100" required
+                       autocomplete="email" th:classappend="${param.error} ? 'invalido'">
+            </div>
 
-        <button type="submit" class="btn"> Entrar </button>
-    </form>
+            <div class="campo">
+                <label for="contrasenia">Contraseña</label>
+                <div class="campo-contrasena">
+                    <input type="password" id="contrasenia" name="contrasenia" maxlength="72" required
+                           autocomplete="current-password" th:classappend="${param.error} ? 'invalido'">
+                    <button th:replace="fragments/iconos :: ojo"></button>
+                </div>
+            </div>
 
-    <p>¿No tenés cuenta, o la diste de baja? <a th:href="@{/registro}">Registrate</a>.
-    Si te das de baja y volvés con el mismo correo y DNI, recuperás tu cuenta.</p>
+            <button type="submit" class="btn btn-bloque">Iniciar sesión</button>
+        </form>
+
+        <p class="nota">Si diste de baja tu cuenta, registrate de nuevo con el mismo correo y DNI y la recuperás.</p>
+    </section>
 </main>
 
 <footer th:replace="fragments/footer :: footer-nav"> </footer>
