@@ -6,10 +6,11 @@ public class EdicionEjemplarForm extends DatosDelEjemplarForm{
         EdicionEjemplarForm form = new EdicionEjemplarForm();
         form.setEstado(ejemplar.estado());
         form.setDisponibleAlquiler(ejemplar.disponibleAlquiler());
+        form.setPrecioPorDia(ejemplar.precioPorDia());
         return form;
     }
 
     public DatosDeEdicionDeEjemplar aDatosDeEdicion(){
-        return new DatosDeEdicionDeEjemplar(getEstado(), isDisponibleAlquiler());
+        return new DatosDeEdicionDeEjemplar(getEstado(), isDisponibleAlquiler(), getPrecioPorDia());
     }
 }

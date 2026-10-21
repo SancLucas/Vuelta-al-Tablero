@@ -11,8 +11,9 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface EjemplarRepository extends JpaRepository<Ejemplar, Long>{
 
-    /* Los ejemplares de un juego dado de baja, o de un dueño dado de baja, desaparecen de la
-    lista pública sin tocarlos: si el juego o el usuario se reactivan, vuelven solos. */
+        /* Los ejemplares de un juego dado de baja, o de un dueño dado de baja, desaparecen de la
+    lista pública sin tocarlos: si el juego o el usuario se reactivan, vuelven solos.
+    Lo mismo pasa con un ejemplar alquilado: reaparece cuando su dueño registra la devolución. */
     @Query("""
            select e from Ejemplar e
              join fetch e.juego j
@@ -21,6 +22,8 @@ public interface EjemplarRepository extends JpaRepository<Ejemplar, Long>{
              and e.fechaBaja is null
              and j.fechaBaja is null
              and p.fechaBaja is null
+             and not exists (select a.id from Alquiler a
+                             where a.ejemplar = e and a.fechaDevolucion is null)
            order by j.titulo""")
     List<Ejemplar> findDisponiblesParaAlquilar();
 
@@ -45,4 +48,17 @@ public interface EjemplarRepository extends JpaRepository<Ejemplar, Long>{
              and e.fechaBaja is null
              and j.fechaBaja is null""")
     Optional<Ejemplar> findActivoDe(@Param("id") Long id, @Param("correo") String correo);
+    
+        /* Búsqueda por id para quien NO es el dueño (alquilar, criticar, ver el detalle): misma
+    visibilidad que la lista pública, pero sin exigir disponibleAlquiler, porque el dueño pudo
+    dejar de ofrecerlo y el ejemplar seguir teniendo alquileres y críticas. */
+    @Query("""
+           select e from Ejemplar e
+             join fetch e.juego j
+             join fetch e.propietario p
+           where e.id = :id
+             and e.fechaBaja is null
+             and j.fechaBaja is null
+             and p.fechaBaja is null""")
+    Optional<Ejemplar> findVisiblePorId(@Param("id") Long id);
 }

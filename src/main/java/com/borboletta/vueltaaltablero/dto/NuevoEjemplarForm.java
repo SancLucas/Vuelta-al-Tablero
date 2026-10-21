@@ -13,6 +13,7 @@ public class NuevoEjemplarForm extends DatosDelEjemplarForm{
     private Long idJuego;
 
     public DatosDeNuevoEjemplar aDatosDeNuevoEjemplar(){
-        return new DatosDeNuevoEjemplar(idJuego, getEstado(), isDisponibleAlquiler());
+        return new DatosDeNuevoEjemplar(idJuego, getEstado(), isDisponibleAlquiler(),
+                getPrecioPorDia());
     }
 }

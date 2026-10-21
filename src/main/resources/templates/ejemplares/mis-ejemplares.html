@@ -14,6 +14,7 @@
 
 <main class="container">
     <p class="alerta alerta-ok" th:if="${mensajeExito}" th:text="${mensajeExito}">Mensaje</p>
+    <p class="alerta alerta-error" th:if="${mensajeError}" th:text="${mensajeError}">Error</p>
 
     <div class="encabezado-lista">
         <h1>Mis ejemplares</h1>

@@ -63,6 +63,15 @@
                 Disponible para alquilar
             </label>
         </div>
+        
+        <div class="campo">
+            <label for="precioPorDia">Precio por día (solo si lo ofrecés en alquiler)</label>
+            <input type="number" th:field="*{precioPorDia}" min="0.01" step="0.01" inputmode="decimal"
+                   th:classappend="${#fields.hasErrors('precioPorDia') or #fields.hasErrors('precioPorDiaValido')} ? 'invalido'">
+            <small class="error" th:errors="*{precioPorDia}"> Error </small>
+            <small class="error" th:errors="*{precioPorDiaValido}"> Error </small>
+            <small class="ayuda">Cada alquiler dura entre 1 y 7 días y se cobra por día.</small>
+        </div>
 
         <button type="submit" class="btn btn-bloque"
                 th:text="${modoEdicion} ? 'Guardar cambios' : 'Publicar ejemplar'">Publicar ejemplar</button>

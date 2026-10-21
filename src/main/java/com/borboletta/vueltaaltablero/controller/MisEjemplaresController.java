@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import com.borboletta.vueltaaltablero.exception.EjemplarYaAlquiladoException;
 
 /* Cada persona gestiona SU colección. Quién es sale siempre del Principal (la sesión), nunca de
 un parámetro: el dueño se verifica en el servicio al buscar el ejemplar por id Y por dueño. */
@@ -93,8 +94,12 @@ public class MisEjemplaresController{
     @PostMapping("/{id}/baja")
     public String darDeBaja(Principal principal, @PathVariable Long id,
                             RedirectAttributes redirectAttributes){
-        ejemplarService.darDeBaja(id, principal.getName());
-        redirectAttributes.addFlashAttribute("mensajeExito", "El ejemplar se quitó de tu colección.");
+        try{
+            ejemplarService.darDeBaja(id, principal.getName());
+            redirectAttributes.addFlashAttribute("mensajeExito", "El ejemplar se quitó de tu colección.");
+        }catch(EjemplarYaAlquiladoException e){
+            redirectAttributes.addFlashAttribute("mensajeError", e.getMessage());
+        }
         return REDIRECCION_LISTA;
     }
 
