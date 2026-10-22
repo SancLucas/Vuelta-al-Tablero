@@ -75,4 +75,15 @@ public class AlquilerService{
         return alquilerRepository.findEnCursoDeInquilino(idEjemplar, correoInquilino)
                 .map(DetalleDeAlquiler::desde);
     }
+    
+        /* Cancelar un alquiler que todavía no empezó lo elimina: nunca llegó a ocurrir, así que no
+    deja historial ni cuenta para criticar. Solo lo cancela el dueño del ejemplar (se busca por
+    id Y por dueño: el alquiler de un ejemplar ajeno responde 404). */
+    @Transactional
+    public void cancelar(Long idAlquiler, String correoPropietario){
+        Alquiler alquiler = alquilerRepository.findDelPropietario(idAlquiler, correoPropietario)
+                .orElseThrow(() -> new AlquilerNoEncontradoException(idAlquiler));
+        alquiler.exigirQuePuedaCancelarse();
+        alquilerRepository.delete(alquiler);
+    }
 }

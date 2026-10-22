@@ -81,11 +81,21 @@ public class Alquiler{
      * La fecha real es la de hoy.
      */
     public void registrarDevolucion(){
-        LocalDate hoy = LocalDate.now();
         exigirQue(this.fechaDevolucion == null, "Este alquiler ya fue devuelto.");
-        exigirQue(!hoy.isBefore(this.fechaEntrega),
+        exigirQue(yaEmpezo(),
                 "Todavía no llegó la fecha de entrega: no se puede registrar la devolución.");
-        this.fechaDevolucion = hoy;
+        this.fechaDevolucion = LocalDate.now();
+    }
+
+    /* Un alquiler pedido para dentro de unos días existe, pero todavía no empezó. */
+    public boolean yaEmpezo(){
+        return !this.fechaEntrega.isAfter(LocalDate.now());
+    }
+    
+        /* Un alquiler solo se cancela antes de empezar. Desde la entrega en adelante ya no se
+    cancela: se devuelve. La entidad solo valida; quien lo elimina es el servicio. */
+    public void exigirQuePuedaCancelarse(){
+        exigirQue(!yaEmpezo(), "Solo se puede cancelar un alquiler que todavía no empezó.");
     }
 
     public boolean estaEnCurso(){

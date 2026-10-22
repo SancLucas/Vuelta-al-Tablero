@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<!-- Lista de críticas con su promedio. Recibe un ResumenDeCriticas. -->
+<div th:fragment="lista(resumen)">
+    <p class="criticas-promedio" th:if="${resumen.hayCriticas()}"
+       th:text="'Promedio: ' + ${#numbers.formatDecimal(resumen.promedio, 1, 'POINT', 1, 'COMMA')} + ' / 5 · ' + ${resumen.cantidad()} + (${resumen.cantidad()} == 1 ? ' crítica' : ' críticas')">Promedio: 4,5 / 5 · 2 críticas</p>
+
+    <p class="vacio" th:unless="${resumen.hayCriticas()}">Todavía no hay críticas.</p>
+
+    <ul class="criticas-lista" th:if="${resumen.hayCriticas()}">
+        <li class="critica" th:each="critica : ${resumen.criticas}">
+            <p class="critica-cabecera">
+                <strong th:text="${critica.autor}">Ana</strong>
+                <span class="etiqueta" th:text="${critica.puntuacion} + ' / 5'">5 / 5</span>
+            </p>
+            <p th:if="${critica.comentario != null}" th:text="${critica.comentario}">Comentario</p>
+        </li>
+    </ul>
+</div>
+
+<!-- Formulario para escribir o corregir la propia crítica. Recibe a dónde enviarla. -->
+<form th:fragment="formulario(accion)" th:action="${accion}" th:object="${criticaForm}" method="post">
+    <h3>Dejá tu crítica</h3>
+
+    <p class="alerta alerta-error" th:each="mensaje : ${#fields.globalErrors()}"
+       th:text="${mensaje}">Error</p>
+
+    <div class="campo">
+        <label for="puntuacion">Puntuación</label>
+        <select th:field="*{puntuacion}" required
+                th:classappend="${#fields.hasErrors('puntuacion')} ? 'invalido'">
+            <option value="">Elegí una puntuación</option>
+            <option th:value="5">5 - Excelente</option>
+            <option th:value="4">4 - Muy bueno</option>
+            <option th:value="3">3 - Bueno</option>
+            <option th:value="2">2 - Regular</option>
+            <option th:value="1">1 - Malo</option>
+        </select>
+        <small class="error" th:errors="*{puntuacion}"> Error </small>
+    </div>
+
+    <div class="campo">
+        <label for="comentario">Comentario (opcional)</label>
+        <textarea th:field="*{comentario}" rows="4" maxlength="200"
+                  th:classappend="${#fields.hasErrors('comentario')} ? 'invalido'"></textarea>
+        <small class="error" th:errors="*{comentario}"> Error </small>
+        <small class="ayuda">Hasta 200 caracteres. Si ya dejaste una crítica, al guardar se reemplaza por esta.</small>
+    </div>
+
+    <button type="submit" class="btn btn-bloque">Guardar mi crítica</button>
+</form>
+
+</html>

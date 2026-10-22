@@ -623,6 +623,35 @@ h2, h3 { font-weight: 700; font-size: 1.375rem; }   /* títulos: Bricolage 22 */
 .ejemplares-del-juego { margin: 0 0 2rem; }
 .ejemplares-del-juego h2 { margin-bottom: 1rem; }
 
+/* ---------- Críticas ---------- */
+.criticas-del-juego,
+.criticas-del-ejemplar { margin: 0 0 2rem; }
+
+.criticas-promedio { margin: 0 0 1rem; font-weight: 600; }
+
+.criticas-lista {
+    list-style: none;
+    margin: 0 0 1.5rem;
+    padding: 0;
+    display: grid;
+    gap: 0.75rem;
+}
+
+.critica {
+    padding: 1rem 1.25rem;
+    border: 1px solid var(--verde-claro);
+    border-radius: 16px;
+}
+
+.critica p { margin: 0.25rem 0; overflow-wrap: anywhere; }
+
+.critica-cabecera {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem;
+}
+
 /* ---------- Pie ---------- */
 .pie {
     margin-top: 3rem;

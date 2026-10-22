@@ -115,6 +115,19 @@
             <button type="submit" class="btn btn-bloque">Confirmar alquiler</button>
         </form>
     </section>
+    
+    <section class="criticas-del-ejemplar">
+        <h2>Críticas de este ejemplar</h2>
+
+        <div th:replace="fragments/criticas :: lista(${resumenCriticas})"></div>
+
+        <form th:if="${puedeCriticar}"
+              th:replace="fragments/criticas :: formulario(@{/ejemplares/{id}/critica(id=${ejemplar.id})})"></form>
+
+        <p class="ayuda" th:unless="${puedeCriticar}">
+            Solo puede criticar este ejemplar quien lo alquiló y ya lo devolvió.
+        </p>
+    </section>
 
     <div class="acciones-perfil">
         <a th:href="@{/juegos/{id}(id=${ejemplar.idJuego})}" class="btn btn-secundario">Ver el juego</a>

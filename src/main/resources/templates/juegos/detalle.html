@@ -59,12 +59,27 @@
             </li>
         </ul>
     </section>
+    
+    <section class="criticas-del-juego">
+        <h2>Críticas del juego</h2>
+
+        <div th:replace="fragments/criticas :: lista(${resumenCriticas})"></div>
+
+        <form th:if="${sesionIniciada}"
+              th:replace="fragments/criticas :: formulario(@{/juegos/{id}/critica(id=${juego.id})})"></form>
+
+        <p class="caja-info" th:unless="${sesionIniciada}">
+            <a th:href="@{/usuario/ingreso}">Ingresá</a> para dejar tu crítica.
+        </p>
+    </section>
 
     <div class="acciones-perfil">
         <a th:if="${esAdmin}" th:href="@{/admin/juegos/{id}/editar(id=${juego.id})}" class="btn">Editar juego</a>
         <a th:href="@{/juegos}" class="btn btn-secundario">Volver al catálogo</a>
     </div>
 </main>
+
+<p class="alerta alerta-ok" th:if="${mensajeExito}" th:text="${mensajeExito}">Mensaje</p>
 
 <footer th:replace="fragments/footer :: footer-nav"> </footer>
 </body>

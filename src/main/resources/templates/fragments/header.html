@@ -23,6 +23,7 @@
 
             <!-- Opciones si SÍ hay sesión activa -->
             <li th:if="${sesionIniciada}"><a th:href="@{/mis-ejemplares}">Mis ejemplares</a></li>
+            <li th:if="${sesionIniciada}"><a th:href="@{/mis-alquileres}">Mis alquileres</a></li>
             <li th:if="${sesionIniciada}"><a th:href="@{/usuario/perfil}">Mi perfil</a></li>
             <li th:if="${esAdmin}"><a th:href="@{/usuarios}">Usuarios</a></li>
         </ul>

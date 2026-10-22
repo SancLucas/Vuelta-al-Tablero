@@ -18,7 +18,10 @@
 
     <div class="encabezado-lista">
         <h1>Mis ejemplares</h1>
-        <a th:href="@{/mis-ejemplares/nuevo}" class="btn btn-compacto">Publicar ejemplar</a>
+        <div class="acciones-perfil">
+            <a th:href="@{/mis-ejemplares/alquileres}" class="btn btn-compacto btn-secundario">Alquileres de mis ejemplares</a>
+            <a th:href="@{/mis-ejemplares/nuevo}" class="btn btn-compacto">Publicar ejemplar</a>
+        </div>
     </div>
 
     <p class="vacio" th:if="${#lists.isEmpty(ejemplares)}">

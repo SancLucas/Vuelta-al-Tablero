@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Alquileres de mis ejemplares | Vuelta al Tablero</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link rel="icon" type="image/x-icon" th:href="@{/images/favicon.png}">
+</head>
+
+<body>
+<header th:replace="fragments/header :: header-nav"> </header>
+
+<main class="container">
+    <p class="alerta alerta-ok" th:if="${mensajeExito}" th:text="${mensajeExito}">Mensaje</p>
+    <p class="alerta alerta-error" th:if="${mensajeError}" th:text="${mensajeError}">Error</p>
+
+    <div class="encabezado-lista">
+        <h1>Alquileres de mis ejemplares</h1>
+        <a th:href="@{/mis-ejemplares}" class="btn btn-compacto btn-secundario">Mis ejemplares</a>
+    </div>
+
+    <p class="vacio" th:if="${#lists.isEmpty(alquileres)}">
+        Todavía nadie alquiló tus ejemplares.
+    </p>
+
+    <ul class="tarjetas">
+        <li class="tarjeta" th:each="alquiler : ${alquileres}">
+            <h2><a th:href="@{/ejemplares/{id}(id=${alquiler.idEjemplar})}" th:text="${alquiler.tituloJuego}">Juego</a></h2>
+
+            <p class="tarjeta-detalle">
+                <span class="etiqueta" th:classappend="${alquiler.enCurso} ? 'etiqueta-alquilado'"
+                      th:text="${alquiler.enCurso} ? (${alquiler.empezado} ? 'En curso' : 'Reservado') : 'Devuelto'">En curso</span>
+            </p>
+            <p class="tarjeta-detalle" th:text="'Lo alquiló ' + ${alquiler.inquilino}">Lo alquiló Beto</p>
+            <p class="tarjeta-detalle"
+               th:text="'Entrega: ' + ${#temporals.format(alquiler.fechaEntrega, 'dd/MM/yyyy')}">Entrega: 23/10/2026</p>
+            <p class="tarjeta-detalle"
+               th:text="'Devolución prevista: ' + ${#temporals.format(alquiler.fechaDevolucionPrevista, 'dd/MM/yyyy')}">Devolución prevista: 25/10/2026</p>
+            <p class="tarjeta-detalle" th:if="${alquiler.fechaDevolucion != null}"
+               th:text="'Devuelto el ' + ${#temporals.format(alquiler.fechaDevolucion, 'dd/MM/yyyy')}">Devuelto el 25/10/2026</p>
+            <p class="tarjeta-detalle"
+               th:text="'Total: $ ' + ${#numbers.formatDecimal(alquiler.precio, 1, 'POINT', 2, 'COMMA')} + ' · ' + ${alquiler.dias} + (${alquiler.dias} == 1 ? ' día' : ' días')">Total: $ 2.000,00 · 2 días</p>
+
+            <!-- El teléfono solo viene mientras el alquiler está abierto -->
+            <p class="tarjeta-detalle" th:if="${alquiler.enCurso and alquiler.telefonoInquilino != null}">
+                Teléfono de <span th:text="${alquiler.inquilino}">Beto</span>:
+                <a class="enlace-telefono" th:href="'tel:' + ${alquiler.telefonoInquilino}"
+                   th:text="${alquiler.telefonoInquilino}">11 1234-5678</a>
+            </p>
+
+            <div class="tarjeta-acciones">
+                <!-- Desde el día de la entrega se registra la devolución; antes, se puede cancelar -->
+                <form th:if="${alquiler.enCurso and alquiler.empezado}"
+                      th:action="@{/mis-ejemplares/alquileres/{id}/devolucion(id=${alquiler.id})}" method="post"
+                      onsubmit="return confirm('¿Confirmás que ya recibiste el ejemplar de vuelta?');">
+                    <button type="submit" class="btn btn-compacto">Registrar devolución</button>
+                </form>
+                <form th:if="${alquiler.enCurso and !alquiler.empezado}"
+                      th:action="@{/mis-ejemplares/alquileres/{id}/cancelacion(id=${alquiler.id})}" method="post"
+                      onsubmit="return confirm('¿Querés cancelar este alquiler? Avisale a quien lo pidió.');">
+                    <button type="submit" class="btn btn-compacto btn-peligro">Cancelar alquiler</button>
+                </form>
+                <small class="ayuda" th:if="${alquiler.enCurso and !alquiler.empezado}">
+                    La devolución se registra desde el día de la entrega.
+                </small>
+            </div>
+        </li>
+    </ul>
+</main>
+
+<footer th:replace="fragments/footer :: footer-nav"> </footer>
+</body>
+
+</html>

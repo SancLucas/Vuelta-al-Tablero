@@ -20,8 +20,10 @@ import com.borboletta.vueltaaltablero.repository.EjemplarRepository;
 import com.borboletta.vueltaaltablero.repository.JuegoRepository;
 import com.borboletta.vueltaaltablero.repository.UsuarioRepository;
 import java.util.List;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import com.borboletta.vueltaaltablero.dto.ResumenDeCriticas;
 import org.springframework.transaction.annotation.Transactional;
 
 /* Una persona tiene como máximo una crítica por juego y una por ejemplar: si vuelve a enviarla,
@@ -69,17 +71,37 @@ public class CriticaService{
     }
 
     @Transactional(readOnly = true)
-    public List<DetalleDeCritica> deEjemplar(Long idEjemplar){
-        return criticaEjemplarRepository.findDeEjemplar(idEjemplar).stream()
+    public ResumenDeCriticas deEjemplar(Long idEjemplar){
+        return ResumenDeCriticas.de(criticaEjemplarRepository.findDeEjemplar(idEjemplar).stream()
                 .map(critica -> DetalleDeCritica.desde(critica.getAutor(), critica.getOpinion()))
-                .toList();
+                .toList());
     }
 
     @Transactional(readOnly = true)
-    public List<DetalleDeCritica> deJuego(Long idJuego){
-        return criticaJuegoRepository.findDeJuego(idJuego).stream()
+    public ResumenDeCriticas deJuego(Long idJuego){
+        return ResumenDeCriticas.de(criticaJuegoRepository.findDeJuego(idJuego).stream()
                 .map(critica -> DetalleDeCritica.desde(critica.getAutor(), critica.getOpinion()))
-                .toList();
+                .toList());
+    }
+
+    /* La crítica propia, si ya la dejó: el formulario la muestra para poder corregirla. */
+    @Transactional(readOnly = true)
+    public Optional<DetalleDeCritica> miCriticaDeEjemplar(Long idEjemplar, String correo){
+        return criticaEjemplarRepository.findDeAutor(idEjemplar, correo)
+                .map(critica -> DetalleDeCritica.desde(critica.getAutor(), critica.getOpinion()));
+    }
+
+    @Transactional(readOnly = true)
+    public Optional<DetalleDeCritica> miCriticaDeJuego(Long idJuego, String correo){
+        return criticaJuegoRepository.findDeAutor(idJuego, correo)
+                .map(critica -> DetalleDeCritica.desde(critica.getAutor(), critica.getOpinion()));
+    }
+
+    /* Lo mismo que exige criticarEjemplar: haberlo alquilado y devuelto. La página lo usa para
+    decidir si muestra el formulario. */
+    @Transactional(readOnly = true)
+    public boolean puedeCriticarEjemplar(Long idEjemplar, String correo){
+        return alquilerRepository.haDevueltoElEjemplar(buscarAutor(correo).getNro(), idEjemplar);
     }
 
     private Usuario buscarAutor(String correo){
