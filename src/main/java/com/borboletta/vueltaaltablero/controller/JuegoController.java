@@ -1,5 +1,6 @@
 package com.borboletta.vueltaaltablero.controller;
 
+import com.borboletta.vueltaaltablero.service.EjemplarService;
 import com.borboletta.vueltaaltablero.service.JuegoService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -18,6 +19,7 @@ public class JuegoController{
     private static final String VISTA_DETALLE = "juegos/detalle";
 
     private final JuegoService juegoService;
+    private final EjemplarService ejemplarService;
 
     @GetMapping
     public String catalogo(Model model){
@@ -25,10 +27,11 @@ public class JuegoController{
         return VISTA_LISTA;
     }
 
+    /* La página del juego incluye sus ejemplares disponibles; cada uno tiene su propia página. */
     @GetMapping("/{id}")
     public String detalle(@PathVariable Long id, Model model){
         model.addAttribute("juego", juegoService.obtener(id));
+        model.addAttribute("ejemplares", ejemplarService.disponiblesDeJuego(id));
         return VISTA_DETALLE;
     }
 }
-

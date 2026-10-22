@@ -41,6 +41,24 @@
             <dd th:text="${juego.descripcion}">Descripción</dd>
         </div>
     </dl>
+    
+    <section class="ejemplares-del-juego">
+        <h2>Ejemplares disponibles</h2>
+
+        <p class="vacio" th:if="${#lists.isEmpty(ejemplares)}">
+            Por ahora no hay ejemplares de este juego para alquilar.
+        </p>
+
+        <ul class="tarjetas" th:unless="${#lists.isEmpty(ejemplares)}">
+            <li class="tarjeta" th:each="ejemplar : ${ejemplares}">
+                <h3><a th:href="@{/ejemplares/{id}(id=${ejemplar.id})}"
+                       th:text="'Ejemplar de ' + ${ejemplar.propietario}">Ejemplar de Ana</a></h3>
+                <p class="tarjeta-detalle" th:text="'Estado: ' + ${ejemplar.estado.etiqueta}">Estado: Nuevo</p>
+                <p class="tarjeta-detalle"
+                   th:text="'$ ' + ${#numbers.formatDecimal(ejemplar.precioPorDia, 1, 'POINT', 2, 'COMMA')} + ' por día'">$ 1.000,00 por día</p>
+            </li>
+        </ul>
+    </section>
 
     <div class="acciones-perfil">
         <a th:if="${esAdmin}" th:href="@{/admin/juegos/{id}/editar(id=${juego.id})}" class="btn">Editar juego</a>

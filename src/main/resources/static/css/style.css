@@ -343,6 +343,7 @@ h2, h3 { font-weight: 700; font-size: 1.375rem; }   /* títulos: Bricolage 22 */
 }
 
 .tarjeta h2,
+.tarjeta h3,
 .usuario-card h3 {
     overflow-wrap: anywhere;      /* títulos y correos largos no rompen la tarjeta */
     margin-bottom: 1rem;
@@ -350,8 +351,10 @@ h2, h3 { font-weight: 700; font-size: 1.375rem; }   /* títulos: Bricolage 22 */
     border-bottom: 1.5px solid var(--marron);
 }
 
-.tarjeta h2 a { color: var(--verde); text-decoration: none; }
-.tarjeta h2 a:hover { text-decoration: underline; text-underline-offset: 0.25em; }
+.tarjeta h2 a,
+.tarjeta h3 a { color: var(--verde); text-decoration: none; }
+.tarjeta h2 a:hover,
+.tarjeta h3 a:hover { text-decoration: underline; text-underline-offset: 0.25em; }
 
 .tarjeta-detalle,
 .usuario-card p { margin: 0.25rem 0; overflow-wrap: anywhere; }
@@ -582,6 +585,44 @@ h2, h3 { font-weight: 700; font-size: 1.375rem; }   /* títulos: Bricolage 22 */
 .acciones-perfil { display: flex; flex-wrap: wrap; gap: 0.75rem; }
 .acciones-perfil form { margin: 0; }
 
+/* ---------- Etiquetas, cajas de aviso y resumen del alquiler ---------- */
+.etiqueta {
+    display: inline-block;
+    padding: 0.2rem 0.75rem;
+    border: 1px solid var(--verde-claro);
+    border-radius: 999px;
+    background-color: var(--verde-palido);
+    color: var(--verde-oscuro);
+    font-size: 0.875rem;
+    font-weight: 600;
+}
+
+.etiqueta-alquilado {
+    background-color: var(--crema);
+    border-color: var(--marron);
+    color: var(--marron-oscuro);
+}
+
+.caja-info {
+    margin: 0 0 1.5rem;
+    padding: 1.1rem 1.25rem;
+    border: 1.5px solid var(--verde-claro);
+    border-radius: 16px;
+    background-color: var(--verde-palido);
+    color: var(--verde-oscuro);
+}
+
+.caja-info h2 { margin-bottom: 0.5rem; font-size: 1.125rem; }
+.caja-info p { margin: 0.25rem 0; overflow-wrap: anywhere; }
+
+.enlace-telefono { font-weight: 700; white-space: nowrap; }
+
+.resumen-alquiler { margin: 0 0 1.25rem; font-weight: 600; }
+.resumen-alquiler:empty { display: none; }
+
+.ejemplares-del-juego { margin: 0 0 2rem; }
+.ejemplares-del-juego h2 { margin-bottom: 1rem; }
+
 /* ---------- Pie ---------- */
 .pie {
     margin-top: 3rem;
@@ -667,4 +708,12 @@ h2, h3 { font-weight: 700; font-size: 1.375rem; }   /* títulos: Bricolage 22 */
 
 @media (prefers-reduced-motion: reduce) {
     * { transition: none !important; }
+}
+
+@media (pointer: coarse) {
+    .enlace-telefono {
+        display: inline-flex;
+        align-items: center;
+        min-height: 2.75rem;
+    }
 }

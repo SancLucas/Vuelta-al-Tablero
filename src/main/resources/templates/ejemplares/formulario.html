@@ -9,6 +9,8 @@
     <link rel="icon" type="image/x-icon" th:href="@{/images/favicon.png}">
 </head>
 
+<script th:src="@{/js/precio-ejemplar.js}" defer></script>
+
 <body>
 <header th:replace="fragments/header :: header-nav"> </header>
 
@@ -64,8 +66,8 @@
             </label>
         </div>
         
-        <div class="campo">
-            <label for="precioPorDia">Precio por día (solo si lo ofrecés en alquiler)</label>
+        <div class="campo" id="campo-precio">
+            <label for="precioPorDia">Precio por día</label>
             <input type="number" th:field="*{precioPorDia}" min="0.01" step="0.01" inputmode="decimal"
                    th:classappend="${#fields.hasErrors('precioPorDia') or #fields.hasErrors('precioPorDiaValido')} ? 'invalido'">
             <small class="error" th:errors="*{precioPorDia}"> Error </small>

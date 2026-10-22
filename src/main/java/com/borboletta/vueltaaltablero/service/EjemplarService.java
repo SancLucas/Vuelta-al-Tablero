@@ -15,6 +15,7 @@ import com.borboletta.vueltaaltablero.repository.EjemplarRepository;
 import com.borboletta.vueltaaltablero.repository.JuegoRepository;
 import com.borboletta.vueltaaltablero.repository.UsuarioRepository;
 import java.util.List;
+import java.util.Set;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -28,23 +29,48 @@ public class EjemplarService{
     private final UsuarioRepository usuarioRepository;
     private final AlquilerRepository alquilerRepository;
 
+    /* Las dos listas públicas ya excluyen por consulta a los alquilados: por eso "alquilado" es false. */
     @Transactional(readOnly = true)
     public List<DetalleDeEjemplar> disponiblesParaAlquilar(){
         return ejemplarRepository.findDisponiblesParaAlquilar().stream()
-                .map(DetalleDeEjemplar::desde)
+                .map(ejemplar -> DetalleDeEjemplar.desde(ejemplar, false))
                 .toList();
     }
 
     @Transactional(readOnly = true)
-    public List<DetalleDeEjemplar> deUsuario(String correo){
-        return ejemplarRepository.findActivosDe(correo).stream()
-                .map(DetalleDeEjemplar::desde)
+    public List<DetalleDeEjemplar> disponiblesDeJuego(Long idJuego){
+        return ejemplarRepository.findDisponiblesDeJuego(idJuego).stream()
+                .map(ejemplar -> DetalleDeEjemplar.desde(ejemplar, false))
                 .toList();
+    }
+
+    /* Los del dueño sí pueden estar alquilados: una sola consulta trae cuáles, sin una por ejemplar. */
+    @Transactional(readOnly = true)
+    public List<DetalleDeEjemplar> deUsuario(String correo){
+        Set<Long> alquilados = alquilerRepository.findIdsDeEjemplaresEnCursoDe(correo);
+        return ejemplarRepository.findActivosDe(correo).stream()
+                .map(ejemplar -> DetalleDeEjemplar.desde(
+                        ejemplar, alquilados.contains(ejemplar.getId())))
+                .toList();
+    }
+
+    /* Para la página pública de un ejemplar: la ve cualquiera, esté disponible, alquilado o no. */
+    @Transactional(readOnly = true)
+    public DetalleDeEjemplar obtener(Long id){
+        Ejemplar ejemplar = ejemplarRepository.findVisiblePorId(id)
+                .orElseThrow(() -> EjemplarNoEncontradoException.enLaPlataforma(id));
+        return DetalleDeEjemplar.desde(ejemplar, estaAlquilado(id));
+    }
+
+    /* ¿El ejemplar es de esta persona? La página pública lo usa para no ofrecerle alquilar lo suyo. */
+    @Transactional(readOnly = true)
+    public boolean esDe(Long id, String correo){
+        return ejemplarRepository.findActivoDe(id, correo).isPresent();
     }
 
     @Transactional(readOnly = true)
     public DetalleDeEjemplar obtenerDeUsuario(Long id, String correo){
-        return DetalleDeEjemplar.desde(buscarDeUsuario(id, correo));
+        return DetalleDeEjemplar.desde(buscarDeUsuario(id, correo), estaAlquilado(id));
     }
 
     @Transactional
@@ -69,12 +95,16 @@ public class EjemplarService{
     @Transactional
     public void darDeBaja(Long id, String correo){
         Ejemplar ejemplar = buscarDeUsuario(id, correo);
-        if (alquilerRepository.existsByEjemplarIdAndFechaDevolucionIsNull(id)){
+        if (estaAlquilado(id)){
             throw new EjemplarYaAlquiladoException(
                     "No podés quitar este ejemplar mientras está alquilado. "
                             + "Primero registrá su devolución.");
         }
         ejemplar.darDeBaja();
+    }
+
+    private boolean estaAlquilado(Long idEjemplar){
+        return alquilerRepository.existsByEjemplarIdAndFechaDevolucionIsNull(idEjemplar);
     }
 
     private Ejemplar buscarDeUsuario(Long id, String correo){

@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${ejemplar.tituloJuego} + ' (ejemplar) | Vuelta al Tablero'">Ejemplar | Vuelta al Tablero</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link rel="icon" type="image/x-icon" th:href="@{/images/favicon.png}">
+</head>
+
+<body>
+<header th:replace="fragments/header :: header-nav"> </header>
+
+<main class="container container-form">
+    <p class="alerta alerta-ok" th:if="${mensajeExito}" th:text="${mensajeExito}">Mensaje</p>
+
+    <h1 th:text="${ejemplar.tituloJuego}">Juego</h1>
+
+    <p>
+        <span class="etiqueta etiqueta-alquilado" th:if="${ejemplar.alquilado}">Alquilado</span>
+        <span class="etiqueta" th:if="${!ejemplar.alquilado and ejemplar.disponibleAlquiler}">Disponible</span>
+    </p>
+
+    <dl class="datos-perfil">
+        <div class="dato">
+            <dt>Juego</dt>
+            <dd><a th:href="@{/juegos/{id}(id=${ejemplar.idJuego})}" th:text="${ejemplar.tituloJuego}">Juego</a></dd>
+        </div>
+        <div class="dato">
+            <dt>Estado</dt>
+            <dd th:text="${ejemplar.estado.etiqueta}">Nuevo</dd>
+        </div>
+        <div class="dato">
+            <dt>Lo ofrece</dt>
+            <dd th:text="${ejemplar.propietario}">Ana</dd>
+        </div>
+        <div class="dato">
+            <dt>Precio por día</dt>
+            <dd th:text="${ejemplar.disponibleAlquiler}
+                         ? ('$ ' + ${#numbers.formatDecimal(ejemplar.precioPorDia, 1, 'POINT', 2, 'COMMA')})
+                         : 'No se ofrece en alquiler'">$ 1.000,00</dd>
+        </div>
+    </dl>
+
+    <!-- Una sola de estas cajas se muestra: el primer th:case que se cumple gana -->
+    <section th:switch="${true}">
+
+        <div class="caja-info" th:case="${esPropio}">
+            <h2>Este ejemplar es tuyo</h2>
+            <p>Lo ves como lo ven los demás. Para cambiar su estado o su precio, entrá a
+                <a th:href="@{/mis-ejemplares}">Mis ejemplares</a>.</p>
+        </div>
+
+        <div class="caja-info" th:case="${miAlquiler != null}">
+            <h2>Tu alquiler está en curso</h2>
+            <p th:text="'Entrega: ' + ${#temporals.format(miAlquiler.fechaEntrega, 'dd/MM/yyyy')}">Entrega: 23/10/2026</p>
+            <p th:text="'Devolución prevista: ' + ${#temporals.format(miAlquiler.fechaDevolucionPrevista, 'dd/MM/yyyy')}">Devolución prevista: 25/10/2026</p>
+            <p th:text="'Total: $ ' + ${#numbers.formatDecimal(miAlquiler.precio, 1, 'POINT', 2, 'COMMA')}">Total: $ 2.000,00</p>
+            <p th:if="${miAlquiler.telefonoPropietario != null}">
+                Coordiná la entrega con <strong th:text="${miAlquiler.propietario}">Ana</strong>:
+                <a class="enlace-telefono" th:href="'tel:' + ${miAlquiler.telefonoPropietario}"
+                   th:text="${miAlquiler.telefonoPropietario}">11 1234-5678</a>
+            </p>
+            <p th:if="${miAlquiler.telefonoPropietario == null}">
+                El dueño no cargó un teléfono: coordiná la entrega por otro medio.
+            </p>
+        </div>
+
+        <div class="caja-info" th:case="${ejemplar.alquilado}">
+            <h2>Alquilado actualmente</h2>
+            <p>Volverá a estar disponible cuando su dueño registre la devolución.</p>
+        </div>
+
+        <div class="caja-info" th:case="${!ejemplar.disponibleAlquiler}">
+            <h2>No disponible</h2>
+            <p>Su dueño no lo ofrece en alquiler por ahora.</p>
+        </div>
+
+        <div class="caja-info" th:case="${!sesionIniciada}">
+            <h2>¿Querés alquilarlo?</h2>
+            <p><a th:href="@{/usuario/ingreso}">Ingresá</a> o <a th:href="@{/registro}">registrate</a> para pedirlo.</p>
+        </div>
+
+        <!-- Se puede alquilar: formulario con las fechas -->
+        <form th:case="*" th:action="@{/ejemplares/{id}/alquilar(id=${ejemplar.id})}"
+              th:object="${form}" method="post"
+              th:attr="data-precio-dia=${ejemplar.precioPorDia},data-dias-minimos=${form.diasMinimos()},data-dias-maximos=${form.diasMaximos()}">
+
+            <h2>Alquilarlo</h2>
+            <p class="alerta alerta-error" th:each="mensaje : ${#fields.globalErrors()}"
+               th:text="${mensaje}">Error</p>
+            <p class="ayuda"
+               th:text="'Elegí cuándo te lo entregan y cuándo lo devolvés: cada alquiler dura de ' + ${form.diasMinimos()} + ' a ' + ${form.diasMaximos()} + ' días. El total se calcula por día.'">
+                Elegí las fechas.</p>
+
+            <div class="campo-fila">
+                <div class="campo">
+                    <label for="fechaEntrega">Fecha de entrega</label>
+                    <input type="date" th:field="*{fechaEntrega}" required
+                           th:min="${form.entregaMinima()}" th:max="${form.entregaMaxima()}"
+                           th:classappend="${#fields.hasErrors('fechaEntrega')} ? 'invalido'">
+                    <small class="error" th:errors="*{fechaEntrega}"> Error </small>
+                </div>
+                <div class="campo">
+                    <label for="fechaDevolucion">Fecha de devolución</label>
+                    <input type="date" th:field="*{fechaDevolucion}" required
+                           th:classappend="${#fields.hasErrors('fechaDevolucion')} ? 'invalido'">
+                    <small class="error" th:errors="*{fechaDevolucion}"> Error </small>
+                </div>
+            </div>
+
+            <p class="resumen-alquiler" aria-live="polite"></p>
+
+            <button type="submit" class="btn btn-bloque">Confirmar alquiler</button>
+        </form>
+    </section>
+
+    <div class="acciones-perfil">
+        <a th:href="@{/juegos/{id}(id=${ejemplar.idJuego})}" class="btn btn-secundario">Ver el juego</a>
+        <a th:href="@{/ejemplares}" class="btn btn-secundario">Más ejemplares</a>
+    </div>
+</main>
+
+<footer th:replace="fragments/footer :: footer-nav"> </footer>
+<script th:src="@{/js/alquiler.js}" defer></script>
+</body>
+
+</html>

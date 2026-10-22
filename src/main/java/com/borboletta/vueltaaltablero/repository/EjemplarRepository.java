@@ -61,4 +61,20 @@ public interface EjemplarRepository extends JpaRepository<Ejemplar, Long>{
              and j.fechaBaja is null
              and p.fechaBaja is null""")
     Optional<Ejemplar> findVisiblePorId(@Param("id") Long id);
+    
+        // Los disponibles de UN juego (sección "Ejemplares disponibles" de su página): mismas reglas
+    // que findDisponiblesParaAlquilar.
+    @Query("""
+           select e from Ejemplar e
+             join fetch e.juego j
+             join fetch e.propietario p
+           where j.id = :idJuego
+             and e.disponibleAlquiler = true
+             and e.fechaBaja is null
+             and j.fechaBaja is null
+             and p.fechaBaja is null
+             and not exists (select a.id from Alquiler a
+                             where a.ejemplar = e and a.fechaDevolucion is null)
+           order by e.id""")
+    List<Ejemplar> findDisponiblesDeJuego(@Param("idJuego") Long idJuego);
 }

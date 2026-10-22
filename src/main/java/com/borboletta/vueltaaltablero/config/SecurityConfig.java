@@ -43,7 +43,8 @@ public class SecurityConfig{
                 .requestMatchers("/", "/registro", RUTA_INGRESO,
                                  "/css/**", "/js/**", "/images/**", "/error").permitAll()
                 // Catálogo y ejemplares disponibles: públicos, pero SOLO para mirar (GET).
-                .requestMatchers(HttpMethod.GET, "/juegos", "/juegos/*", "/ejemplares").permitAll()
+                .requestMatchers(HttpMethod.GET, "/juegos", "/juegos/*",
+                                 "/ejemplares", "/ejemplares/*").permitAll()
                 // Administración: todo lo que cuelga de /admin/** es solo para administradores.
                 .requestMatchers("/usuarios", "/admin/**").hasRole(Roles.ADMINISTRADOR)
                 // Lo demás (por ejemplo /mis-ejemplares/**) pide sesión iniciada.

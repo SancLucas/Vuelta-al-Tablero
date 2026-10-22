@@ -13,6 +13,7 @@ import com.borboletta.vueltaaltablero.repository.AlquilerRepository;
 import com.borboletta.vueltaaltablero.repository.EjemplarRepository;
 import com.borboletta.vueltaaltablero.repository.UsuarioRepository;
 import java.util.List;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -65,5 +66,13 @@ public class AlquilerService{
         return alquilerRepository.findDeEjemplaresDe(correo).stream()
                 .map(DetalleDeAlquiler::desde)
                 .toList();
+    }
+    
+        /* El alquiler abierto de esta persona sobre este ejemplar, si lo hay. Trae el teléfono del
+    dueño (solo mientras está abierto) para que coordinen la entrega. */
+    @Transactional(readOnly = true)
+    public Optional<DetalleDeAlquiler> enCursoDe(Long idEjemplar, String correoInquilino){
+        return alquilerRepository.findEnCursoDeInquilino(idEjemplar, correoInquilino)
+                .map(DetalleDeAlquiler::desde);
     }
 }

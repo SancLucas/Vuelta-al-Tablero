@@ -28,16 +28,23 @@
     <ul class="tarjetas">
         <li class="tarjeta" th:each="ejemplar : ${ejemplares}">
             <h2><a th:href="@{/juegos/{id}(id=${ejemplar.idJuego})}" th:text="${ejemplar.tituloJuego}">Juego</a></h2>
+            <p class="tarjeta-detalle" th:if="${ejemplar.alquilado}">
+                <span class="etiqueta etiqueta-alquilado">Alquilado ahora</span>
+            </p>
             <p class="tarjeta-detalle" th:text="'Estado: ' + ${ejemplar.estado.etiqueta}">Estado: Nuevo</p>
             <p class="tarjeta-detalle"
-               th:text="${ejemplar.disponibleAlquiler} ? 'Disponible para alquilar' : 'No disponible por ahora'">Disponible</p>
+               th:text="${ejemplar.disponibleAlquiler}
+                        ? ('Disponible para alquilar: $ ' + ${#numbers.formatDecimal(ejemplar.precioPorDia, 1, 'POINT', 2, 'COMMA')} + ' por día')
+                        : 'No disponible por ahora'">Disponible</p>
 
             <div class="tarjeta-acciones">
                 <a th:href="@{/mis-ejemplares/{id}/editar(id=${ejemplar.id})}" class="btn btn-compacto">Editar</a>
-                <form th:action="@{/mis-ejemplares/{id}/baja(id=${ejemplar.id})}" method="post"
+                <form th:unless="${ejemplar.alquilado}"
+                      th:action="@{/mis-ejemplares/{id}/baja(id=${ejemplar.id})}" method="post"
                       onsubmit="return confirm('¿Querés quitar este ejemplar de tu colección?');">
                     <button type="submit" class="btn btn-compacto btn-peligro">Quitar</button>
                 </form>
+                <small class="ayuda" th:if="${ejemplar.alquilado}">Mientras esté alquilado no se puede quitar.</small>
             </div>
         </li>
     </ul>
