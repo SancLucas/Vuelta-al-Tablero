@@ -24,7 +24,7 @@ CREATE TABLE IF NOT EXISTS `vuelta_al_tablero_db`.`usuario`(
   `correo` VARCHAR(100) NOT NULL,
   `contrasenia` VARCHAR(100) NOT NULL,
   `telefono` VARCHAR(14) NOT NULL,
-  `fecha_registro` DATE NOT NULL DEFAULT (CURRENT_DATE()),
+  `fecha_registro` DATE NOT NULL DEFAULT (CURDATE()),
   `fecha_baja` DATE NULL,
   `fecha_bloqueo` DATE NULL,
   `rol_admin` TINYINT NOT NULL DEFAULT 0,
