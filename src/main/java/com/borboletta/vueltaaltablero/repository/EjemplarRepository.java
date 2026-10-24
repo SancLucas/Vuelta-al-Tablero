@@ -11,22 +11,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface EjemplarRepository extends JpaRepository<Ejemplar, Long>{
 
-        /* Los ejemplares de un juego dado de baja, o de un dueño dado de baja, desaparecen de la
-    lista pública sin tocarlos: si el juego o el usuario se reactivan, vuelven solos.
-    Lo mismo pasa con un ejemplar alquilado: reaparece cuando su dueño registra la devolución. */
-    @Query("""
-           select e from Ejemplar e
-             join fetch e.juego j
-             join fetch e.propietario p
-           where e.disponibleAlquiler = true
-             and e.fechaBaja is null
-             and j.fechaBaja is null
-             and p.fechaBaja is null
-             and not exists (select a.id from Alquiler a
-                             where a.ejemplar = e and a.fechaDevolucion is null)
-           order by j.titulo""")
-    List<Ejemplar> findDisponiblesParaAlquilar();
-
     @Query("""
            select e from Ejemplar e
              join fetch e.juego j
@@ -59,11 +43,13 @@ public interface EjemplarRepository extends JpaRepository<Ejemplar, Long>{
            where e.id = :id
              and e.fechaBaja is null
              and j.fechaBaja is null
-             and p.fechaBaja is null""")
+             and p.fechaBaja is null
+             and p.fechaBloqueo is null""")
     Optional<Ejemplar> findVisiblePorId(@Param("id") Long id);
     
-        // Los disponibles de UN juego (sección "Ejemplares disponibles" de su página): mismas reglas
-    // que findDisponiblesParaAlquilar.
+    /* Los disponibles de UN juego (sección "Ejemplares disponibles" de su página). No se muestran los de
+    un juego dado de baja, los de un dueño dado de baja o BLOQUEADO (sin tocarlos: si vuelven, vuelven
+    con ellos) ni los que hoy están alquilados (reaparecen cuando el dueño registra la devolución). */
     @Query("""
            select e from Ejemplar e
              join fetch e.juego j
@@ -73,6 +59,7 @@ public interface EjemplarRepository extends JpaRepository<Ejemplar, Long>{
              and e.fechaBaja is null
              and j.fechaBaja is null
              and p.fechaBaja is null
+             and p.fechaBloqueo is null
              and not exists (select a.id from Alquiler a
                              where a.ejemplar = e and a.fechaDevolucion is null)
            order by e.id""")

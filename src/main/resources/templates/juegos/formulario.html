@@ -28,9 +28,12 @@
 
         <div class="campo">
             <label for="categoria">Categoría</label>
-            <input type="text" th:field="*{categoria}" maxlength="25" required
-                   th:classappend="${#fields.hasErrors('categoria')} ? 'invalido'">
-            <small class="ayuda">Por ejemplo: estrategia, cartas, cooperativo.</small>
+            <select th:field="*{categoria}" required
+                    th:classappend="${#fields.hasErrors('categoria')} ? 'invalido'">
+                <option value="">Elegí una categoría</option>
+                <option th:each="categoriaDelJuego : ${categorias}" th:value="${categoriaDelJuego}"
+                        th:text="${categoriaDelJuego.etiqueta}">Estrategia</option>
+            </select>
             <small class="error" th:errors="*{categoria}"> Error </small>
         </div>
 

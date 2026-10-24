@@ -34,6 +34,7 @@ public class AutenticacionService implements UserDetailsService{
         return User.withUsername(credenciales.correo())
                 .password(credenciales.contraseniaCodificada())
                 .roles(rol)
+                .accountLocked(credenciales.bloqueado())   // Spring Security rechaza el ingreso
                 .build();
     }
 }

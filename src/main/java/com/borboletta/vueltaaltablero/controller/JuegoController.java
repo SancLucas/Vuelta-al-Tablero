@@ -1,6 +1,7 @@
 package com.borboletta.vueltaaltablero.controller;
 
 import com.borboletta.vueltaaltablero.dto.CriticaForm;
+import com.borboletta.vueltaaltablero.entity.CategoriaJuego;
 import com.borboletta.vueltaaltablero.service.CriticaService;
 import com.borboletta.vueltaaltablero.service.EjemplarService;
 import com.borboletta.vueltaaltablero.service.JuegoService;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 /* Catálogo público: cualquiera puede mirarlo, solo con GET. Dejar una crítica pide sesión (el POST
@@ -31,9 +33,13 @@ public class JuegoController{
     private final EjemplarService ejemplarService;
     private final CriticaService criticaService;
 
+    /* /juegos muestra todos; /juegos?categoria=ESTRATEGIA filtra. Una categoría inventada no rompe: no filtra. */
     @GetMapping
-    public String catalogo(Model model){
-        model.addAttribute("juegos", juegoService.catalogo());
+    public String catalogo(@RequestParam(required = false) String categoria, Model model){
+        CategoriaJuego filtro = CategoriaJuego.buscarPorCodigo(categoria).orElse(null);
+        model.addAttribute("juegos", juegoService.catalogo(filtro));
+        model.addAttribute("categorias", CategoriaJuego.values());
+        model.addAttribute("categoriaActual", filtro);
         return VISTA_LISTA;
     }
 

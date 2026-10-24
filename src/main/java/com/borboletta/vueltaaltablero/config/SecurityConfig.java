@@ -42,11 +42,10 @@ public class SecurityConfig{
             .authorizeHttpRequests(rutas -> rutas
                 .requestMatchers("/", "/registro", RUTA_INGRESO,
                                  "/css/**", "/js/**", "/images/**", "/error").permitAll()
-                // Catálogo y ejemplares disponibles: públicos, pero SOLO para mirar (GET).
-                .requestMatchers(HttpMethod.GET, "/juegos", "/juegos/*",
-                                 "/ejemplares", "/ejemplares/*").permitAll()
+                // Catálogo, página de cada juego y de cada ejemplar: públicos, pero SOLO para mirar (GET).
+                .requestMatchers(HttpMethod.GET, "/juegos", "/juegos/*", "/ejemplares/*").permitAll()
                 // Administración: todo lo que cuelga de /admin/** es solo para administradores.
-                .requestMatchers("/usuarios", "/admin/**").hasRole(Roles.ADMINISTRADOR)
+                .requestMatchers("/admin/**").hasRole(Roles.ADMINISTRADOR)
                 // Lo demás (por ejemplo /mis-ejemplares/**) pide sesión iniciada.
                 .anyRequest().authenticated())
             .formLogin(formulario -> formulario
@@ -54,8 +53,11 @@ public class SecurityConfig{
                 .loginProcessingUrl(RUTA_INGRESO)
                 .usernameParameter("correo")
                 .passwordParameter("contrasenia")
-                .defaultSuccessUrl(RUTA_PERFIL, true)
-                .failureUrl(RUTA_INGRESO + "?error")
+                // false: si te mandaron a ingresar desde otra página (por ejemplo "Alquilar ahora"),
+                // al ingresar volvés a ella; si entraste directo al formulario, vas al perfil.
+                .defaultSuccessUrl(RUTA_PERFIL, false)
+                // Una cuenta bloqueada vuelve con su propio aviso; el resto, con el mensaje genérico.
+                .failureHandler(new ManejadorDeFalloDeIngreso(RUTA_INGRESO))
                 .permitAll())
             .logout(salida -> salida
                 .logoutUrl(RUTA_SALIDA)

@@ -19,19 +19,18 @@
         <ul class="menu">
             <li><a th:href="@{/}">Inicio</a></li>
             <li><a th:href="@{/juegos}">Catálogo</a></li>
-            <li><a th:href="@{/ejemplares}">Ejemplares</a></li>
 
             <!-- Opciones si SÍ hay sesión activa -->
             <li th:if="${sesionIniciada}"><a th:href="@{/mis-ejemplares}">Mis ejemplares</a></li>
             <li th:if="${sesionIniciada}"><a th:href="@{/mis-alquileres}">Mis alquileres</a></li>
             <li th:if="${sesionIniciada}"><a th:href="@{/usuario/perfil}">Mi perfil</a></li>
-            <li th:if="${esAdmin}"><a th:href="@{/usuarios}">Usuarios</a></li>
+            <li th:if="${esAdmin}"><a th:href="@{/admin/usuarios}">Usuarios</a></li>
         </ul>
 
         <div class="encabezado-acciones">
             <!-- Opciones si NO hay sesión activa -->
             <a class="enlace-nav" th:unless="${sesionIniciada}" th:href="@{/usuario/ingreso}">Iniciar sesión</a>
-            <a class="btn" th:unless="${sesionIniciada}" th:href="@{/registro}">Unirse</a>
+            <a class="btn" th:unless="${sesionIniciada}" th:href="@{/registro}">Registrarse</a>
 
             <!-- Spring Security exige POST (con token CSRF) para cerrar sesión -->
             <form class="form-salir" th:if="${sesionIniciada}" th:action="@{/salir}" method="post">

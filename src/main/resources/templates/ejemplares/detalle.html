@@ -15,7 +15,7 @@
 <main class="container container-form">
     <p class="alerta alerta-ok" th:if="${mensajeExito}" th:text="${mensajeExito}">Mensaje</p>
 
-    <h1 th:text="${ejemplar.tituloJuego}">Juego</h1>
+    <h1 th:text="'Ejemplar de ' + ${ejemplar.tituloJuego}">Ejemplar de Catan</h1>
 
     <p>
         <span class="etiqueta etiqueta-alquilado" th:if="${ejemplar.alquilado}">Alquilado</span>
@@ -131,7 +131,7 @@
 
     <div class="acciones-perfil">
         <a th:href="@{/juegos/{id}(id=${ejemplar.idJuego})}" class="btn btn-secundario">Ver el juego</a>
-        <a th:href="@{/ejemplares}" class="btn btn-secundario">Más ejemplares</a>
+        <a th:href="@{/juegos}" class="btn btn-secundario">Volver al catálogo</a>
     </div>
 </main>
 

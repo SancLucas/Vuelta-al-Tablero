@@ -2,6 +2,7 @@ package com.borboletta.vueltaaltablero.controller;
 
 import com.borboletta.vueltaaltablero.dto.DetalleDeJuego;
 import com.borboletta.vueltaaltablero.dto.JuegoForm;
+import com.borboletta.vueltaaltablero.entity.CategoriaJuego;
 import com.borboletta.vueltaaltablero.exception.JuegoYaExisteException;
 import com.borboletta.vueltaaltablero.service.JuegoService;
 import jakarta.validation.Valid;
@@ -27,6 +28,12 @@ public class JuegoAdminController{
     private static final String REDIRECCION_CATALOGO = "redirect:/juegos";
 
     private final JuegoService juegoService;
+
+    /* Las opciones del desplegable "Categoría", disponibles para las vistas de este controller. */
+    @ModelAttribute("categorias")
+    public CategoriaJuego[] categorias(){
+        return CategoriaJuego.values();
+    }
 
     @GetMapping("/nuevo")
     public String mostrarAlta(Model model){

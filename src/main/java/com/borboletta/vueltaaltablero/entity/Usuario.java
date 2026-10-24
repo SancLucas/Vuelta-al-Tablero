@@ -10,6 +10,7 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import java.util.function.BiPredicate;
+import com.borboletta.vueltaaltablero.exception.OperacionNoPermitidaException;
 import static com.borboletta.vueltaaltablero.validation.Validaciones.exigirTexto;
 
 @Entity
@@ -33,6 +34,7 @@ public class Usuario{
         private LocalDate fechaRegistro;
         private boolean rolAdmin;
         private LocalDate fechaBaja;     // null = cuenta activa
+        private LocalDate fechaBloqueo;  // null = cuenta no bloqueada
 
 ///////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////
@@ -64,10 +66,11 @@ public class Usuario{
      * La comparación de contraseñas la hace Spring Security, no la entidad.
      */
     public Credenciales credenciales(){
-        return new Credenciales(correo, contrasenia, rolAdmin);
+        return new Credenciales(correo, contrasenia, rolAdmin, fechaBloqueo != null);
     }
 
-    public record Credenciales(String correo, String contraseniaCodificada, boolean administrador){ }
+    public record Credenciales(String correo, String contraseniaCodificada,
+                               boolean administrador, boolean bloqueado){ }
     
     /** Tell, Don't Ask: se le dice al usuario que se actualice; él valida sus reglas. */
     public void actualizarDatosPersonales(String nombre, String apellido, String telefono){
@@ -80,8 +83,26 @@ public class Usuario{
     }
 
     /**
+     * Tell, Don't Ask: el usuario decide si puede ser bloqueado. A un administrador no se lo
+     * bloquea (primero habría que quitarle el rol): así nadie deja al sistema sin administración.
+     */
+    public void bloquear(){
+        if (this.rolAdmin){
+            throw new OperacionNoPermitidaException("Un administrador no puede ser bloqueado.");
+        }
+        if (this.fechaBloqueo == null){
+            this.fechaBloqueo = LocalDate.now();
+        }
+    }
+
+    public void desbloquear(){
+        this.fechaBloqueo = null;
+    }
+
+    /**
      * Reactivación por registro: la persona vuelve a su misma cuenta con datos nuevos.
      * Nunca devuelve el rol de administrador: el alta pública no crea administradores.
+     * Tampoco levanta un bloqueo: quien estaba bloqueado sigue bloqueado (no se evade volviendo a registrarse).
      */
     public void reactivar(String nombre, String apellido, String telefono,
                           String contraseniaCodificada){

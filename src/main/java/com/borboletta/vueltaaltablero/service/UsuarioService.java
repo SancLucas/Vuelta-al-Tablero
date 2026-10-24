@@ -3,12 +3,15 @@ package com.borboletta.vueltaaltablero.service;
 import com.borboletta.vueltaaltablero.dto.DatosDeEdicionUsuario;
 import com.borboletta.vueltaaltablero.dto.DatosDePerfil;
 import com.borboletta.vueltaaltablero.dto.DatosDeRegistroUsuario;
+import com.borboletta.vueltaaltablero.dto.ResumenDeUsuario;
 import com.borboletta.vueltaaltablero.entity.Usuario;
+import com.borboletta.vueltaaltablero.exception.CuentaNoEncontradaException;
 import com.borboletta.vueltaaltablero.exception.UsuarioNoEncontradoException;
 import com.borboletta.vueltaaltablero.exception.UsuarioYaRegistradoException;
 import com.borboletta.vueltaaltablero.repository.UsuarioRepository;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,9 +22,27 @@ public class UsuarioService{
 
     private final UsuarioRepository usuarioRepository;
     private final PasswordEncoder passwordEncoder;
+    private final ApplicationEventPublisher eventos;
 
-    public List<Usuario> obtenerTodosLosUsuarios(){
-        return usuarioRepository.findAllByFechaBajaIsNull();
+    /* Para el listado del administrador (incluye a las cuentas bloqueadas, para poder desbloquearlas). */
+    @Transactional(readOnly = true)
+    public List<ResumenDeUsuario> obtenerTodosLosUsuarios(){
+        return usuarioRepository.findAllByFechaBajaIsNullOrderByNombreAscApellidoAsc().stream()
+                .map(ResumenDeUsuario::desde)
+                .toList();
+    }
+
+    /* Bloquea la cuenta y avisa (evento) para que se le cierren las sesiones abiertas. */
+    @Transactional
+    public void bloquear(Long nro){
+        Usuario usuario = buscarPorNro(nro);
+        usuario.bloquear();
+        eventos.publishEvent(new UsuarioBloqueadoEvento(usuario.getCorreo()));
+    }
+
+    @Transactional
+    public void desbloquear(Long nro){
+        buscarPorNro(nro).desbloquear();
     }
 
     /* Si el correo y el DNI son de una cuenta dada de baja, se la reactiva;
@@ -71,6 +92,13 @@ public class UsuarioService{
         if (usuarioRepository.existsByDni(datos.dni())){
             throw new UsuarioYaRegistradoException("dni", "Ya existe una cuenta con ese DNI.");
         }
+    }
+
+    /* La cuenta que pide el administrador es AJENA: si no existe es un 404, y no hay que
+    cerrarle la sesión a quien navega (por eso no es UsuarioNoEncontradoException). */
+    private Usuario buscarPorNro(Long nro){
+        return usuarioRepository.findByNroAndFechaBajaIsNull(nro)
+                .orElseThrow(() -> new CuentaNoEncontradaException(nro));
     }
 
     private Usuario buscarPorCorreo(String correo){

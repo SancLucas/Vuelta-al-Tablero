@@ -21,7 +21,23 @@
         <a th:if="${esAdmin}" th:href="@{/admin/juegos/nuevo}" class="btn btn-compacto">Agregar juego</a>
     </div>
 
-    <p class="vacio" th:if="${#lists.isEmpty(juegos)}">
+    <!-- Filtro por categoría. "Todos los juegos" es el catálogo sin filtrar -->
+    <nav class="filtros" aria-label="Filtrar por categoría">
+        <a class="filtro" th:href="@{/juegos}"
+           th:classappend="${categoriaActual == null} ? 'activo'"
+           th:attr="aria-current=${categoriaActual == null} ? 'true'">Todos los juegos</a>
+        <a class="filtro" th:each="categoria : ${categorias}"
+           th:href="@{/juegos(categoria=${categoria})}"
+           th:classappend="${categoriaActual == categoria} ? 'activo'"
+           th:attr="aria-current=${categoriaActual == categoria} ? 'true'"
+           th:text="${categoria.etiqueta}">Estrategia</a>
+    </nav>
+
+    <p class="vacio" th:if="${#lists.isEmpty(juegos) and categoriaActual != null}"
+       th:text="'Todavía no hay juegos de la categoría ' + ${categoriaActual.etiqueta} + '.'">
+        Todavía no hay juegos de esta categoría.
+    </p>
+    <p class="vacio" th:if="${#lists.isEmpty(juegos) and categoriaActual == null}">
         Todavía no hay juegos en el catálogo.
         <span th:if="${esAdmin}">Agregá el primero con el botón de arriba.</span>
     </p>
@@ -29,7 +45,7 @@
     <ul class="tarjetas">
         <li class="tarjeta" th:each="juego : ${juegos}">
             <h2><a th:href="@{/juegos/{id}(id=${juego.id})}" th:text="${juego.titulo}">Título</a></h2>
-            <p class="tarjeta-detalle" th:text="${juego.categoria}">Categoría</p>
+            <p class="tarjeta-detalle" th:text="${juego.categoria.etiqueta}">Categoría</p>
             <p class="tarjeta-detalle" th:text="${juego.editorial}">Editorial</p>
             <p class="tarjeta-detalle"
                th:text="${juego.jugadores()} + ', desde los ' + ${juego.minEdad} + ' años'">2 a 4 jugadores</p>
@@ -43,6 +59,13 @@
             </div>
         </li>
     </ul>
+
+    <!-- Al final de la lista, siempre -->
+    <aside class="pedido-juego">
+        <p>¿No está el juego que buscabas?
+            <a th:href="'mailto:' + ${correoContacto} + '?subject=Pedido%20de%20un%20juego%20para%20el%20cat%C3%A1logo'">Pedinos y lo agregamos</a>
+        </p>
+    </aside>
 </main>
 
 <footer th:replace="fragments/footer :: footer-nav"> </footer>

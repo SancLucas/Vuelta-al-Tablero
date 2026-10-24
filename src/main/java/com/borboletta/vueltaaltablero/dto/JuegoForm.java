@@ -1,5 +1,6 @@
 package com.borboletta.vueltaaltablero.dto;
 
+import com.borboletta.vueltaaltablero.entity.CategoriaJuego;
 import jakarta.validation.constraints.AssertTrue;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
@@ -19,9 +20,8 @@ public class JuegoForm{
     @Size(max = 45, message = "Máximo 45 caracteres.")
     private String titulo;
 
-    @NotBlank(message = "Ingresá la categoría.")
-    @Size(max = 25, message = "Máximo 25 caracteres.")
-    private String categoria;
+    @NotNull(message = "Elegí la categoría.")
+    private CategoriaJuego categoria;
 
     @NotBlank(message = "Ingresá la editorial.")
     @Size(max = 25, message = "Máximo 25 caracteres.")

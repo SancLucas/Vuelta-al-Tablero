@@ -1,10 +1,11 @@
 package com.borboletta.vueltaaltablero.dto;
 
+import com.borboletta.vueltaaltablero.entity.CategoriaJuego;
 import com.borboletta.vueltaaltablero.entity.FichaTecnica;
 import com.borboletta.vueltaaltablero.entity.Juego;
 
 /** Lo que las vistas pueden ver de un juego: las plantillas nunca tocan la entidad. */
-public record DetalleDeJuego(Long id, String titulo, String categoria, String editorial,
+public record DetalleDeJuego(Long id, String titulo, CategoriaJuego categoria, String editorial,
                              int minJugadores, int maxJugadores, int minEdad,
                              String descripcion, int anioPublicacion){
 

@@ -26,7 +26,6 @@ crítica del ejemplar. La gestión de los propios está en MisEjemplaresControll
 @RequiredArgsConstructor
 public class EjemplarController{
 
-    private static final String VISTA_LISTA = "ejemplares/lista";
     private static final String VISTA_DETALLE = "ejemplares/detalle";
     private static final String MENSAJE_ALQUILER_REGISTRADO =
             "Tu alquiler quedó registrado. Coordiná la entrega con el dueño con el teléfono de abajo.";
@@ -34,12 +33,6 @@ public class EjemplarController{
     private final EjemplarService ejemplarService;
     private final AlquilerService alquilerService;
     private final CriticaService criticaService;
-
-    @GetMapping("/ejemplares")
-    public String disponibles(Model model){
-        model.addAttribute("ejemplares", ejemplarService.disponiblesParaAlquilar());
-        return VISTA_LISTA;
-    }
 
     @GetMapping("/ejemplares/{id}")
     public String detalle(@PathVariable Long id, Principal principal, Model model){

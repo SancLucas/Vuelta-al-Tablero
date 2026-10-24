@@ -29,14 +29,7 @@ public class EjemplarService{
     private final UsuarioRepository usuarioRepository;
     private final AlquilerRepository alquilerRepository;
 
-    /* Las dos listas públicas ya excluyen por consulta a los alquilados: por eso "alquilado" es false. */
-    @Transactional(readOnly = true)
-    public List<DetalleDeEjemplar> disponiblesParaAlquilar(){
-        return ejemplarRepository.findDisponiblesParaAlquilar().stream()
-                .map(ejemplar -> DetalleDeEjemplar.desde(ejemplar, false))
-                .toList();
-    }
-
+    /* La lista pública ya excluye por consulta a los alquilados: por eso "alquilado" es false. */
     @Transactional(readOnly = true)
     public List<DetalleDeEjemplar> disponiblesDeJuego(Long idJuego){
         return ejemplarRepository.findDisponiblesDeJuego(idJuego).stream()

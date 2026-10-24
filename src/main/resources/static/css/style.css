@@ -46,7 +46,10 @@
 /* ---------- Base ---------- */
 *, *::before, *::after { box-sizing: border-box; }
 
-html { -webkit-text-size-adjust: 100%; }
+html {
+    -webkit-text-size-adjust: 100%;
+    scroll-padding-top: 7rem;     /* el encabezado fijo no tapa lo que se enfoca con el teclado */
+}
 
 body {
     margin: 0;
@@ -94,12 +97,21 @@ h2, h3 { font-weight: 700; font-size: 1.375rem; }   /* títulos: Bricolage 22 */
 
 /* ---------- Encabezado ---------- */
 .encabezado {
+    position: sticky;             /* el encabezado queda anclado arriba al desplazarse */
+    top: 0;
+    z-index: 100;
     display: flex;
     flex-wrap: wrap;
     align-items: center;
     gap: 1rem 2.5rem;
     padding: 0.75rem var(--margen-pagina);
     background-color: var(--crema);
+    transition: box-shadow 0.2s ease;
+}
+
+/* Al desplazarse aparece una sombra suave (la agrega js/menu-movil.js) */
+.encabezado.desplazado {
+    box-shadow: 0 1px 0 var(--verde-suave), 0 8px 20px rgba(37, 124, 112, 0.10);
 }
 
 .encabezado-logo { flex: none; display: block; line-height: 0; }
@@ -344,6 +356,7 @@ h2, h3 { font-weight: 700; font-size: 1.375rem; }   /* títulos: Bricolage 22 */
 
 .tarjeta h2,
 .tarjeta h3,
+.usuario-card h2,
 .usuario-card h3 {
     overflow-wrap: anywhere;      /* títulos y correos largos no rompen la tarjeta */
     margin-bottom: 1rem;
@@ -665,6 +678,62 @@ h2, h3 { font-weight: 700; font-size: 1.375rem; }   /* títulos: Bricolage 22 */
 
 .pie p { margin: 0; }
 
+/* ---------- Filtro por categoría y pedido de un juego ---------- */
+.filtros {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+    margin: 0 0 1.75rem;
+}
+
+.filtro {
+    display: inline-flex;
+    align-items: center;
+    min-height: 2.5rem;
+    padding: 0.4rem 1.1rem;
+    border: 1.5px solid var(--marron);
+    border-radius: 999px;
+    background-color: var(--crema);
+    color: var(--marron);
+    font-size: 0.95rem;
+    font-weight: 500;
+    text-decoration: none;
+    transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.filtro:hover { background-color: var(--verde-palido); color: var(--marron-oscuro); }
+
+.filtro.activo,
+.filtro.activo:hover {
+    background-color: var(--marron);
+    color: var(--crema);
+}
+
+.pedido-juego {
+    margin-top: 2.5rem;
+    padding: 1.5rem;
+    border: 1px solid var(--verde-claro);
+    border-radius: var(--radio-tarjeta);
+    text-align: center;
+}
+
+.pedido-juego p { margin: 0; font-size: 1.125rem; }
+
+/* ---------- Administración ---------- */
+.etiqueta-bloqueado {
+    background-color: var(--error-fondo);
+    border-color: var(--error-borde);
+    color: var(--error);
+}
+
+.admin-perfil {
+    margin-top: 2rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--verde-suave);
+}
+
+.admin-perfil h2 { margin-bottom: 1rem; }
+
 /* ---------- Pantallas medianas y chicas ---------- */
 
 /* Tablets y celulares: el menú queda detrás de un botón. Si el JavaScript no carga, el menú
@@ -682,6 +751,13 @@ h2, h3 { font-weight: 700; font-size: 1.375rem; }   /* títulos: Bricolage 22 */
     .js .menu-boton { display: inline-flex; }
     .js .encabezado-nav { display: none; }
     .js .encabezado-nav.abierto { display: flex; }
+
+    /* Con el menú abierto, el encabezado fijo se desplaza por dentro si no entra en la pantalla */
+    .encabezado.menu-abierto {
+        max-height: 100vh;
+        max-height: 100dvh;
+        overflow-y: auto;
+    }
 
     .menu { flex-direction: column; gap: 0; }
 
@@ -725,6 +801,7 @@ h2, h3 { font-weight: 700; font-size: 1.375rem; }   /* títulos: Bricolage 22 */
 @media (pointer: coarse) {
     .btn-compacto { min-height: 2.75rem; }
     .campo-check label { min-height: 2.75rem; }
+    .filtro { min-height: 2.75rem; }
 
     .panel-cerrar {
         display: flex;
@@ -733,6 +810,12 @@ h2, h3 { font-weight: 700; font-size: 1.375rem; }   /* títulos: Bricolage 22 */
         min-width: 2.75rem;
         min-height: 2.75rem;
     }
+}
+
+/* Pantallas muy bajas (celular en horizontal): el encabezado deja de estar anclado */
+@media (max-height: 32rem) {
+    .encabezado { position: static; }
+    html { scroll-padding-top: 0; }
 }
 
 @media (prefers-reduced-motion: reduce) {

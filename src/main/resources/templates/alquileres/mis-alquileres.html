@@ -18,12 +18,12 @@
 
     <div class="encabezado-lista">
         <h1>Mis alquileres</h1>
-        <a th:href="@{/ejemplares}" class="btn btn-compacto">Buscar ejemplares</a>
+        <a th:href="@{/juegos}" class="btn btn-compacto">Buscar en el catálogo</a>
     </div>
 
     <p class="vacio" th:if="${#lists.isEmpty(alquileres)}">
         Todavía no alquilaste ningún ejemplar.
-        <a th:href="@{/ejemplares}">Mirá los que están disponibles</a>.
+        <a th:href="@{/juegos}">Elegí un juego del catálogo</a>.
     </p>
 
     <ul class="tarjetas">

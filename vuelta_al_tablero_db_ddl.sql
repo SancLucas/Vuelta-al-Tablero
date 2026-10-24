@@ -1,5 +1,8 @@
 -- MySQL Workbench Forward Engineering (detallado)
 
+-- Para volver a crear la base desde cero (SE PIERDEN LOS DATOS), descomentar la línea siguiente:
+-- DROP SCHEMA IF EXISTS `vuelta_al_tablero_db`;
+
 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0;
 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION';
@@ -23,6 +26,7 @@ CREATE TABLE IF NOT EXISTS `vuelta_al_tablero_db`.`usuario`(
   `telefono` VARCHAR(14) NOT NULL,
   `fecha_registro` DATE NOT NULL DEFAULT (CURRENT_DATE()),
   `fecha_baja` DATE NULL,
+  `fecha_bloqueo` DATE NULL,
   `rol_admin` TINYINT NOT NULL DEFAULT 0,
 
   PRIMARY KEY (`nro`),
@@ -63,8 +67,12 @@ CREATE TABLE IF NOT EXISTS `vuelta_al_tablero_db`.`juego`(
   `fecha_baja` DATE NULL,
 
   PRIMARY KEY (`id`),
+  UNIQUE INDEX `titulo_UNIQUE` (`titulo` ASC),
   INDEX `fk_juego_ficha_tecnica1_idx` (`id_ficha_tecnica` ASC),
 
+  -- Tienen que coincidir con el enum CategoriaJuego de la aplicación.
+  CONSTRAINT `chk_juego_categoria` CHECK (`categoria` IN
+    ('Clásicos', 'Modernos', 'Estrategia', 'Cooperativos', 'Familiares', 'Cartas', 'Party', 'Otros')),
   CONSTRAINT `fk_juego_ficha_tecnica` FOREIGN KEY (`id_ficha_tecnica`)
     REFERENCES `vuelta_al_tablero_db`.`ficha_tecnica` (`id`)
     ON DELETE NO ACTION ON UPDATE CASCADE

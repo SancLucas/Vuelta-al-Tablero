@@ -1,6 +1,7 @@
 package com.borboletta.vueltaaltablero.controller;
 
 import com.borboletta.vueltaaltablero.config.Roles;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import java.security.Principal;
@@ -9,6 +10,19 @@ import org.springframework.security.core.Authentication;
 
 @ControllerAdvice
 public class GlobalControllerAdvice{
+
+    private final String correoContacto;
+
+    /* El correo de la administración se configura en application.properties (vuelta.contacto.correo). */
+    public GlobalControllerAdvice(@Value("${vuelta.contacto.correo}") String correoContacto){
+        this.correoContacto = correoContacto;
+    }
+
+    /* Lo usan las vistas para los enlaces "escribinos" (pedir un juego, cuenta bloqueada). */
+    @ModelAttribute("correoContacto")
+    public String correoDeContacto(){
+        return correoContacto;
+    }
 
     @ModelAttribute("currentYear")
     public int getCurrentYear(){

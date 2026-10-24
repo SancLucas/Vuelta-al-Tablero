@@ -22,6 +22,10 @@
 
         <p class="alerta alerta-ok" th:if="${mensajeExito}" th:text="${mensajeExito}">Mensaje</p>
         <p class="alerta alerta-error" th:if="${param.error}">Correo o contraseña incorrectos.</p>
+        <p class="alerta alerta-error" th:if="${param.bloqueado}">
+            Tu cuenta está bloqueada. Si creés que es un error,
+            <a th:href="'mailto:' + ${correoContacto}">escribinos</a>.
+        </p>
 
         <!-- Los nombres "correo" y "contrasenia" deben coincidir con SecurityConfig -->
         <form th:action="@{/usuario/ingreso}" method="post">
@@ -44,7 +48,7 @@
             <button type="submit" class="btn btn-bloque">Iniciar sesión</button>
         </form>
 
-        <p class="nota">Si diste de baja tu cuenta, registrate de nuevo con el mismo correo y DNI y la recuperás.</p>
+        <p class="nota">Si diste de baja tu cuenta, <a th:href="@{/registro}">registrate</a> de nuevo con el mismo correo y DNI y la recuperás.</p>
     </section>
 </main>
 

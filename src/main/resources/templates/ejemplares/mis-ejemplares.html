@@ -30,7 +30,7 @@
 
     <ul class="tarjetas">
         <li class="tarjeta" th:each="ejemplar : ${ejemplares}">
-            <h2><a th:href="@{/juegos/{id}(id=${ejemplar.idJuego})}" th:text="${ejemplar.tituloJuego}">Juego</a></h2>
+            <h2><a th:href="@{/ejemplares/{id}(id=${ejemplar.id})}" th:text="${ejemplar.tituloJuego}">Juego</a></h2>
             <p class="tarjeta-detalle" th:if="${ejemplar.alquilado}">
                 <span class="etiqueta etiqueta-alquilado">Alquilado ahora</span>
             </p>

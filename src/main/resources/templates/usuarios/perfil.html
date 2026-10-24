@@ -56,6 +56,15 @@
             <button type="submit" class="btn btn-peligro">Eliminar cuenta</button>
         </form>
     </div>
+
+    <!-- Solo para administradores (la protección real está en SecurityConfig: /admin/**) -->
+    <section class="admin-perfil" th:if="${esAdmin}" aria-labelledby="titulo-admin">
+        <h2 id="titulo-admin">Administración</h2>
+        <div class="acciones-perfil">
+            <a th:href="@{/admin/usuarios}" class="btn">Administrar usuarios</a>
+            <a th:href="@{/admin/juegos/nuevo}" class="btn btn-secundario">Agregar juego</a>
+        </div>
+    </section>
 </main>
 
 <footer th:replace="fragments/footer :: footer-nav"> </footer>

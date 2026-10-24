@@ -1,5 +1,6 @@
 package com.borboletta.vueltaaltablero.repository;
 
+import com.borboletta.vueltaaltablero.entity.CategoriaJuego;
 import com.borboletta.vueltaaltablero.entity.Juego;
 import java.util.List;
 import java.util.Optional;
@@ -15,10 +16,19 @@ public interface JuegoRepository extends JpaRepository<Juego, Long>{
     List<Juego> findAllByFechaBajaIsNullOrderByTituloAsc();
 
     @EntityGraph(attributePaths = "fichaTecnica")
+    List<Juego> findAllByCategoriaAndFechaBajaIsNullOrderByTituloAsc(CategoriaJuego categoria);
+
+    @EntityGraph(attributePaths = "fichaTecnica")
     Optional<Juego> findByIdAndFechaBajaIsNull(Long id);
 
-    // Un título puede repetirse solo si el otro juego ya fue dado de baja.
+    // El título es único en la base: a lo sumo hay un juego dado de baja con ese título.
+    @EntityGraph(attributePaths = "fichaTecnica")
+    Optional<Juego> findByTituloIgnoreCaseAndFechaBajaIsNotNull(String titulo);
+
     boolean existsByTituloIgnoreCaseAndFechaBajaIsNull(String titulo);
 
+    // Para editar: ¿otro juego (activo o dado de baja) ya usa ese título?
     boolean existsByTituloIgnoreCaseAndFechaBajaIsNullAndIdNot(String titulo, Long id);
+
+    boolean existsByTituloIgnoreCaseAndFechaBajaIsNotNullAndIdNot(String titulo, Long id);
 }

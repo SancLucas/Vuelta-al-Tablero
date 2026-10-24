@@ -1,25 +1,56 @@
-<!DOCTYPE html> 
-<html lang="es" xmlns:th="http://www.thymeleaf.org"> 
-<head> 
-    <meta charset="UTF-8"> 
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
-    <title>Vuelta al Tablero</title> 
-    <link rel="stylesheet" th:href="@{/css/style.css}"> 
-    <link rel="icon" type="image/x-icon" th:href="@{/images/favicon.png}"> 
-</head> 
-<body> 
- <header th:replace="fragments/header :: header-nav"></header> 
-    <div class="container">
-        <p class="alerta alerta-ok" th:if="${mensajeExito}" th:text="${mensajeExito}">Mensaje</p>
-        <h1>Todos nuestros usuarios</h1>
-        <div class="usuarios-grid"> 
-            <div th:each="usuario: ${usuarios}" class="usuario-card"> 
-            <h3 th:text="${usuario.nombre}+' '+${usuario.apellido}">Nombre de usuario</h3>
-            <p th:text="${usuario.correo}">Mail del usuario</p>
-            <p th:text="${usuario.dni}">DNI del usuario</p>
-            </div> 
-        </div> 
-    </div> 
-  <footer th:replace="fragments/footer :: footer-nav"></footer> 
-</body> 
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Administrar usuarios | Vuelta al Tablero</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link rel="icon" type="image/x-icon" th:href="@{/images/favicon.png}">
+</head>
+
+<body>
+<header th:replace="fragments/header :: header-nav"> </header>
+
+<main class="container">
+    <p class="alerta alerta-ok" th:if="${mensajeExito}" th:text="${mensajeExito}">Mensaje</p>
+    <p class="alerta alerta-error" th:if="${mensajeError}" th:text="${mensajeError}">Error</p>
+
+    <div class="encabezado-lista">
+        <h1>Administrar usuarios</h1>
+    </div>
+
+    <p class="vacio" th:if="${#lists.isEmpty(usuarios)}">Todavía no hay usuarios registrados.</p>
+
+    <ul class="usuarios-grid">
+        <li class="usuario-card" th:each="usuario : ${usuarios}">
+            <h2 th:text="${usuario.nombre} + ' ' + ${usuario.apellido}">Nombre de usuario</h2>
+            <p th:text="${usuario.correo}">correo@ejemplo.com</p>
+            <p th:text="'DNI ' + ${usuario.dni}">DNI 12345678</p>
+            <p>
+                <span class="etiqueta" th:if="${usuario.administrador}">Administrador</span>
+                <span class="etiqueta" th:if="${!usuario.administrador and !usuario.bloqueado()}">Activo</span>
+                <span class="etiqueta etiqueta-bloqueado" th:if="${usuario.bloqueado()}"
+                      th:text="'Bloqueado desde el ' + ${#temporals.format(usuario.fechaBloqueo, 'dd/MM/yyyy')}">Bloqueado</span>
+            </p>
+
+            <!-- A un administrador no se lo puede bloquear -->
+            <div class="tarjeta-acciones" th:unless="${usuario.administrador}">
+                <form th:if="${usuario.bloqueado()}"
+                      th:action="@{/admin/usuarios/{nro}/desbloquear(nro=${usuario.nro})}" method="post">
+                    <button type="submit" class="btn btn-compacto btn-secundario">Desbloquear</button>
+                </form>
+                <form th:unless="${usuario.bloqueado()}"
+                      th:action="@{/admin/usuarios/{nro}/bloquear(nro=${usuario.nro})}" method="post"
+                      onsubmit="return confirm('¿Querés bloquear esta cuenta? No va a poder ingresar y se le cerrará la sesión.');">
+                    <button type="submit" class="btn btn-compacto btn-peligro">Bloquear</button>
+                </form>
+            </div>
+        </li>
+    </ul>
+</main>
+
+<footer th:replace="fragments/footer :: footer-nav"> </footer>
+</body>
+
 </html>

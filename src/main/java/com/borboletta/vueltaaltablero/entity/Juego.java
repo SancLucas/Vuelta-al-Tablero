@@ -4,6 +4,7 @@ import static com.borboletta.vueltaaltablero.validation.Validaciones.exigirQue;
 import static com.borboletta.vueltaaltablero.validation.Validaciones.exigirTexto;
 
 import jakarta.persistence.CascadeType;
+import jakarta.persistence.Convert;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -25,7 +26,10 @@ public class Juego{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String titulo;
-    private String categoria;
+
+    @Convert(converter = CategoriaJuegoConverter.class)
+    private CategoriaJuego categoria;
+
     private String editorial;
 
     /* La ficha es parte del juego: se guarda con él (cascade) y se carga solo cuando hace falta (LAZY). */
@@ -35,18 +39,19 @@ public class Juego{
 
     private LocalDate fechaBaja;     // null = el juego está en el catálogo
 
-    private Juego(String titulo, String categoria, String editorial, FichaTecnica fichaTecnica){
+    private Juego(String titulo, CategoriaJuego categoria, String editorial,
+                  FichaTecnica fichaTecnica){
         exigirQue(fichaTecnica != null, "Un juego necesita su ficha técnica.");
         asignarDatosBasicos(titulo, categoria, editorial);
         this.fichaTecnica = fichaTecnica;
     }
 
-    public static Juego crear(String titulo, String categoria, String editorial,
+    public static Juego crear(String titulo, CategoriaJuego categoria, String editorial,
                               FichaTecnica fichaTecnica){
         return new Juego(titulo, categoria, editorial, fichaTecnica);
     }
 
-    public void actualizarDatos(String titulo, String categoria, String editorial){
+    public void actualizarDatos(String titulo, CategoriaJuego categoria, String editorial){
         asignarDatosBasicos(titulo, categoria, editorial);
     }
 
@@ -62,9 +67,22 @@ public class Juego{
         }
     }
 
-    private void asignarDatosBasicos(String titulo, String categoria, String editorial){
+    /**
+     * El juego vuelve al catálogo con los datos nuevos. Se reutiliza la MISMA fila: dar de baja y
+     * volver a agregar un juego no duplica registros en la base (y sus ejemplares vuelven solos).
+     */
+    public void reactivar(String titulo, CategoriaJuego categoria, String editorial){
+        if (this.fechaBaja == null){
+            throw new IllegalStateException("El juego ya está en el catálogo.");
+        }
+        asignarDatosBasicos(titulo, categoria, editorial);
+        this.fechaBaja = null;
+    }
+
+    private void asignarDatosBasicos(String titulo, CategoriaJuego categoria, String editorial){
+        exigirQue(categoria != null, "El juego necesita una categoría.");
         this.titulo = exigirTexto(titulo, "El juego necesita un título.");
-        this.categoria = exigirTexto(categoria, "El juego necesita una categoría.");
+        this.categoria = categoria;
         this.editorial = exigirTexto(editorial, "El juego necesita una editorial.");
     }
 }

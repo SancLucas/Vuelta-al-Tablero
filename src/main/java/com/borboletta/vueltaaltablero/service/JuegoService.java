@@ -2,6 +2,7 @@ package com.borboletta.vueltaaltablero.service;
 
 import com.borboletta.vueltaaltablero.dto.DatosDeJuego;
 import com.borboletta.vueltaaltablero.dto.DetalleDeJuego;
+import com.borboletta.vueltaaltablero.entity.CategoriaJuego;
 import com.borboletta.vueltaaltablero.entity.FichaTecnica;
 import com.borboletta.vueltaaltablero.entity.Juego;
 import com.borboletta.vueltaaltablero.exception.JuegoNoEncontradoException;
@@ -19,9 +20,19 @@ public class JuegoService{
 
     private final JuegoRepository juegoRepository;
 
+    /** Todo el catálogo ("Todos los juegos"). */
     @Transactional(readOnly = true)
     public List<DetalleDeJuego> catalogo(){
-        return juegoRepository.findAllByFechaBajaIsNullOrderByTituloAsc().stream()
+        return catalogo(null);
+    }
+
+    /** El catálogo de una categoría; con null, sin filtrar. */
+    @Transactional(readOnly = true)
+    public List<DetalleDeJuego> catalogo(CategoriaJuego categoria){
+        List<Juego> juegos = categoria == null
+                ? juegoRepository.findAllByFechaBajaIsNullOrderByTituloAsc()
+                : juegoRepository.findAllByCategoriaAndFechaBajaIsNullOrderByTituloAsc(categoria);
+        return juegos.stream()
                 .map(DetalleDeJuego::desde)
                 .toList();
     }
@@ -31,14 +42,14 @@ public class JuegoService{
         return DetalleDeJuego.desde(buscar(id));
     }
 
+    /* Si el título es de un juego que estaba dado de baja, se lo reactiva con los datos nuevos
+    en lugar de crear otra fila: la base no se llena de duplicados. Si no, se crea uno nuevo. */
     @Transactional
     public void crear(DatosDeJuego datos){
-        rechazarSiElTituloEstaOcupado(
-                juegoRepository.existsByTituloIgnoreCaseAndFechaBajaIsNull(datos.titulo()));
-        FichaTecnica ficha = FichaTecnica.crear(datos.minJugadores(), datos.maxJugadores(),
-                datos.minEdad(), datos.descripcion(), datos.anioPublicacion());
-        juegoRepository.save(
-                Juego.crear(datos.titulo(), datos.categoria(), datos.editorial(), ficha));
+        juegoRepository.findByTituloIgnoreCaseAndFechaBajaIsNotNull(datos.titulo())
+                .ifPresentOrElse(
+                        juegoDeBaja -> reponerEnElCatalogo(juegoDeBaja, datos),
+                        () -> crearNuevo(datos));
     }
 
     /* No hay save(): el juego que trae el repositorio queda administrado por JPA y, al terminar
@@ -46,11 +57,9 @@ public class JuegoService{
     @Transactional
     public void actualizar(Long id, DatosDeJuego datos){
         Juego juego = buscar(id);
-        rechazarSiElTituloEstaOcupado(
-                juegoRepository.existsByTituloIgnoreCaseAndFechaBajaIsNullAndIdNot(datos.titulo(), id));
+        validarTituloLibre(datos.titulo(), id);
         juego.actualizarDatos(datos.titulo(), datos.categoria(), datos.editorial());
-        juego.actualizarFicha(datos.minJugadores(), datos.maxJugadores(), datos.minEdad(),
-                datos.descripcion(), datos.anioPublicacion());
+        actualizarFicha(juego, datos);
     }
 
     /* Baja lógica: una sola actualización. Sus ejemplares dejan de mostrarse porque las
@@ -60,9 +69,32 @@ public class JuegoService{
         buscar(id).darDeBaja();
     }
 
-    private void rechazarSiElTituloEstaOcupado(boolean ocupado){
-        if (ocupado){
-            throw new JuegoYaExisteException();
+    private void reponerEnElCatalogo(Juego juegoDeBaja, DatosDeJuego datos){
+        juegoDeBaja.reactivar(datos.titulo(), datos.categoria(), datos.editorial());
+        actualizarFicha(juegoDeBaja, datos);
+    }
+
+    private void crearNuevo(DatosDeJuego datos){
+        if (juegoRepository.existsByTituloIgnoreCaseAndFechaBajaIsNull(datos.titulo())){
+            throw JuegoYaExisteException.enElCatalogo();
+        }
+        FichaTecnica ficha = FichaTecnica.crear(datos.minJugadores(), datos.maxJugadores(),
+                datos.minEdad(), datos.descripcion(), datos.anioPublicacion());
+        juegoRepository.save(
+                Juego.crear(datos.titulo(), datos.categoria(), datos.editorial(), ficha));
+    }
+
+    private void actualizarFicha(Juego juego, DatosDeJuego datos){
+        juego.actualizarFicha(datos.minJugadores(), datos.maxJugadores(), datos.minEdad(),
+                datos.descripcion(), datos.anioPublicacion());
+    }
+
+    private void validarTituloLibre(String titulo, Long idPropio){
+        if (juegoRepository.existsByTituloIgnoreCaseAndFechaBajaIsNullAndIdNot(titulo, idPropio)){
+            throw JuegoYaExisteException.enElCatalogo();
+        }
+        if (juegoRepository.existsByTituloIgnoreCaseAndFechaBajaIsNotNullAndIdNot(titulo, idPropio)){
+            throw JuegoYaExisteException.dadoDeBaja();
         }
     }
 
