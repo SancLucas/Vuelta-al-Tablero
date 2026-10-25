@@ -1,8 +1,5 @@
 package com.borboletta.vueltaaltablero.entity;
 
-import static com.borboletta.vueltaaltablero.validation.Validaciones.exigirQue;
-import static com.borboletta.vueltaaltablero.validation.Validaciones.exigirTexto;
-
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Convert;
 import jakarta.persistence.Entity;
@@ -12,10 +9,14 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToOne;
-import java.time.LocalDate;
-import lombok.AccessLevel;
+
 import lombok.Getter;
+import lombok.AccessLevel;
+import java.time.LocalDate;
 import lombok.NoArgsConstructor;
+
+import static com.borboletta.vueltaaltablero.validation.Validaciones.exigirQue;
+import static com.borboletta.vueltaaltablero.validation.Validaciones.exigirTexto;
 
 @Entity
 @Getter
@@ -55,7 +56,7 @@ public class Juego{
         asignarDatosBasicos(titulo, categoria, editorial);
     }
 
-    /** El servicio no "le pide la ficha al juego para tocarla": le dice al juego que la actualice. */
+    /* El servicio no "le pide la ficha al juego para tocarla": le dice al juego que la actualice. */
     public void actualizarFicha(int minJugadores, int maxJugadores, int minEdad,
                                 String descripcion, int anioPublicacion){
         fichaTecnica.actualizar(minJugadores, maxJugadores, minEdad, descripcion, anioPublicacion);
@@ -67,10 +68,8 @@ public class Juego{
         }
     }
 
-    /**
-     * El juego vuelve al catálogo con los datos nuevos. Se reutiliza la MISMA fila: dar de baja y
-     * volver a agregar un juego no duplica registros en la base (y sus ejemplares vuelven solos).
-     */
+    /* El juego vuelve al catálogo con los datos nuevos. Se reutiliza la MISMA fila: dar de baja y
+    volver a agregar un juego no duplica registros en la base (y sus ejemplares vuelven solos). */
     public void reactivar(String titulo, CategoriaJuego categoria, String editorial){
         if (this.fechaBaja == null){
             throw new IllegalStateException("El juego ya está en el catálogo.");

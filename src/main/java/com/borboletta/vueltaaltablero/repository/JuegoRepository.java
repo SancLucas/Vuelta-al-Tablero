@@ -2,11 +2,13 @@ package com.borboletta.vueltaaltablero.repository;
 
 import com.borboletta.vueltaaltablero.entity.CategoriaJuego;
 import com.borboletta.vueltaaltablero.entity.Juego;
+
 import java.util.List;
 import java.util.Optional;
+import org.springframework.stereotype.Repository;
+
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.stereotype.Repository;
 
 @Repository
 public interface JuegoRepository extends JpaRepository<Juego, Long>{
@@ -21,13 +23,13 @@ public interface JuegoRepository extends JpaRepository<Juego, Long>{
     @EntityGraph(attributePaths = "fichaTecnica")
     Optional<Juego> findByIdAndFechaBajaIsNull(Long id);
 
-    // El título es único en la base: a lo sumo hay un juego dado de baja con ese título.
+    /* El título es único en la base: a lo sumo hay un juego dado de baja con ese título. */
     @EntityGraph(attributePaths = "fichaTecnica")
     Optional<Juego> findByTituloIgnoreCaseAndFechaBajaIsNotNull(String titulo);
 
     boolean existsByTituloIgnoreCaseAndFechaBajaIsNull(String titulo);
 
-    // Para editar: ¿otro juego (activo o dado de baja) ya usa ese título?
+    /* Para editar: ¿otro juego (activo o dado de baja) ya usa ese título? */
     boolean existsByTituloIgnoreCaseAndFechaBajaIsNullAndIdNot(String titulo, Long id);
 
     boolean existsByTituloIgnoreCaseAndFechaBajaIsNotNullAndIdNot(String titulo, Long id);

@@ -6,19 +6,21 @@ import com.borboletta.vueltaaltablero.dto.NuevoEjemplarForm;
 import com.borboletta.vueltaaltablero.entity.EstadoEjemplar;
 import com.borboletta.vueltaaltablero.service.EjemplarService;
 import com.borboletta.vueltaaltablero.service.JuegoService;
-import jakarta.validation.Valid;
+
 import java.security.Principal;
+import jakarta.validation.Valid;
+import org.springframework.ui.Model;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import com.borboletta.vueltaaltablero.exception.EjemplarYaAlquiladoException;
+
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import com.borboletta.vueltaaltablero.exception.EjemplarYaAlquiladoException;
 
 /* Cada persona gestiona SU colección. Quién es sale siempre del Principal (la sesión), nunca de
 un parámetro: el dueño se verifica en el servicio al buscar el ejemplar por id Y por dueño. */
@@ -33,6 +35,9 @@ public class MisEjemplaresController{
 
     private final EjemplarService ejemplarService;
     private final JuegoService juegoService;
+
+///////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////
 
     /* Las opciones del desplegable "Estado", disponibles para todas las vistas de este controller. */
     @ModelAttribute("estados")
@@ -103,8 +108,8 @@ public class MisEjemplaresController{
         return REDIRECCION_LISTA;
     }
 
-    /* La plantilla distingue alta de edición con "modoEdicion": se declara siempre, en ambos casos
-    (en SpEL, "!modoEdicion" falla si la variable no existe). */
+    /* La plantilla distingue alta de edición con "modoEdicion": se declara siempre,
+    en ambos casos (en SpEL, "!modoEdicion" falla si la variable no existe). */
     private String vistaDeAlta(Model model){
         model.addAttribute("modoEdicion", false);
         model.addAttribute("juegos", juegoService.catalogo());

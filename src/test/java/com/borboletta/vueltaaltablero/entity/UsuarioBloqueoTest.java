@@ -2,7 +2,6 @@ package com.borboletta.vueltaaltablero.entity;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-
 import com.borboletta.vueltaaltablero.exception.OperacionNoPermitidaException;
 import org.junit.jupiter.api.Test;
 import org.springframework.test.util.ReflectionTestUtils;

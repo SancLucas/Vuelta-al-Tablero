@@ -9,17 +9,17 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface UsuarioRepository extends JpaRepository<Usuario, Long>{
 
-    // Solo cuentas activas: ingreso, perfil y edición.
+    /* Solo cuentas activas: ingreso, perfil y edición. */
     Optional<Usuario> findByCorreoIgnoreCaseAndFechaBajaIsNull(String correo);
     List<Usuario> findAllByFechaBajaIsNullOrderByNombreAscApellidoAsc();
 
-    // Para que el administrador bloquee o desbloquee a otra persona.
+    /* Para que el administrador bloquee o desbloquee a otra persona. */
     Optional<Usuario> findByNroAndFechaBajaIsNull(Long nro);
 
-    // Solo cuentas DADAS DE BAJA: para reactivarlas cuando se registran de nuevo.
+    /* Solo cuentas DADAS DE BAJA: para reactivarlas cuando se registran de nuevo. */
     Optional<Usuario> findByCorreoIgnoreCaseAndDniAndFechaBajaIsNotNull(String correo, String dni);
 
-    // Sin filtro a propósito: un correo o DNI de cualquier cuenta (activa o no) está ocupado.
+    /* Sin filtro a propósito: un correo o DNI de cualquier cuenta (activa o no) está ocupado. */
     boolean existsByCorreoIgnoreCase(String correo);
     boolean existsByDni(String dni);
 }

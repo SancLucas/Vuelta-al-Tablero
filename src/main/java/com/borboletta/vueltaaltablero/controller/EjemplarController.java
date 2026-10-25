@@ -3,17 +3,21 @@ package com.borboletta.vueltaaltablero.controller;
 import com.borboletta.vueltaaltablero.dto.CriticaForm;
 import com.borboletta.vueltaaltablero.dto.DetalleDeAlquiler;
 import com.borboletta.vueltaaltablero.dto.NuevoAlquilerForm;
-import com.borboletta.vueltaaltablero.exception.CriticaNoPermitidaException;
-import com.borboletta.vueltaaltablero.exception.EjemplarYaAlquiladoException;
+
 import com.borboletta.vueltaaltablero.service.AlquilerService;
 import com.borboletta.vueltaaltablero.service.CriticaService;
 import com.borboletta.vueltaaltablero.service.EjemplarService;
+
+import com.borboletta.vueltaaltablero.exception.CriticaNoPermitidaException;
+import com.borboletta.vueltaaltablero.exception.EjemplarYaAlquiladoException;
+
 import jakarta.validation.Valid;
 import java.security.Principal;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
+
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -34,13 +38,16 @@ public class EjemplarController{
     private final AlquilerService alquilerService;
     private final CriticaService criticaService;
 
+///////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////
+
     @GetMapping("/ejemplares/{id}")
     public String detalle(@PathVariable Long id, Principal principal, Model model){
         return vistaDeDetalle(id, principal, model);
     }
 
-    /* Quién alquila sale de la sesión (principal), nunca del formulario. Sin sesión, Spring
-    Security ya redirige al ingreso porque este POST no es público. */
+    /* Quién alquila sale de la sesión (principal), nunca del formulario. Sin sesión,
+    Spring Security ya redirige al ingreso porque este POST no es público. */
     @PostMapping("/ejemplares/{id}/alquilar")
     public String alquilar(@PathVariable Long id, Principal principal,
                            @Valid @ModelAttribute("form") NuevoAlquilerForm form,

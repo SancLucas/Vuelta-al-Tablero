@@ -1,13 +1,15 @@
 package com.borboletta.vueltaaltablero.controller;
 
 import com.borboletta.vueltaaltablero.dto.RegistroUsuarioForm;
-import com.borboletta.vueltaaltablero.exception.UsuarioYaRegistradoException;
 import com.borboletta.vueltaaltablero.service.UsuarioService;
+import com.borboletta.vueltaaltablero.exception.UsuarioYaRegistradoException;
+
 import jakarta.validation.Valid;
+import org.springframework.ui.Model;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -16,12 +18,15 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 @Controller
 @RequiredArgsConstructor
 public class UsuarioController{
-    
+
     private static final String VISTA_FORMULARIO = "usuarios/formulario";
     private static final String VISTA_INGRESO = "usuarios/ingreso";
     private static final String REDIRECCION_INGRESO = "redirect:/usuario/ingreso";
 
     private final UsuarioService usuarioService;
+
+///////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////
 
     @GetMapping("/registro")
     public String mostrarFormulario(Model model){
@@ -35,7 +40,7 @@ public class UsuarioController{
                                    BindingResult resultado,
                                    RedirectAttributes redirectAttributes){
         String vista = VISTA_FORMULARIO;
-        if (!resultado.hasErrors()) {
+        if (!resultado.hasErrors()){
             vista = registrar(form, resultado, redirectAttributes);
         }
         return vista;
@@ -53,7 +58,7 @@ public class UsuarioController{
         }
         return vista;
     }
-    
+
     @GetMapping("/usuario/ingreso")
     public String mostrarFormularioIngreso(){
         return VISTA_INGRESO; // el POST lo procesa Spring Security (ver SecurityConfig)

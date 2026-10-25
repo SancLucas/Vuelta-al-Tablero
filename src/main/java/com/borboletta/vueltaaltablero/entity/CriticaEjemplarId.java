@@ -3,12 +3,12 @@ package com.borboletta.vueltaaltablero.entity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 import java.io.Serializable;
+import lombok.Getter;
 import lombok.AccessLevel;
 import lombok.EqualsAndHashCode;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-/** Clave de CriticaEjemplar: una persona puede criticar una vez cada ejemplar. */
+/* Clave de CriticaEjemplar: una persona puede criticar una vez cada ejemplar. */
 @Embeddable
 @Getter
 @EqualsAndHashCode // JPA exige equals/hashCode en una clave compuesta

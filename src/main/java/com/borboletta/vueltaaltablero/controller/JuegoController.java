@@ -2,15 +2,18 @@ package com.borboletta.vueltaaltablero.controller;
 
 import com.borboletta.vueltaaltablero.dto.CriticaForm;
 import com.borboletta.vueltaaltablero.entity.CategoriaJuego;
+
 import com.borboletta.vueltaaltablero.service.CriticaService;
 import com.borboletta.vueltaaltablero.service.EjemplarService;
 import com.borboletta.vueltaaltablero.service.JuegoService;
+
 import jakarta.validation.Valid;
 import java.security.Principal;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -19,8 +22,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-/* Catálogo público: cualquiera puede mirarlo, solo con GET. Dejar una crítica pide sesión (el POST
-no es público). La administración está en JuegoAdminController. */
+/* Catálogo público: cualquiera puede mirarlo, solo con GET. Dejar una crítica pide
+sesión (el POST no es público). La administración está en JuegoAdminController. */
 @Controller
 @RequestMapping("/juegos")
 @RequiredArgsConstructor
@@ -32,6 +35,9 @@ public class JuegoController{
     private final JuegoService juegoService;
     private final EjemplarService ejemplarService;
     private final CriticaService criticaService;
+
+///////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////
 
     /* /juegos muestra todos; /juegos?categoria=ESTRATEGIA filtra. Una categoría inventada no rompe: no filtra. */
     @GetMapping
@@ -48,8 +54,8 @@ public class JuegoController{
         return vistaDeDetalle(id, principal, model);
     }
 
-    /* Al juego lo puede criticar cualquier persona con sesión. Quién es sale del Principal. Si ya
-    tenía una crítica, esta la reemplaza (el servicio hace el "actualizar o crear"). */
+    /* Al juego lo puede criticar cualquier persona con sesión. Quién es sale del Principal.
+    Si ya tenía una crítica, esta la reemplaza (el servicio hace el "actualizar o crear"). */
     @PostMapping("/{id}/critica")
     public String criticar(@PathVariable Long id, Principal principal,
                            @Valid @ModelAttribute("criticaForm") CriticaForm form,
@@ -68,8 +74,8 @@ public class JuegoController{
         return vista;
     }
 
-    /* Arma lo que necesita la página. Si llega un "criticaForm" ya cargado (con errores de un POST)
-    se respeta; si no, se muestra el de la crítica propia, o uno vacío. */
+    /* Arma lo que necesita la página. Si llega un "criticaForm" ya cargado (con errores
+    de un POST) se respeta; si no, se muestra el de la crítica propia, o uno vacío. */
     private String vistaDeDetalle(Long id, Principal principal, Model model){
         model.addAttribute("juego", juegoService.obtener(id));
         model.addAttribute("ejemplares", ejemplarService.disponiblesDeJuego(id));

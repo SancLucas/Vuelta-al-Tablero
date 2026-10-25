@@ -6,7 +6,7 @@ import lombok.Getter;
 public class UsuarioYaRegistradoException extends RuntimeException{
     private final String campo;
 
-    public UsuarioYaRegistradoException(String campo, String mensaje){ 
+    public UsuarioYaRegistradoException(String campo, String mensaje){
         super(mensaje);
         this.campo = campo; //usamos un campo genérico para así reutilizar el metodo con dni y correo.
     }

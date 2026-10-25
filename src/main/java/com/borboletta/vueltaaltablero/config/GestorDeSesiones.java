@@ -14,6 +14,9 @@ public class GestorDeSesiones{
 
     private final SessionRegistry sessionRegistry;
 
+///////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////
+
     public void cerrarSesionesDe(String correo){
         sessionRegistry.getAllPrincipals().stream()
                 .filter(principal -> esDe(principal, correo))

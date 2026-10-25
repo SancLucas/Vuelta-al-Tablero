@@ -1,10 +1,12 @@
 package com.borboletta.vueltaaltablero.controller;
 
-import com.borboletta.vueltaaltablero.exception.OperacionNoPermitidaException;
 import com.borboletta.vueltaaltablero.service.UsuarioService;
+import com.borboletta.vueltaaltablero.exception.OperacionNoPermitidaException;
+
+import org.springframework.ui.Model;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
+
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -21,6 +23,9 @@ public class UsuarioAdminController{
     private static final String REDIRECCION_LISTADO = "redirect:/admin/usuarios";
 
     private final UsuarioService usuarioService;
+
+///////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////
 
     @GetMapping
     public String listado(Model model){

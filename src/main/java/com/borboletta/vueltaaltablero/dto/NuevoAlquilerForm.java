@@ -7,11 +7,9 @@ import lombok.Getter;
 import lombok.Setter;
 import org.springframework.format.annotation.DateTimeFormat;
 
-/**
- * Lo que se completa al alquilar un ejemplar. Acá solo se exige que haya fechas: que la
- * duración y la anticipación sean válidas lo decide Alquiler (una sola fuente de verdad).
- * Los métodos de abajo solo le pasan esos límites a la plantilla para acotar los campos de fecha.
- */
+/* Lo que se completa al alquilar un ejemplar. Acá solo se exige que haya fechas: que la
+duración y la anticipación sean válidas lo decide Alquiler (una sola fuente de verdad).
+Los métodos de abajo solo le pasan esos límites a la plantilla para acotar los campos de fecha. */
 @Getter
 @Setter
 public class NuevoAlquilerForm{

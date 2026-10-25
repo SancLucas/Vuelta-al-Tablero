@@ -1,14 +1,17 @@
 package com.borboletta.vueltaaltablero.service;
 
-import com.borboletta.vueltaaltablero.dto.DatosDeEdicionUsuario;
 import com.borboletta.vueltaaltablero.dto.DatosDePerfil;
-import com.borboletta.vueltaaltablero.dto.DatosDeRegistroUsuario;
 import com.borboletta.vueltaaltablero.dto.ResumenDeUsuario;
+import com.borboletta.vueltaaltablero.dto.DatosDeEdicionUsuario;
+import com.borboletta.vueltaaltablero.dto.DatosDeRegistroUsuario;
+
 import com.borboletta.vueltaaltablero.entity.Usuario;
+import com.borboletta.vueltaaltablero.repository.UsuarioRepository;
+
 import com.borboletta.vueltaaltablero.exception.CuentaNoEncontradaException;
 import com.borboletta.vueltaaltablero.exception.UsuarioNoEncontradoException;
 import com.borboletta.vueltaaltablero.exception.UsuarioYaRegistradoException;
-import com.borboletta.vueltaaltablero.repository.UsuarioRepository;
+
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
@@ -23,6 +26,9 @@ public class UsuarioService{
     private final UsuarioRepository usuarioRepository;
     private final PasswordEncoder passwordEncoder;
     private final ApplicationEventPublisher eventos;
+
+///////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////
 
     /* Para el listado del administrador (incluye a las cuentas bloqueadas, para poder desbloquearlas). */
     @Transactional(readOnly = true)
@@ -45,8 +51,8 @@ public class UsuarioService{
         buscarPorNro(nro).desbloquear();
     }
 
-    /* Si el correo y el DNI son de una cuenta dada de baja, se la reactiva;
-    si no, se crea una cuenta nueva. */
+        /* Si el correo y el DNI son de una cuenta dada de baja,
+    se la reactiva; si no, se crea una cuenta nueva. */
     @Transactional
     public void registrar(DatosDeRegistroUsuario datos){
         usuarioRepository
@@ -94,7 +100,7 @@ public class UsuarioService{
         }
     }
 
-    /* La cuenta que pide el administrador es AJENA: si no existe es un 404, y no hay que
+        /* La cuenta que pide el administrador es AJENA: si no existe es un 404, y no hay que
     cerrarle la sesión a quien navega (por eso no es UsuarioNoEncontradoException). */
     private Usuario buscarPorNro(Long nro){
         return usuarioRepository.findByNroAndFechaBajaIsNull(nro)

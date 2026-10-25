@@ -2,13 +2,13 @@ package com.borboletta.vueltaaltablero.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
-import java.io.Serializable;
-import lombok.AccessLevel;
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.AccessLevel;
+import java.io.Serializable;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
-/** Clave de CriticaJuego: una persona puede criticar una vez cada juego. */
+/* Clave de CriticaJuego: una persona puede criticar una vez cada juego. */
 @Embeddable
 @Getter
 @EqualsAndHashCode

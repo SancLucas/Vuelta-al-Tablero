@@ -2,9 +2,10 @@ package com.borboletta.vueltaaltablero.controller;
 
 import com.borboletta.vueltaaltablero.service.AlquilerService;
 import java.security.Principal;
+import org.springframework.ui.Model;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
+
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -22,6 +23,9 @@ public class MisAlquileresController{
 
     private final AlquilerService alquilerService;
 
+///////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////
+
     @GetMapping("/mis-alquileres")
     public String comoInquilino(Principal principal, Model model){
         model.addAttribute("alquileres", alquilerService.comoInquilino(principal.getName()));
@@ -34,8 +38,8 @@ public class MisAlquileresController{
         return VISTA_DE_MIS_EJEMPLARES;
     }
 
-    /* Solo el dueño del ejemplar puede registrar la devolución: el servicio busca el alquiler por
-    id Y por dueño, así que el de un ejemplar ajeno responde 404. */
+    /* Solo el dueño del ejemplar puede registrar la devolución: el servicio busca el
+    alquiler por id Y por dueño, así que el de un ejemplar ajeno responde 404. */
     @PostMapping("/mis-ejemplares/alquileres/{id}/devolucion")
     public String registrarDevolucion(Principal principal, @PathVariable Long id,
                                       RedirectAttributes redirectAttributes){
@@ -48,7 +52,7 @@ public class MisAlquileresController{
         }
         return REDIRECCION_DE_MIS_EJEMPLARES;
     }
-    
+
     @PostMapping("/mis-ejemplares/alquileres/{id}/cancelacion")
     public String cancelar(Principal principal, @PathVariable Long id,
                            RedirectAttributes redirectAttributes){

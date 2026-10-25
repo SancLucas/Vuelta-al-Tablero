@@ -4,18 +4,19 @@ import com.borboletta.vueltaaltablero.entity.Alquiler;
 import java.util.Set;
 import java.util.List;
 import java.util.Optional;
-import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
-import org.springframework.stereotype.Repository;
+import org.springframework.data.jpa.repository.JpaRepository;
 
 @Repository
 public interface AlquilerRepository extends JpaRepository<Alquiler, Long>{
 
-    // Regla "un solo alquiler abierto por ejemplar": el servicio la consulta antes de registrar.
+    /* Regla "un solo alquiler abierto por ejemplar": el servicio la consulta antes de registrar. */
     boolean existsByEjemplarIdAndFechaDevolucionIsNull(Long idEjemplar);
 
-    // Historial de una copia, del más reciente al más antiguo. El join fetch evita el N+1.
+    /* Historial de una copia, del más reciente al más antiguo. El join fetch evita el N+1. */
     @Query("""
            select a from Alquiler a
              join fetch a.inquilino
@@ -23,7 +24,7 @@ public interface AlquilerRepository extends JpaRepository<Alquiler, Long>{
            order by a.fechaEntrega desc, a.id desc""")
     List<Alquiler> findHistorialDeEjemplar(@Param("idEjemplar") Long idEjemplar);
 
-    // Alquileres "a nivel de juego": los de todas sus copias juntas.
+    /* Alquileres "a nivel de juego": los de todas sus copias juntas. */
     @Query("""
            select a from Alquiler a
              join fetch a.inquilino
@@ -32,7 +33,7 @@ public interface AlquilerRepository extends JpaRepository<Alquiler, Long>{
            order by a.fechaEntrega desc, a.id desc""")
     List<Alquiler> findHistorialDeJuego(@Param("idJuego") Long idJuego);
 
-    // Base de la regla "solo critica quien alquiló y devolvió" (la usa el Paso 2).
+    /* Base de la regla "solo critica quien alquiló y devolvió" (la usa el Paso 2). */
     @Query("""
            select count(a) > 0 from Alquiler a
            where a.inquilino.nro = :nroUsuario
@@ -40,8 +41,8 @@ public interface AlquilerRepository extends JpaRepository<Alquiler, Long>{
              and a.fechaDevolucion is not null""")
     boolean haDevueltoElEjemplar(@Param("nroUsuario") Long nroUsuario,
                                  @Param("idEjemplar") Long idEjemplar);
-    
-        // Lo que alquilé yo (como inquilino), lo más reciente primero.
+
+    /* Lo que alquilé yo (como inquilino), lo más reciente primero. */
     @Query("""
            select a from Alquiler a
              join fetch a.inquilino i
@@ -52,7 +53,7 @@ public interface AlquilerRepository extends JpaRepository<Alquiler, Long>{
            order by a.fechaEntrega desc, a.id desc""")
     List<Alquiler> findDeInquilino(@Param("correo") String correo);
 
-    // Los alquileres de MIS ejemplares (como propietario): desde acá registro las devoluciones.
+    /* Los alquileres de MIS ejemplares (como propietario): desde acá registro las devoluciones. */
     @Query("""
            select a from Alquiler a
              join fetch a.inquilino
@@ -63,8 +64,8 @@ public interface AlquilerRepository extends JpaRepository<Alquiler, Long>{
            order by a.fechaEntrega desc, a.id desc""")
     List<Alquiler> findDeEjemplaresDe(@Param("correo") String correo);
 
-    /* Por id Y por propietario a la vez, igual que EjemplarRepository.findActivoDe: el alquiler
-    de un ejemplar ajeno simplemente "no existe". */
+    /* Por id Y por propietario a la vez, igual que EjemplarRepository.findActivoDe:
+    el alquiler de un ejemplar ajeno simplemente "no existe". */
     @Query("""
            select a from Alquiler a
              join fetch a.inquilino
@@ -74,16 +75,16 @@ public interface AlquilerRepository extends JpaRepository<Alquiler, Long>{
            where a.id = :id
              and lower(p.correo) = lower(:correo)""")
     Optional<Alquiler> findDelPropietario(@Param("id") Long id, @Param("correo") String correo);
-    
-        // Ids de los ejemplares de una persona que hoy están alquilados (para marcarlos en "Mis ejemplares").
+
+    /* Ids de los ejemplares de una persona que hoy están alquilados (para marcarlos en "Mis ejemplares"). */
     @Query("""
            select a.ejemplar.id from Alquiler a
            where a.fechaDevolucion is null
              and lower(a.ejemplar.propietario.correo) = lower(:correo)""")
     Set<Long> findIdsDeEjemplaresEnCursoDe(@Param("correo") String correo);
 
-    // El alquiler abierto que una persona tiene sobre un ejemplar: de acá salen sus fechas y el
-    // teléfono del dueño. Como mucho hay uno, porque el servicio no permite dos abiertos.
+        /* El alquiler abierto que una persona tiene sobre un ejemplar: de acá salen sus fechas y el
+    teléfono del dueño. Como mucho hay uno, porque el servicio no permite dos abiertos. */
     @Query("""
            select a from Alquiler a
              join fetch a.inquilino i

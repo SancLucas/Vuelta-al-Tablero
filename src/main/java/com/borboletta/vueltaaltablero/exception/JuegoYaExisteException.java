@@ -14,8 +14,8 @@ public class JuegoYaExisteException extends RuntimeException{
         return new JuegoYaExisteException("Ya hay un juego con ese título en el catálogo.");
     }
 
-    /* Al editar un juego no se lo puede renombrar con el título de otro que está dado de baja:
-    para recuperar ese, se usa "Agregar juego", que lo reactiva. */
+    /* Al editar un juego no se lo puede renombrar con el título de otro que está
+    dado de baja: para recuperar ese, se usa "Agregar juego", que lo reactiva. */
     public static JuegoYaExisteException dadoDeBaja(){
         return new JuegoYaExisteException("Ese título es de un juego dado de baja. "
                 + "Para recuperarlo, agregalo de nuevo desde \"Agregar juego\".");

@@ -1,21 +1,20 @@
 package com.borboletta.vueltaaltablero.entity;
 
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+
+import lombok.Getter;
+import java.time.Year;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+
 import static com.borboletta.vueltaaltablero.validation.Validaciones.exigirQue;
 import static com.borboletta.vueltaaltablero.validation.Validaciones.exigirTexto;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import java.time.Year;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-
-/**
- * La ficha técnica es PARTE de un Juego: nace, se modifica y vive con él.
- * Por eso no tiene repositorio propio: se accede siempre a través de Juego.
- */
+/* La ficha técnica es PARTE de un Juego: nace, se modifica y vive con él.
+Por eso no tiene repositorio propio: se accede siempre a través de Juego. */
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED) // lo exige JPA; nadie más lo usa
@@ -32,6 +31,9 @@ public class FichaTecnica{
     private String descripcion;
     private int anioPublicacion;
 
+///////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////
+
     private FichaTecnica(int minJugadores, int maxJugadores, int minEdad,
                          String descripcion, int anioPublicacion){
         asignar(minJugadores, maxJugadores, minEdad, descripcion, anioPublicacion);
@@ -42,7 +44,7 @@ public class FichaTecnica{
         return new FichaTecnica(minJugadores, maxJugadores, minEdad, descripcion, anioPublicacion);
     }
 
-    /** Tell, Don't Ask: se le dice a la ficha que se actualice; ella valida sus reglas.**/
+    /* Tell, Don't Ask: se le dice a la ficha que se actualice; ella valida sus reglas. */
     public void actualizar(int minJugadores, int maxJugadores, int minEdad,
                            String descripcion, int anioPublicacion){
         asignar(minJugadores, maxJugadores, minEdad, descripcion, anioPublicacion);

@@ -1,23 +1,24 @@
 package com.borboletta.vueltaaltablero.controller;
 
-import com.borboletta.vueltaaltablero.config.GestorDeSesiones;
 import com.borboletta.vueltaaltablero.dto.DatosDePerfil;
 import com.borboletta.vueltaaltablero.dto.EdicionUsuarioForm;
 import com.borboletta.vueltaaltablero.service.UsuarioService;
+import com.borboletta.vueltaaltablero.config.GestorDeSesiones;
+
+import java.security.Principal;
+import jakarta.validation.Valid;
+import org.springframework.ui.Model;
+import lombok.RequiredArgsConstructor;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.validation.Valid;
-import java.security.Principal;
-import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 
 @Controller
 @RequiredArgsConstructor
@@ -30,6 +31,9 @@ public class PerfilController{
 
     private final UsuarioService usuarioService;
     private final GestorDeSesiones gestorDeSesiones;
+
+///////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////
 
     /* Spring Security garantiza que acá solo llega alguien con sesión iniciada,
     y el Principal es quien ingresó: no hay forma de pedir los datos de otro. */

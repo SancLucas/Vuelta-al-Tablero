@@ -1,21 +1,22 @@
 package com.borboletta.vueltaaltablero.entity;
 
-import static com.borboletta.vueltaaltablero.validation.Validaciones.exigirQue;
-
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
-import java.math.BigDecimal;
-import java.time.LocalDate;
-import java.time.temporal.ChronoUnit;
-import lombok.AccessLevel;
+import jakarta.persistence.Id;
+
 import lombok.Getter;
+import lombok.AccessLevel;
+import java.time.LocalDate;
+import java.math.BigDecimal;
 import lombok.NoArgsConstructor;
+import java.time.temporal.ChronoUnit;
+
+import static com.borboletta.vueltaaltablero.validation.Validaciones.exigirQue;
 
 /** El préstamo de un Ejemplar a un usuario, con sus fechas y el total que se acordó al pedirlo. */
 @Entity
@@ -69,17 +70,14 @@ public class Alquiler{
         this.precio = ejemplar.costoDeAlquilarPor(dias);   // el ejemplar sabe cuánto cuesta
     }
 
-    /* Sin "public" a propósito: solo Ejemplar.alquilarA (mismo paquete) puede crear un alquiler,
-    así nadie se salta las reglas del ejemplar. */
+    /* Sin "public" a propósito: solo Ejemplar.alquilarA (mismo paquete) puede
+    crear un alquiler, así nadie se salta las reglas del ejemplar. */
     static Alquiler registrar(Ejemplar ejemplar, Usuario inquilino, LocalDate fechaEntrega,
                               LocalDate fechaDevolucionPrevista){
         return new Alquiler(ejemplar, inquilino, fechaEntrega, fechaDevolucionPrevista);
     }
 
-    /**
-     * Tell, Don't Ask: el propietario le dice al alquiler que ya recibió el ejemplar de vuelta.
-     * La fecha real es la de hoy.
-     */
+    /* Tell, Don't Ask: el propietario le dice al alquiler que ya recibió el ejemplar de vuelta. */
     public void registrarDevolucion(){
         exigirQue(this.fechaDevolucion == null, "Este alquiler ya fue devuelto.");
         exigirQue(yaEmpezo(),
@@ -92,7 +90,7 @@ public class Alquiler{
         return !this.fechaEntrega.isAfter(LocalDate.now());
     }
     
-        /* Un alquiler solo se cancela antes de empezar. Desde la entrega en adelante ya no se
+    /* Un alquiler solo se cancela antes de empezar. Desde la entrega en adelante ya no se
     cancela: se devuelve. La entidad solo valida; quien lo elimina es el servicio. */
     public void exigirQuePuedaCancelarse(){
         exigirQue(!yaEmpezo(), "Solo se puede cancelar un alquiler que todavía no empezó.");

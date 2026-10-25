@@ -2,12 +2,15 @@ package com.borboletta.vueltaaltablero.service;
 
 import com.borboletta.vueltaaltablero.dto.DatosDeJuego;
 import com.borboletta.vueltaaltablero.dto.DetalleDeJuego;
-import com.borboletta.vueltaaltablero.entity.CategoriaJuego;
-import com.borboletta.vueltaaltablero.entity.FichaTecnica;
+
 import com.borboletta.vueltaaltablero.entity.Juego;
-import com.borboletta.vueltaaltablero.exception.JuegoNoEncontradoException;
-import com.borboletta.vueltaaltablero.exception.JuegoYaExisteException;
+import com.borboletta.vueltaaltablero.entity.FichaTecnica;
+import com.borboletta.vueltaaltablero.entity.CategoriaJuego;
+
 import com.borboletta.vueltaaltablero.repository.JuegoRepository;
+import com.borboletta.vueltaaltablero.exception.JuegoYaExisteException;
+import com.borboletta.vueltaaltablero.exception.JuegoNoEncontradoException;
+
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -20,13 +23,16 @@ public class JuegoService{
 
     private final JuegoRepository juegoRepository;
 
-    /** Todo el catálogo ("Todos los juegos"). */
+///////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////
+
+    /* Todo el catálogo ("Todos los juegos"). */
     @Transactional(readOnly = true)
     public List<DetalleDeJuego> catalogo(){
         return catalogo(null);
     }
 
-    /** El catálogo de una categoría; con null, sin filtrar. */
+    /* El catálogo de una categoría; con null, sin filtrar. */
     @Transactional(readOnly = true)
     public List<DetalleDeJuego> catalogo(CategoriaJuego categoria){
         List<Juego> juegos = categoria == null
@@ -42,7 +48,7 @@ public class JuegoService{
         return DetalleDeJuego.desde(buscar(id));
     }
 
-    /* Si el título es de un juego que estaba dado de baja, se lo reactiva con los datos nuevos
+        /* Si el título es de un juego que estaba dado de baja, se lo reactiva con los datos nuevos
     en lugar de crear otra fila: la base no se llena de duplicados. Si no, se crea uno nuevo. */
     @Transactional
     public void crear(DatosDeJuego datos){
@@ -52,7 +58,7 @@ public class JuegoService{
                         () -> crearNuevo(datos));
     }
 
-    /* No hay save(): el juego que trae el repositorio queda administrado por JPA y, al terminar
+        /* No hay save(): el juego que trae el repositorio queda administrado por JPA y, al terminar
     la transacción, Hibernate detecta los cambios (también los de la ficha) y hace el UPDATE. */
     @Transactional
     public void actualizar(Long id, DatosDeJuego datos){
@@ -62,8 +68,8 @@ public class JuegoService{
         actualizarFicha(juego, datos);
     }
 
-    /* Baja lógica: una sola actualización. Sus ejemplares dejan de mostrarse porque las
-    consultas de ejemplares solo traen los de juegos que siguen en el catálogo. */
+        /* Baja lógica: una sola actualización. Sus ejemplares dejan de mostrarse porque
+    las consultas de ejemplares solo traen los de juegos que siguen en el catálogo. */
     @Transactional
     public void darDeBaja(Long id){
         buscar(id).darDeBaja();

@@ -3,13 +3,15 @@ package com.borboletta.vueltaaltablero.controller;
 import com.borboletta.vueltaaltablero.dto.DetalleDeJuego;
 import com.borboletta.vueltaaltablero.dto.JuegoForm;
 import com.borboletta.vueltaaltablero.entity.CategoriaJuego;
-import com.borboletta.vueltaaltablero.exception.JuegoYaExisteException;
 import com.borboletta.vueltaaltablero.service.JuegoService;
+import com.borboletta.vueltaaltablero.exception.JuegoYaExisteException;
+
 import jakarta.validation.Valid;
+import org.springframework.ui.Model;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -17,8 +19,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-/* Todo lo que cuelga de /admin/** exige rol ADMIN (ver SecurityConfig): acá no hace falta
-volver a chequearlo, y es imposible que se olvide en un método nuevo. */
+/* Todo lo que cuelga de /admin/** exige rol ADMIN (ver SecurityConfig): acá no hace
+falta volver a chequearlo, y es imposible que se olvide en un método nuevo. */
 @Controller
 @RequestMapping("/admin/juegos")
 @RequiredArgsConstructor
@@ -28,6 +30,9 @@ public class JuegoAdminController{
     private static final String REDIRECCION_CATALOGO = "redirect:/juegos";
 
     private final JuegoService juegoService;
+
+///////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////
 
     /* Las opciones del desplegable "Categoría", disponibles para las vistas de este controller. */
     @ModelAttribute("categorias")

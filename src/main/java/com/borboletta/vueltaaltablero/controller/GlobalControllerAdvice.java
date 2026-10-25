@@ -4,14 +4,17 @@ import com.borboletta.vueltaaltablero.config.Roles;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import java.security.Principal;
 import java.time.Year;
+import java.security.Principal;
 import org.springframework.security.core.Authentication;
 
 @ControllerAdvice
 public class GlobalControllerAdvice{
 
     private final String correoContacto;
+
+///////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////
 
     /* El correo de la administración se configura en application.properties (vuelta.contacto.correo). */
     public GlobalControllerAdvice(@Value("${vuelta.contacto.correo}") String correoContacto){
@@ -34,8 +37,8 @@ public class GlobalControllerAdvice{
     public boolean haySesionIniciada(Principal principal){
         return principal != null;
     }
-    
-        /* Lo usan las vistas del catálogo para mostrar (o no) los botones de administración.
+
+    /* Lo usan las vistas del catálogo para mostrar (o no) los botones de administración.
     Es solo una comodidad visual: la protección real está en SecurityConfig (/admin/**). */
     @ModelAttribute("esAdmin")
     public boolean esAdministrador(Authentication autenticacion){

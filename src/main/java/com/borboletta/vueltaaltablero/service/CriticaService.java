@@ -2,23 +2,27 @@ package com.borboletta.vueltaaltablero.service;
 
 import com.borboletta.vueltaaltablero.dto.DatosDeCritica;
 import com.borboletta.vueltaaltablero.dto.DetalleDeCritica;
-import com.borboletta.vueltaaltablero.entity.CriticaEjemplar;
-import com.borboletta.vueltaaltablero.entity.CriticaEjemplarId;
-import com.borboletta.vueltaaltablero.entity.CriticaJuego;
-import com.borboletta.vueltaaltablero.entity.CriticaJuegoId;
-import com.borboletta.vueltaaltablero.entity.Ejemplar;
+
 import com.borboletta.vueltaaltablero.entity.Juego;
 import com.borboletta.vueltaaltablero.entity.Usuario;
-import com.borboletta.vueltaaltablero.exception.CriticaNoPermitidaException;
-import com.borboletta.vueltaaltablero.exception.EjemplarNoEncontradoException;
+import com.borboletta.vueltaaltablero.entity.Ejemplar;
+import com.borboletta.vueltaaltablero.entity.CriticaJuego;
+import com.borboletta.vueltaaltablero.entity.CriticaJuegoId;
+import com.borboletta.vueltaaltablero.entity.CriticaEjemplar;
+import com.borboletta.vueltaaltablero.entity.CriticaEjemplarId;
+
 import com.borboletta.vueltaaltablero.exception.JuegoNoEncontradoException;
+import com.borboletta.vueltaaltablero.exception.CriticaNoPermitidaException;
 import com.borboletta.vueltaaltablero.exception.UsuarioNoEncontradoException;
-import com.borboletta.vueltaaltablero.repository.AlquilerRepository;
-import com.borboletta.vueltaaltablero.repository.CriticaEjemplarRepository;
-import com.borboletta.vueltaaltablero.repository.CriticaJuegoRepository;
-import com.borboletta.vueltaaltablero.repository.EjemplarRepository;
+import com.borboletta.vueltaaltablero.exception.EjemplarNoEncontradoException;
+
 import com.borboletta.vueltaaltablero.repository.JuegoRepository;
 import com.borboletta.vueltaaltablero.repository.UsuarioRepository;
+import com.borboletta.vueltaaltablero.repository.AlquilerRepository;
+import com.borboletta.vueltaaltablero.repository.EjemplarRepository;
+import com.borboletta.vueltaaltablero.repository.CriticaJuegoRepository;
+import com.borboletta.vueltaaltablero.repository.CriticaEjemplarRepository;
+
 import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
@@ -26,7 +30,7 @@ import org.springframework.stereotype.Service;
 import com.borboletta.vueltaaltablero.dto.ResumenDeCriticas;
 import org.springframework.transaction.annotation.Transactional;
 
-/* Una persona tiene como máximo una crítica por juego y una por ejemplar: si vuelve a enviarla,
+    /* Una persona tiene como máximo una crítica por juego y una por ejemplar: si vuelve a enviarla,
 se corrige la anterior en vez de crear otra. El autor sale siempre de la sesión.
 Al juego lo puede criticar cualquiera con sesión; al ejemplar, solo quien lo alquiló y devolvió. */
 @Service
@@ -39,6 +43,9 @@ public class CriticaService{
     private final EjemplarRepository ejemplarRepository;
     private final JuegoRepository juegoRepository;
     private final UsuarioRepository usuarioRepository;
+
+///////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////
 
     @Transactional
     public void criticarEjemplar(Long idEjemplar, String correoAutor, DatosDeCritica datos){
@@ -97,8 +104,8 @@ public class CriticaService{
                 .map(critica -> DetalleDeCritica.desde(critica.getAutor(), critica.getOpinion()));
     }
 
-    /* Lo mismo que exige criticarEjemplar: haberlo alquilado y devuelto. La página lo usa para
-    decidir si muestra el formulario. */
+        /* Lo mismo que exige criticarEjemplar: haberlo alquilado y devuelto.
+    La página lo usa para decidir si muestra el formulario. */
     @Transactional(readOnly = true)
     public boolean puedeCriticarEjemplar(Long idEjemplar, String correo){
         return alquilerRepository.haDevueltoElEjemplar(buscarAutor(correo).getNro(), idEjemplar);

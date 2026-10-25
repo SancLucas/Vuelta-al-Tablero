@@ -21,6 +21,9 @@ class AutenticacionServiceTest{
     @Mock private UsuarioRepository usuarioRepository;
     @InjectMocks private AutenticacionService servicio;
 
+///////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////
+
     private Usuario ana(){
         return Usuario.registrar("Ana", "Gómez", "30111222", "ana@mail.com", "1155550000", "hash");
     }

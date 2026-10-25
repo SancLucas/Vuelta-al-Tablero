@@ -1,7 +1,5 @@
 package com.borboletta.vueltaaltablero.entity;
 
-import static com.borboletta.vueltaaltablero.validation.Validaciones.exigirQue;
-
 import jakarta.persistence.Embedded;
 import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
@@ -9,11 +7,14 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.MapsId;
-import lombok.AccessLevel;
+
 import lombok.Getter;
+import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
-/** La opinión de una persona sobre una copia física concreta (su estado, su trato...). */
+import static com.borboletta.vueltaaltablero.validation.Validaciones.exigirQue;
+
+/* La opinión de una persona sobre una copia física concreta (su estado, su trato...). */
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED) // lo exige JPA; nadie más lo usa
@@ -51,7 +52,7 @@ public class CriticaEjemplar{
         return new CriticaEjemplar(ejemplar, autor, Opinion.de(comentario, puntuacion));
     }
 
-    /** Tell, Don't Ask: el autor corrige su opinión y la crítica valida la nueva. */
+    /* Tell, Don't Ask: el autor corrige su opinión y la crítica valida la nueva. */
     public void actualizar(String comentario, int puntuacion){
         this.opinion = Opinion.de(comentario, puntuacion);
     }

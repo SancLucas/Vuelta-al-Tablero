@@ -8,9 +8,13 @@ import org.springframework.web.bind.annotation.GetMapping;
 
 @Controller
 public class IndexController{
+
     @Autowired
     private UsuarioService usuarioService;
-    
+
+///////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////
+
     @GetMapping("/") //ruta del usuario. En este caso es solo una barra porque es la raíz.
     public String index(Model model){
         return "index"; /*indica a thymeleaf que busque la plantilla index,

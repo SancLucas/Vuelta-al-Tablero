@@ -3,10 +3,11 @@ package com.borboletta.vueltaaltablero.repository;
 import com.borboletta.vueltaaltablero.entity.Ejemplar;
 import java.util.List;
 import java.util.Optional;
+import org.springframework.stereotype.Repository;
+
+import org.springframework.data.repository.query.Param;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
-import org.springframework.stereotype.Repository;
 
 @Repository
 public interface EjemplarRepository extends JpaRepository<Ejemplar, Long>{
@@ -21,8 +22,8 @@ public interface EjemplarRepository extends JpaRepository<Ejemplar, Long>{
            order by j.titulo""")
     List<Ejemplar> findActivosDe(@Param("correo") String correo);
 
-    /* Busca por id Y por dueño a la vez: el ejemplar de otra persona simplemente "no existe",
-    así que nadie puede editar o quitar uno ajeno cambiando el id en la URL. */
+        /* Busca por id Y por dueño a la vez: el ejemplar de otra persona simplemente "no
+    existe", así que nadie puede editar o quitar uno ajeno cambiando el id en la URL. */
     @Query("""
            select e from Ejemplar e
              join fetch e.juego j
@@ -46,9 +47,9 @@ public interface EjemplarRepository extends JpaRepository<Ejemplar, Long>{
              and p.fechaBaja is null
              and p.fechaBloqueo is null""")
     Optional<Ejemplar> findVisiblePorId(@Param("id") Long id);
-    
-    /* Los disponibles de UN juego (sección "Ejemplares disponibles" de su página). No se muestran los de
-    un juego dado de baja, los de un dueño dado de baja o BLOQUEADO (sin tocarlos: si vuelven, vuelven
+
+        /* Los disponibles de UN juego (sección "Ejemplares disponibles" de su página). No se muestran los 
+    de un juego dado de baja, los de un dueño dado de baja o BLOQUEADO (sin tocarlos: si vuelven, vuelven
     con ellos) ni los que hoy están alquilados (reaparecen cuando el dueño registra la devolución). */
     @Query("""
            select e from Ejemplar e

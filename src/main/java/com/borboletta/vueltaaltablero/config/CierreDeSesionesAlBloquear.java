@@ -13,6 +13,9 @@ public class CierreDeSesionesAlBloquear{
 
     private final GestorDeSesiones gestorDeSesiones;
 
+///////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////
+
     @TransactionalEventListener
     public void alBloquearse(UsuarioBloqueadoEvento evento){
         gestorDeSesiones.cerrarSesionesDe(evento.correo());

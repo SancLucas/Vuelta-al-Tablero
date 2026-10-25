@@ -2,9 +2,11 @@ package com.borboletta.vueltaaltablero.controller;
 
 import com.borboletta.vueltaaltablero.exception.RecursoNoEncontradoException;
 import com.borboletta.vueltaaltablero.exception.UsuarioNoEncontradoException;
+
+import org.springframework.ui.Model;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.http.HttpStatus;
-import org.springframework.ui.Model;
+
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -15,6 +17,9 @@ public class ManejadorDeExcepciones{
 
     private static final String VISTA_NO_ENCONTRADO = "error/404";
     private static final String REDIRECCION_INGRESO = "redirect:/usuario/ingreso";
+
+///////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////
 
     /* Juego o ejemplar que no existe (o que no es tuyo): página 404. */
     @ExceptionHandler(RecursoNoEncontradoException.class)

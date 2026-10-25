@@ -1,7 +1,5 @@
 package com.borboletta.vueltaaltablero.entity;
 
-import static com.borboletta.vueltaaltablero.validation.Validaciones.exigirQue;
-
 import jakarta.persistence.Convert;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -10,15 +8,18 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.time.LocalDate;
-import java.util.Objects;
-import lombok.AccessLevel;
 import lombok.Getter;
+import java.util.Objects;
+import java.time.LocalDate;
+import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
-/** La copia física de un Juego que un usuario (o la administración) pone en la plataforma. */
+import static com.borboletta.vueltaaltablero.validation.Validaciones.exigirQue;
+
+/* La copia física de un Juego que un usuario (o la administración) pone en la plataforma. */
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED) // lo exige JPA; nadie más lo usa
@@ -73,11 +74,9 @@ public class Ejemplar{
         }
     }
 
-    /**
-     * Tell, Don't Ask: se le dice al ejemplar que se alquile a alguien y él decide si puede.
-     * Acá viven las reglas que dependen solo de él. Que no tenga ya otro alquiler abierto lo
-     * controla el servicio, porque el ejemplar no conoce sus alquileres.
-     */
+    /* Tell, Don't Ask: se le dice al ejemplar que se alquile a alguien y él decide si puede.
+    Acá viven las reglas que dependen solo de él. Que no tenga ya otro alquiler abierto lo
+    controla el servicio, porque el ejemplar no conoce sus alquileres. */
     public Alquiler alquilarA(Usuario inquilino, LocalDate fechaEntrega,
                               LocalDate fechaDevolucionPrevista){
         exigirQue(this.fechaBaja == null, "El ejemplar ya no está en la colección de su dueño.");

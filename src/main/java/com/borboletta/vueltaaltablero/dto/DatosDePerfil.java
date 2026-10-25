@@ -9,6 +9,9 @@ public record DatosDePerfil(String nombre, String apellido, String dni, String c
     private static final String ROL_ADMINISTRADOR = "Administrador";
     private static final String ROL_USUARIO = "Usuario";
 
+///////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////
+
     public static DatosDePerfil desde(Usuario usuario){
         String rol = usuario.isRolAdmin() ? ROL_ADMINISTRADOR : ROL_USUARIO;
         return new DatosDePerfil(usuario.getNombre(), usuario.getApellido(), usuario.getDni(),
