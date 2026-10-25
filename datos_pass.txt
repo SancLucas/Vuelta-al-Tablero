@@ -1,0 +1,12 @@
+Mail					Password		Hash
+administracion@vueltaltablero.com	administrador		$2a$10$U.A6CCMWWPLU0IR.1wjBN.xbgy4isXXTHmwx243EzLiyoWdn7Iu/q
+lucas.martinez@email.com		segura2026		$2a$10$a9BsqZZxhJCzr5CVzNOBNeZS7FH2D0gs4JZXSEV.l.ywisxDCHvW6
+camila.rodriguez@email.com		camila2026		$2a$10$RZd6HQFqYUyPwiIw1tWjmOW8NnPq5xJipL..ZMZoyvJ9T29Q.kZm.
+joaquin.perez@gmail.com			joaco123		$2a$10$S6WiiJh201c3qf8Z8vtejuISsHlK5bYGtYX5FeTNGvGR6N1OYiDXq
+martina.lopez@hotmail.com		martu456		$2a$10$jyYfX/kltCmglhjSSUsXv.uuY2dtR38kmiZNIIcx6Bqr.1WZIPGqy
+tomas.fernandez@email.com		tomi7890		$2a$10$cOVjDTANTV2MsKywDf/diuAtNMp0APDpcK/gPioRr7pD/.KjU266u
+valentina.diaz@gmail.com		valen2026		$2a$10$81Kz9QShbJjJFWSHGMawLuZNK9D3srAo7pwbmWF7ijAhzQ4MlhE4a
+mateo.sanchez@gmail.com			mateo123		$2a$10$FxkN80.oPyJS3hkSDmYDG.WqZApTbGNb8c/QFX03L4ba5gOSyaFk.
+julieta.romero@email.com		julietapass		$2a$10$Xy28LbkIhbu7UagmjHz4cOINS5j1VYtyFg6wMrRYx.ufos7J9nE5W
+nicolas.alvarez@email.com		nico2026		$2a$10$rlFMUVyKfH56xwMNDwsUr.J0aNL/2r6DNCJrd8XQXuiKP4Dcsu7Ge
+sofia.gomez@email.com			clave123		$2a$10$Qu/ITSaKAvRFZqGaCe5AVuj8NKgn1gaatwvVzjkb12mOacWUCOC8a
