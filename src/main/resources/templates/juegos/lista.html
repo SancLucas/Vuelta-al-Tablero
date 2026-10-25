@@ -33,17 +33,17 @@
            th:text="${categoria.etiqueta}">Estrategia</a>
     </nav>
 
-    <p class="vacio" th:if="${#lists.isEmpty(juegos) and categoriaActual != null}"
+    <p class="vacio" th:if="${paginaJuegos.empty and categoriaActual != null}"
        th:text="'Todavía no hay juegos de la categoría ' + ${categoriaActual.etiqueta} + '.'">
         Todavía no hay juegos de esta categoría.
     </p>
-    <p class="vacio" th:if="${#lists.isEmpty(juegos) and categoriaActual == null}">
+    <p class="vacio" th:if="${paginaJuegos.empty and categoriaActual == null}">
         Todavía no hay juegos en el catálogo.
         <span th:if="${esAdmin}">Agregá el primero con el botón de arriba.</span>
     </p>
 
     <ul class="tarjetas">
-        <li class="tarjeta" th:each="juego : ${juegos}">
+        <li class="tarjeta" th:each="juego : ${paginaJuegos.content}">
             <h2><a th:href="@{/juegos/{id}(id=${juego.id})}" th:text="${juego.titulo}">Título</a></h2>
             <p class="tarjeta-detalle" th:text="${juego.categoria.etiqueta}">Categoría</p>
             <p class="tarjeta-detalle" th:text="${juego.editorial}">Editorial</p>
@@ -59,6 +59,9 @@
             </div>
         </li>
     </ul>
+
+    <!-- Botones de página (el filtro de categoría se conserva en cada enlace) -->
+    <nav th:replace="~{fragments/paginacion :: paginacion(${paginaJuegos}, ${rutaPaginacion}, '')}"></nav>
 
     <!-- Al final de la lista, siempre -->
     <aside class="pedido-juego">

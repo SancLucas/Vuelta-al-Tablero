@@ -42,15 +42,15 @@
         </div>
     </dl>
     
-    <section class="ejemplares-del-juego">
+    <section class="ejemplares-del-juego" id="ejemplares">
         <h2>Ejemplares disponibles</h2>
 
-        <p class="vacio" th:if="${#lists.isEmpty(ejemplares)}">
+        <p class="vacio" th:if="${paginaEjemplares.empty}">
             Por ahora no hay ejemplares de este juego para alquilar.
         </p>
 
-        <ul class="tarjetas" th:unless="${#lists.isEmpty(ejemplares)}">
-            <li class="tarjeta" th:each="ejemplar : ${ejemplares}">
+        <ul class="tarjetas" th:unless="${paginaEjemplares.empty}">
+            <li class="tarjeta" th:each="ejemplar : ${paginaEjemplares.content}">
                 <h3><a th:href="@{/ejemplares/{id}(id=${ejemplar.id})}"
                        th:text="'Ejemplar de ' + ${ejemplar.propietario}">Ejemplar de Ana</a></h3>
                 <p class="tarjeta-detalle" th:text="'Estado: ' + ${ejemplar.estado.etiqueta}">Estado: Nuevo</p>
@@ -58,6 +58,9 @@
                    th:text="'$ ' + ${#numbers.formatDecimal(ejemplar.precioPorDia, 1, 'POINT', 2, 'COMMA')} + ' por día'">$ 1.000,00 por día</p>
             </li>
         </ul>
+
+        <!-- Al cambiar de página se vuelve a esta sección, no al principio de la página -->
+        <nav th:replace="~{fragments/paginacion :: paginacion(${paginaEjemplares}, '/juegos/' + ${juego.id}, '#ejemplares')}"></nav>
     </section>
     
     <section class="criticas-del-juego">

@@ -1,8 +1,9 @@
 package com.borboletta.vueltaaltablero.repository;
 
 import com.borboletta.vueltaaltablero.entity.Usuario;
-import java.util.List;
 import java.util.Optional;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -11,7 +12,7 @@ public interface UsuarioRepository extends JpaRepository<Usuario, Long>{
 
     /* Solo cuentas activas: ingreso, perfil y edición. */
     Optional<Usuario> findByCorreoIgnoreCaseAndFechaBajaIsNull(String correo);
-    List<Usuario> findAllByFechaBajaIsNullOrderByNombreAscApellidoAsc();
+    Page<Usuario> findAllByFechaBajaIsNullOrderByNombreAscApellidoAsc(Pageable pageable);
 
     /* Para que el administrador bloquee o desbloquee a otra persona. */
     Optional<Usuario> findByNroAndFechaBajaIsNull(Long nro);

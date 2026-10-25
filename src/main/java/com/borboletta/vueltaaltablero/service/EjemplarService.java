@@ -1,26 +1,31 @@
 package com.borboletta.vueltaaltablero.service;
 
-import com.borboletta.vueltaaltablero.dto.DetalleDeEjemplar;
-import com.borboletta.vueltaaltablero.dto.DatosDeNuevoEjemplar;
 import com.borboletta.vueltaaltablero.dto.DatosDeEdicionDeEjemplar;
+import com.borboletta.vueltaaltablero.dto.DatosDeNuevoEjemplar;
+import com.borboletta.vueltaaltablero.dto.DetalleDeEjemplar;
 
+import com.borboletta.vueltaaltablero.entity.Ejemplar;
 import com.borboletta.vueltaaltablero.entity.Juego;
 import com.borboletta.vueltaaltablero.entity.Usuario;
-import com.borboletta.vueltaaltablero.entity.Ejemplar;
 
+import com.borboletta.vueltaaltablero.exception.EjemplarNoEncontradoException;
+import com.borboletta.vueltaaltablero.exception.EjemplarYaAlquiladoException;
 import com.borboletta.vueltaaltablero.exception.JuegoNoEncontradoException;
 import com.borboletta.vueltaaltablero.exception.UsuarioNoEncontradoException;
-import com.borboletta.vueltaaltablero.exception.EjemplarYaAlquiladoException;
-import com.borboletta.vueltaaltablero.exception.EjemplarNoEncontradoException;
 
-import com.borboletta.vueltaaltablero.repository.JuegoRepository;
-import com.borboletta.vueltaaltablero.repository.UsuarioRepository;
 import com.borboletta.vueltaaltablero.repository.AlquilerRepository;
 import com.borboletta.vueltaaltablero.repository.EjemplarRepository;
+import com.borboletta.vueltaaltablero.repository.JuegoRepository;
+import com.borboletta.vueltaaltablero.repository.UsuarioRepository;
+
+import com.borboletta.vueltaaltablero.paginacion.Paginas;
 
 import java.util.List;
 import java.util.Set;
 import lombok.RequiredArgsConstructor;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -38,10 +43,9 @@ public class EjemplarService{
 
     /* La lista pública ya excluye por consulta a los alquilados: por eso "alquilado" es false. */
     @Transactional(readOnly = true)
-    public List<DetalleDeEjemplar> disponiblesDeJuego(Long idJuego){
-        return ejemplarRepository.findDisponiblesDeJuego(idJuego).stream()
-                .map(ejemplar -> DetalleDeEjemplar.desde(ejemplar, false))
-                .toList();
+    public Page<DetalleDeEjemplar> disponiblesDeJuego(Long idJuego, Pageable pedido){
+        return Paginas.consultar(pedido, pagina -> ejemplarRepository.findDisponiblesDeJuego(idJuego, pagina))
+                .map(ejemplar -> DetalleDeEjemplar.desde(ejemplar, false));
     }
 
     /* Los del dueño sí pueden estar alquilados: una sola consulta trae cuáles, sin una por ejemplar. */

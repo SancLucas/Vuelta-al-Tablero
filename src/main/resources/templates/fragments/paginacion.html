@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+<!--
+  Botones de paginación, para cualquier lista. Parámetros:
+    pagina : el objeto Page que devuelve el servicio
+    base   : la ruta de la lista, con o sin parámetros (ej.: /juegos   o   /juegos?categoria=PARTY)
+    ancla  : a qué parte de la página volver al cambiar de página ('' o, por ejemplo, '#ejemplares')
+
+  Con muchas páginas no se listan todas: se muestran la primera, la última y las vecinas de la actual
+  (con "…" en los saltos). Si hay una sola página, no se muestra nada.
+-->
+<nav class="paginacion" aria-label="Paginación" th:fragment="paginacion(pagina, base, ancla)"
+     th:if="${pagina.totalPages > 1}">
+    <ul th:with="prefijo=${base + (#strings.contains(base, '?') ? '&' : '?') + 'page='},
+                 sufijo=${'&size=' + pagina.size}">
+        <li>
+            <a th:if="${!pagina.first}" rel="prev"
+               th:href="@{${prefijo + (pagina.number - 1) + sufijo}} + ${ancla}">Anterior</a>
+            <span th:if="${pagina.first}" class="deshabilitado" aria-disabled="true">Anterior</span>
+        </li>
+
+        <th:block th:each="i : ${#numbers.sequence(0, pagina.totalPages - 1)}">
+            <li th:if="${i == 0 or i == pagina.totalPages - 1 or (i >= pagina.number - 2 and i <= pagina.number + 2)}"
+                th:classappend="${i == pagina.number} ? 'activa'">
+                <a th:href="@{${prefijo + i + sufijo}} + ${ancla}" th:text="${i + 1}"
+                   th:attr="aria-current=${i == pagina.number} ? 'page'">1</a>
+            </li>
+            <li class="puntos" aria-hidden="true"
+                th:if="${(i == pagina.number - 3 and i > 0) or (i == pagina.number + 3 and i < pagina.totalPages - 1)}">&hellip;</li>
+        </th:block>
+
+        <li>
+            <a th:if="${!pagina.last}" rel="next"
+               th:href="@{${prefijo + (pagina.number + 1) + sufijo}} + ${ancla}">Siguiente</a>
+            <span th:if="${pagina.last}" class="deshabilitado" aria-disabled="true">Siguiente</span>
+        </li>
+    </ul>
+    <p class="paginacion-resumen"
+       th:text="'Página ' + ${pagina.number + 1} + ' de ' + ${pagina.totalPages}">Página 1 de 3</p>
+</nav>
+</body>
+</html>

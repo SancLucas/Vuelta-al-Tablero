@@ -20,10 +20,10 @@
         <h1>Administrar usuarios</h1>
     </div>
 
-    <p class="vacio" th:if="${#lists.isEmpty(usuarios)}">Todavía no hay usuarios registrados.</p>
+    <p class="vacio" th:if="${paginaUsuarios.empty}">Todavía no hay usuarios registrados.</p>
 
     <ul class="usuarios-grid">
-        <li class="usuario-card" th:each="usuario : ${usuarios}">
+        <li class="usuario-card" th:each="usuario : ${paginaUsuarios.content}">
             <h2 th:text="${usuario.nombre} + ' ' + ${usuario.apellido}">Nombre de usuario</h2>
             <p th:text="${usuario.correo}">correo@ejemplo.com</p>
             <p th:text="'DNI ' + ${usuario.dni}">DNI 12345678</p>
@@ -38,16 +38,24 @@
             <div class="tarjeta-acciones" th:unless="${usuario.administrador}">
                 <form th:if="${usuario.bloqueado()}"
                       th:action="@{/admin/usuarios/{nro}/desbloquear(nro=${usuario.nro})}" method="post">
+                    <!-- Para volver a la misma página de la lista después de la acción -->
+                    <input type="hidden" name="page" th:value="${paginaUsuarios.number}">
+                    <input type="hidden" name="size" th:value="${paginaUsuarios.size}">
                     <button type="submit" class="btn btn-compacto btn-secundario">Desbloquear</button>
                 </form>
                 <form th:unless="${usuario.bloqueado()}"
                       th:action="@{/admin/usuarios/{nro}/bloquear(nro=${usuario.nro})}" method="post"
                       onsubmit="return confirm('¿Querés bloquear esta cuenta? No va a poder ingresar y se le cerrará la sesión.');">
+                    <!-- Para volver a la misma página de la lista después de la acción -->
+                    <input type="hidden" name="page" th:value="${paginaUsuarios.number}">
+                    <input type="hidden" name="size" th:value="${paginaUsuarios.size}">
                     <button type="submit" class="btn btn-compacto btn-peligro">Bloquear</button>
                 </form>
             </div>
         </li>
     </ul>
+
+    <nav th:replace="~{fragments/paginacion :: paginacion(${paginaUsuarios}, '/admin/usuarios', '')}"></nav>
 </main>
 
 <footer th:replace="fragments/footer :: footer-nav"> </footer>

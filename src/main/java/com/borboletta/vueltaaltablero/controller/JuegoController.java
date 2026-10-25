@@ -14,6 +14,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -31,6 +34,8 @@ public class JuegoController{
 
     private static final String VISTA_LISTA = "juegos/lista";
     private static final String VISTA_DETALLE = "juegos/detalle";
+    private static final int JUEGOS_POR_PAGINA = 9;
+    private static final int EJEMPLARES_POR_PAGINA = 6;
 
     private final JuegoService juegoService;
     private final EjemplarService ejemplarService;
@@ -39,29 +44,35 @@ public class JuegoController{
 ///////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////
 
-    /* /juegos muestra todos; /juegos?categoria=ESTRATEGIA filtra. Una categoría inventada no rompe: no filtra. */
+    /* /juegos muestra todos; /juegos?categoria=ESTRATEGIA filtra. Una categoría inventada no rompe: no filtra.
+    Va de a una página: /juegos?page=2 (y &size=, con tope). */
     @GetMapping
-    public String catalogo(@RequestParam(required = false) String categoria, Model model){
+    public String catalogo(@RequestParam(required = false) String categoria,
+                           @PageableDefault(size = JUEGOS_POR_PAGINA) Pageable pageable, Model model){
         CategoriaJuego filtro = CategoriaJuego.buscarPorCodigo(categoria).orElse(null);
-        model.addAttribute("juegos", juegoService.catalogo(filtro));
+        model.addAttribute("paginaJuegos", juegoService.catalogo(filtro, pageable));
+        // Los botones de paginación tienen que conservar el filtro de categoría
+        model.addAttribute("rutaPaginacion", filtro == null ? "/juegos" : "/juegos?categoria=" + filtro.name());
         model.addAttribute("categorias", CategoriaJuego.values());
         model.addAttribute("categoriaActual", filtro);
         return VISTA_LISTA;
     }
 
     @GetMapping("/{id}")
-    public String detalle(@PathVariable Long id, Principal principal, Model model){
-        return vistaDeDetalle(id, principal, model);
+    public String detalle(@PathVariable Long id, Principal principal,
+                          @PageableDefault(size = EJEMPLARES_POR_PAGINA) Pageable pageable, Model model){
+        return vistaDeDetalle(id, principal, pageable, model);
     }
 
     /* Al juego lo puede criticar cualquier persona con sesión. Quién es sale del Principal.
     Si ya tenía una crítica, esta la reemplaza (el servicio hace el "actualizar o crear"). */
-    @PostMapping("/{id}/critica")
+        @PostMapping("/{id}/critica")
     public String criticar(@PathVariable Long id, Principal principal,
                            @Valid @ModelAttribute("criticaForm") CriticaForm form,
                            BindingResult resultado, Model model,
                            RedirectAttributes redirectAttributes){
-        String vista = vistaDeDetalle(id, principal, model);
+        // Si hay que volver a mostrar la página por un error del formulario, los ejemplares van desde la primera
+        String vista = vistaDeDetalle(id, principal, PageRequest.of(0, EJEMPLARES_POR_PAGINA), model);
         if (!resultado.hasErrors()){
             try{
                 criticaService.criticarJuego(id, principal.getName(), form.aDatosDeCritica());
@@ -74,11 +85,11 @@ public class JuegoController{
         return vista;
     }
 
-    /* Arma lo que necesita la página. Si llega un "criticaForm" ya cargado (con errores
-    de un POST) se respeta; si no, se muestra el de la crítica propia, o uno vacío. */
-    private String vistaDeDetalle(Long id, Principal principal, Model model){
+    /* Arma lo que necesita la página. Si llega un "criticaForm" ya cargado (con errores de un POST)
+    se respeta; si no, se muestra el de la crítica propia, o uno vacío. */
+    private String vistaDeDetalle(Long id, Principal principal, Pageable pageable, Model model){
         model.addAttribute("juego", juegoService.obtener(id));
-        model.addAttribute("ejemplares", ejemplarService.disponiblesDeJuego(id));
+        model.addAttribute("paginaEjemplares", ejemplarService.disponiblesDeJuego(id, pageable));
         model.addAttribute("resumenCriticas", criticaService.deJuego(id));
         if (!model.containsAttribute("criticaForm")){
             CriticaForm propia = new CriticaForm();

@@ -734,6 +734,65 @@ h2, h3 { font-weight: 700; font-size: 1.375rem; }   /* títulos: Bricolage 22 */
 
 .admin-perfil h2 { margin-bottom: 1rem; }
 
+/* ---------- Paginación ---------- */
+.paginacion { margin: 2rem 0 1rem; text-align: center; }
+
+.paginacion ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.4rem;
+}
+
+.paginacion li > a,
+.paginacion li > span {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 2.5rem;
+    min-height: 2.5rem;
+    padding: 0.3rem 0.9rem;
+    border: 1.5px solid var(--marron);
+    border-radius: 999px;
+    background-color: var(--crema);
+    color: var(--marron);
+    font-weight: 500;
+    text-decoration: none;
+    transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.paginacion li > a:hover { background-color: var(--verde-palido); color: var(--marron-oscuro); }
+
+.paginacion li.activa > a,
+.paginacion li.activa > a:hover {
+    background-color: var(--marron);
+    color: var(--crema);
+}
+
+.paginacion .deshabilitado {
+    border-color: var(--verde-suave);
+    background-color: var(--verde-palido);
+    color: var(--verde-oscuro);
+    cursor: not-allowed;
+}
+
+.paginacion .puntos {
+    display: inline-flex;
+    align-items: center;
+    min-height: 2.5rem;
+    padding: 0 0.25rem;
+    color: var(--verde-oscuro);
+}
+
+.paginacion-resumen {
+    margin: 0.75rem 0 0;
+    font-size: 0.9rem;
+    color: var(--verde-oscuro);
+}
+
 /* ---------- Pantallas medianas y chicas ---------- */
 
 /* Tablets y celulares: el menú queda detrás de un botón. Si el JavaScript no carga, el menú
@@ -802,6 +861,9 @@ h2, h3 { font-weight: 700; font-size: 1.375rem; }   /* títulos: Bricolage 22 */
     .btn-compacto { min-height: 2.75rem; }
     .campo-check label { min-height: 2.75rem; }
     .filtro { min-height: 2.75rem; }
+
+    .paginacion li > a,
+    .paginacion li > span { min-width: 2.75rem; min-height: 2.75rem; }
 
     .panel-cerrar {
         display: flex;

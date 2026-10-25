@@ -5,10 +5,12 @@ import com.borboletta.vueltaaltablero.entity.Juego;
 
 import java.util.List;
 import java.util.Optional;
-import org.springframework.stereotype.Repository;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
 @Repository
 public interface JuegoRepository extends JpaRepository<Juego, Long>{
@@ -17,8 +19,12 @@ public interface JuegoRepository extends JpaRepository<Juego, Long>{
     @EntityGraph(attributePaths = "fichaTecnica")
     List<Juego> findAllByFechaBajaIsNullOrderByTituloAsc();
 
+    // Una página del catálogo: el orden va en el nombre del método, no en lo que pida el cliente.
     @EntityGraph(attributePaths = "fichaTecnica")
-    List<Juego> findAllByCategoriaAndFechaBajaIsNullOrderByTituloAsc(CategoriaJuego categoria);
+    Page<Juego> findAllByFechaBajaIsNullOrderByTituloAsc(Pageable pageable);
+    
+    @EntityGraph(attributePaths = "fichaTecnica")
+    Page<Juego> findAllByCategoriaAndFechaBajaIsNullOrderByTituloAsc(CategoriaJuego categoria, Pageable pageable);
 
     @EntityGraph(attributePaths = "fichaTecnica")
     Optional<Juego> findByIdAndFechaBajaIsNull(Long id);

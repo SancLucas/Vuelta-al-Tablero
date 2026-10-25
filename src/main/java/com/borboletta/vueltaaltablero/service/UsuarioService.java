@@ -1,9 +1,9 @@
 package com.borboletta.vueltaaltablero.service;
 
-import com.borboletta.vueltaaltablero.dto.DatosDePerfil;
-import com.borboletta.vueltaaltablero.dto.ResumenDeUsuario;
 import com.borboletta.vueltaaltablero.dto.DatosDeEdicionUsuario;
+import com.borboletta.vueltaaltablero.dto.DatosDePerfil;
 import com.borboletta.vueltaaltablero.dto.DatosDeRegistroUsuario;
+import com.borboletta.vueltaaltablero.dto.ResumenDeUsuario;
 
 import com.borboletta.vueltaaltablero.entity.Usuario;
 import com.borboletta.vueltaaltablero.repository.UsuarioRepository;
@@ -12,9 +12,12 @@ import com.borboletta.vueltaaltablero.exception.CuentaNoEncontradaException;
 import com.borboletta.vueltaaltablero.exception.UsuarioNoEncontradoException;
 import com.borboletta.vueltaaltablero.exception.UsuarioYaRegistradoException;
 
-import java.util.List;
+import com.borboletta.vueltaaltablero.paginacion.Paginas;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -32,10 +35,9 @@ public class UsuarioService{
 
     /* Para el listado del administrador (incluye a las cuentas bloqueadas, para poder desbloquearlas). */
     @Transactional(readOnly = true)
-    public List<ResumenDeUsuario> obtenerTodosLosUsuarios(){
-        return usuarioRepository.findAllByFechaBajaIsNullOrderByNombreAscApellidoAsc().stream()
-                .map(ResumenDeUsuario::desde)
-                .toList();
+    public Page<ResumenDeUsuario> obtenerTodosLosUsuarios(Pageable pedido){
+        return Paginas.consultar(pedido, usuarioRepository::findAllByFechaBajaIsNullOrderByNombreAscApellidoAsc)
+                .map(ResumenDeUsuario::desde);
     }
 
     /* Bloquea la cuenta y avisa (evento) para que se le cierren las sesiones abiertas. */

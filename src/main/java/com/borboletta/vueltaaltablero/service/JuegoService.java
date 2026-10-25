@@ -3,16 +3,20 @@ package com.borboletta.vueltaaltablero.service;
 import com.borboletta.vueltaaltablero.dto.DatosDeJuego;
 import com.borboletta.vueltaaltablero.dto.DetalleDeJuego;
 
-import com.borboletta.vueltaaltablero.entity.Juego;
-import com.borboletta.vueltaaltablero.entity.FichaTecnica;
 import com.borboletta.vueltaaltablero.entity.CategoriaJuego;
+import com.borboletta.vueltaaltablero.entity.FichaTecnica;
+import com.borboletta.vueltaaltablero.entity.Juego;
 
-import com.borboletta.vueltaaltablero.repository.JuegoRepository;
-import com.borboletta.vueltaaltablero.exception.JuegoYaExisteException;
 import com.borboletta.vueltaaltablero.exception.JuegoNoEncontradoException;
+import com.borboletta.vueltaaltablero.exception.JuegoYaExisteException;
+
+import com.borboletta.vueltaaltablero.paginacion.Paginas;
+import com.borboletta.vueltaaltablero.repository.JuegoRepository;
 
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -26,21 +30,21 @@ public class JuegoService{
 ///////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////
 
-    /* Todo el catálogo ("Todos los juegos"). */
+    /** Todo el catálogo SIN paginar: solo para el desplegable de "publicar ejemplar". Las pantallas usan la paginada. */
     @Transactional(readOnly = true)
     public List<DetalleDeJuego> catalogo(){
-        return catalogo(null);
-    }
-
-    /* El catálogo de una categoría; con null, sin filtrar. */
-    @Transactional(readOnly = true)
-    public List<DetalleDeJuego> catalogo(CategoriaJuego categoria){
-        List<Juego> juegos = categoria == null
-                ? juegoRepository.findAllByFechaBajaIsNullOrderByTituloAsc()
-                : juegoRepository.findAllByCategoriaAndFechaBajaIsNullOrderByTituloAsc(categoria);
-        return juegos.stream()
+        return juegoRepository.findAllByFechaBajaIsNullOrderByTituloAsc().stream()
                 .map(DetalleDeJuego::desde)
                 .toList();
+    }
+
+    /** Una página del catálogo: "Todos los juegos" (categoria null) o los de una categoría. */
+    @Transactional(readOnly = true)
+    public Page<DetalleDeJuego> catalogo(CategoriaJuego categoria, Pageable pedido){
+        return Paginas.consultar(pedido, pagina -> categoria == null
+                        ? juegoRepository.findAllByFechaBajaIsNullOrderByTituloAsc(pagina)
+                        : juegoRepository.findAllByCategoriaAndFechaBajaIsNullOrderByTituloAsc(categoria, pagina))
+                .map(DetalleDeJuego::desde);
     }
 
     @Transactional(readOnly = true)
